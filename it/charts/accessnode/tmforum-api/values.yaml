@@ -1,0 +1,13 @@
+tm-forum-api:
+  defaultConfig:
+    image:
+      tag: "0.16.0"
+    additionalEnvVars:
+      - name: LOGBACK_APPENDER
+        value: CONSOLE
+    ngsiLd:
+      url: http://scorpio:9090
+  apiProxy:
+    enabled: true
+    service: 
+      port: 8080

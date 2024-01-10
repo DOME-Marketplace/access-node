@@ -1,0 +1,24 @@
+deployment:
+  image:
+    # -- scorpio image name
+    # ref: scorpiobroker/all-in-one-runner
+    repository: scorpiobroker/all-in-one-runner
+    # -- tag of the image to be used
+    tag: java-kafka-4.1.10
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  logLevel: DEBUG  
+
+db:
+  host: postgis
+  password: postgres
+  username: postgres
+
+kafka:
+  host: kafka
+
+service:
+  port: 9090
+  type: ClusterIP
+
+fullnameOverride: scorpio

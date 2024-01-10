@@ -1,0 +1,19 @@
+postgresql:
+  fullnameOverride: postgresql-connector
+  nameOverride: postgresql-connector
+  auth:
+    username: postgres  
+    enablePostgresUser: true
+    password: postgres 
+
+  primary:
+    persistence: 
+      enabled: false
+    initdb:
+      scripts:
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
+    
+  readReplicas:
+    persistence: 
+      enabled: false

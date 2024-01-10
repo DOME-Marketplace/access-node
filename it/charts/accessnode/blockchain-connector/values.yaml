@@ -1,0 +1,38 @@
+deployment:
+  image:
+    repository: in2kizuna/blockchain-connector
+    # -- tag of the image to be used
+    tag: v2.0.1
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  logLevel: DEBUG
+  dltAdapter: 
+    domain: http://dlt-adapter:8080
+  blockchain:
+    rpcAddress: http://blockchain-testnode.testnode.svc.cluster.local:8545/
+    userEthereumAddress: 0x40ec977Bd68917E8ffd7A4F3a439ab77149B86e5
+    subscription:
+      active: false
+  broker:
+    externalDomain: http://scorpio:9090
+    internalDomain: http://scorpio:9090
+  ngsiSubscription:
+    notificationEndpoint:  http://blockchain-connector:8080/notifications/broker
+    entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
+  brokerAdapter:
+    domain: http://broker-adapter:8080
+    paths:
+      entites: /api/v2/entities
+      subscriptions: /api/v2/subscriptions
+  operator:
+    organizationId: FIWARE_TEST_PROVIDER
+db:
+  host: postgresql-connector
+  password: postgres
+  username: postgres
+
+service:
+  port: 9090
+  type: ClusterIP
+
+fullnameOverride: blockchain-connector

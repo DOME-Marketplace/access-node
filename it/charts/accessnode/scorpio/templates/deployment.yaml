@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ include "scorpio.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{ include "scorpio.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "scorpio.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "scorpio.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          livenessProbe:
+            httpGet:
+              path: /q/info
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          env:
+            - name: DBHOST
+              value: {{ .Values.db.host }}
+            - name: BUSHOST
+              value: {{ .Values.kafka.host }}
+            - name: QUARKUS_LOG_LEVEL
+              value: {{ .Values.deployment.logLevel }}
+            - name: MYSETTINGS_POSTGRES_PASSWORD
+              value: {{ .Values.db.password }}
+            - name: MYSETTINGS_POSTGRES_USERNAME
+              value: {{ .Values.db.username }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port}}
+              protocol: TCP
+
+
+             

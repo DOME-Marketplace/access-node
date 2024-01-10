@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ include "blockchain-testnode.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{ include "blockchain-testnode.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "blockchain-testnode.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "blockchain-testnode.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          args:
+            - -l 800000
+            - --account
+            # pub 0x40ec977Bd68917E8ffd7A4F3a439ab77149B86e5
+            - '0x041de193683f117a4b0f0b94f8e3e98d9dcf233010a538c6662c41a18188e038, 100000000000000000000'
+            - --account
+            # pub 0x72b440177bcDfD339eF00ffF6B78c3620c09c469
+            - '0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f, 100000000000000000000'
+            - --account
+            # pub 0x91ccCB37E514ba81282aA3dC8A72ab1Fa2e27094
+            - '0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87, 100000000000000000000'
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port}}
+              protocol: TCP
