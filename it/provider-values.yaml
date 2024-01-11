@@ -1,0 +1,10 @@
+deployment:
+  blockchain:
+    userEthereumAddress: 0x72b440177bcDfD339eF00ffF6B78c3620c09c469
+  privateKey: 0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
+  broker:
+    externalDomain: http://scorpio.provider.svc.cluster.local:9090
+  ngsiSubscription:
+    entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
+  operator:
+    organizationId: PROVIDER

@@ -10,7 +10,6 @@ deployment:
     domain: http://dlt-adapter:8080
   blockchain:
     rpcAddress: http://blockchain-testnode.testnode.svc.cluster.local:8545/
-    userEthereumAddress: 0x40ec977Bd68917E8ffd7A4F3a439ab77149B86e5
     subscription:
       active: false
   broker:

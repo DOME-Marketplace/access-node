@@ -1,0 +1,13 @@
+deployment:
+  blockchain:
+    userEthereumAddress: 0x40ec977Bd68917E8ffd7A4F3a439ab77149B86e5
+    subscription:
+      active: true
+      eventTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
+  privateKey: 0x041de193683f117a4b0f0b94f8e3e98d9dcf233010a538c6662c41a18188e038
+  broker:
+    externalDomain: http://scorpio.consumer.svc.cluster.local:9090
+  ngsiSubscription:
+    entityTypes:
+  operator:
+    organizationId: CONSUMER

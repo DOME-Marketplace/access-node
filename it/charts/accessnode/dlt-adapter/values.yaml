@@ -6,7 +6,6 @@ deployment:
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   logLevel: DEBUG
-  privateKey: 0x041de193683f117a4b0f0b94f8e3e98d9dcf233010a538c6662c41a18188e038
 
 service:
   port: 8080
