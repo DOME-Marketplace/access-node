@@ -8,3 +8,8 @@ deployment:
     entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
   operator:
     organizationId: PROVIDER
+tm-forum-api:
+  apiProxy:
+    service:
+      type: LoadBalancer
+      port: 8080

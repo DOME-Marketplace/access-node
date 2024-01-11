@@ -11,3 +11,8 @@ deployment:
     entityTypes:
   operator:
     organizationId: CONSUMER
+tm-forum-api:
+  apiProxy:
+    service:
+      type: LoadBalancer
+      port: 8081

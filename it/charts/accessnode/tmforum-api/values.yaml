@@ -9,5 +9,3 @@ tm-forum-api:
       url: http://scorpio:9090
   apiProxy:
     enabled: true
-    service: 
-      port: 8080

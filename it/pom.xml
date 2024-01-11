@@ -16,25 +16,194 @@
         <version.io.kokuwa.maven.k3s-plugin>1.2.4</version.io.kokuwa.maven.k3s-plugin>
         <version.io.kokuwa.helm-maven-plugin>6.13.0</version.io.kokuwa.helm-maven-plugin>
 
+        <version.org.awaitility>4.2.0</version.org.awaitility>
+        <version.org.junit.bom>5.9.2</version.org.junit.bom>
+        <version.io.cucumber>7.11.1</version.io.cucumber>
+        <version.javax.validation>2.0.1.Final</version.javax.validation>
+        <version.org.projectlombok>1.18.26</version.org.projectlombok>
+        <version.org.slf4j.slf4j-api>2.0.6</version.org.slf4j.slf4j-api>
     </properties>
 
+
+    <dependencyManagement>
+        <!-- test -->
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${version.org.junit.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>${version.io.cucumber}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${version.org.projectlombok}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.org.slf4j.slf4j-api}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${version.javax.validation}</version>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${version.org.awaitility}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${version.org.projectlombok}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <!-- disable jar/surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase/>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- run tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <failIfNoTests>true</failIfNoTests>
+                    <includes>
+                        <include>**/RunCucumberTest.java</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- copy the charts to the target repo to keep the sources clean -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions> 
                     <execution>
-                        <id>copy-resources-testnode</id>
+                        <id>copy-resources-infra</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/charts/blockchain-testnode</outputDirectory>
+                            <outputDirectory>${project.build.directory}/charts/infra</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/charts/blockchain-testnode</directory>
+                                    <directory>${project.basedir}/charts/infra</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -125,7 +294,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>template-testnode</id>
+                        <id>template-infra</id>
                         <goals>
                             <goal>init</goal>
                             <goal>dependency-build</goal>
@@ -133,11 +302,11 @@
                         </goals>
                         <phase>test-compile</phase>
                         <configuration>
-                            <chartDirectory>${project.build.directory}/charts/blockchain-testnode</chartDirectory>
+                            <chartDirectory>${project.build.directory}/charts/infra</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
-                            <templateOutputDir>${project.build.directory}/k3s/blockchain-testnode</templateOutputDir>
-                            <additionalArguments>--name-template=testnode --namespace=testnode</additionalArguments>
+                            <templateOutputDir>${project.build.directory}/k3s/infra</templateOutputDir>
+                            <additionalArguments>--name-template=testnode --namespace=infra</additionalArguments>
                         </configuration>
                     </execution>
                 </executions>
@@ -158,6 +327,10 @@
                         <configuration>
                             <failIfExists>false</failIfExists>
                             <manifests>${project.build.directory}/k3s/namespaces</manifests>
+                            <portBindings>
+                                <portBinding>8080:8080</portBinding>
+                                <portBinding>8081:8081</portBinding>
+                            </portBindings>
                         </configuration>
                     </execution>
                     <execution>
@@ -169,6 +342,10 @@
                         <configuration>
                             <failIfExists>false</failIfExists>
                             <manifests>${project.build.directory}/k3s</manifests>
+                            <portBindings>
+                                <portBinding>8080:8080</portBinding>
+                                <portBinding>8081:8081</portBinding>
+                            </portBindings>
                         </configuration>
                     </execution>
                 </executions>
