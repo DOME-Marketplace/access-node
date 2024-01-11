@@ -265,7 +265,7 @@
                         <id>template-provider</id>
                         <goals>
                             <goal>init</goal>
-                            <goal>dependency-build</goal>
+                            <goal>dependency-update</goal>
                             <goal>template</goal>
                         </goals>
                         <phase>test-compile</phase>
@@ -281,7 +281,7 @@
                         <id>template-consumer</id>
                         <goals>
                             <goal>init</goal>
-                            <goal>dependency-build</goal>
+                            <goal>dependency-update</goal>
                             <goal>template</goal>
                         </goals>
                         <phase>test-compile</phase>
@@ -297,7 +297,7 @@
                         <id>template-infra</id>
                         <goals>
                             <goal>init</goal>
-                            <goal>dependency-build</goal>
+                            <goal>dependency-update</goal>
                             <goal>template</goal>
                         </goals>
                         <phase>test-compile</phase>
