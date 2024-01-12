@@ -1,4 +1,6 @@
-Feature: Test
+Feature: Test feature
 
-    Scenario: Test
-        Given: Test
+  Scenario: Test scenario
+    Given Test this
+    When When it
+    Then Then it

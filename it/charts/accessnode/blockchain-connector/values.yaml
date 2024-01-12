@@ -12,6 +12,7 @@ deployment:
     rpcAddress: http://blockchain-testnode.infra.svc.cluster.local:8545/
     subscription:
       active: false
+      notificationEndpoint:  http://blockchain-connector:8080/notifications/dlt
   broker:
     externalDomain: http://scorpio:9090
     internalDomain: http://scorpio:9090
@@ -31,7 +32,7 @@ db:
   username: postgres
 
 service:
-  port: 9090
+  port: 8080
   type: ClusterIP
 
 fullnameOverride: blockchain-connector

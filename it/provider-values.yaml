@@ -5,7 +5,7 @@ deployment:
   broker:
     externalDomain: http://scorpio.provider.svc.cluster.local:9090
   ngsiSubscription:
-    entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
+    entityTypes: service-catalog,catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
   operator:
     organizationId: PROVIDER
 tm-forum-api:

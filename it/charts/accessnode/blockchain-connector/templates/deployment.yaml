@@ -25,7 +25,23 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          env: 
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          env:
             - name: SPRING_LOGGING_LEVEL_ROOT
               value: {{ .Values.deployment.logLevel }}
             - name: SPRING_R2DBC_PASSWORD
@@ -48,6 +64,10 @@ spec:
               value: {{ .Values.deployment.blockchain.userEthereumAddress }}
             - name: BLOCKCHAIN_SUBSCRIPTION_ACTIVE
               value: {{ .Values.deployment.blockchain.subscription.active | quote }}
+            - name: BLOCKCHAIN_SUBSCRIPTION_EVENT_TYPES
+              value: {{ .Values.deployment.blockchain.subscription.eventTypes | quote }}
+            - name: BLOCKCHAIN_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+              value: {{ .Values.deployment.blockchain.subscription.notificationEndpoint | quote }}
             - name: BROKER_EXTERNAL_DOMAIN
               value: {{ .Values.deployment.broker.externalDomain }}
             - name: BROKER_INTERNAL_DOMAIN
