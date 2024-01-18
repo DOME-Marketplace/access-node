@@ -1,0 +1,98 @@
+blockchain-connector:
+  enabled: true
+broker-adapter:
+  enabled: true
+dlt-adapter:
+  enabled: true
+
+kafka:
+  enabled: false  
+  listeners:
+    client: 
+      protocol: PLAINTEXT
+    controller:
+      protocol: PLAINTEXT
+    interbroker:
+      protocol: PLAINTEXT
+    external: 
+      protocol: PLAINTEXT
+  controller:
+    persistence:
+      enabled: false
+  broker: 
+    persistence:
+      enabled: false
+  zookeeper: 
+    persistence:
+      enabled: false
+  fullnameOverride: kafka
+
+postgis:
+  enabled: true  
+  fullnameOverride: postgis
+  nameOverride: postgis
+  auth:
+    username: postgres
+    enablePostgresUser: true
+    password: postgres
+  primary:
+    persistence: 
+      enabled: false
+    initdb:
+      scripts:
+        enable.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE EXTENSION postgis;"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE ngb;"
+  readReplicas:
+    persistence: 
+      enabled: false
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql-connector
+  nameOverride: postgresql-connector
+  auth:
+    username: postgres  
+    enablePostgresUser: true
+    password: postgres 
+  primary:
+    persistence: 
+      enabled: false
+    initdb:
+      scripts:
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
+  readReplicas:
+    persistence: 
+      enabled: false
+
+scorpio:
+  enabled: true
+  image: 
+    repository: scorpiobroker/all-in-one-runner
+    tag: java-4.1.11 
+  db:
+    dbhost: postgis
+    user: postgres
+    password: postgres
+  readinessProbe:
+    path: /q/health
+  livenessProbe: 
+    path: /q/health
+  fullnameOverride: scorpio
+  service:
+    type: ClusterIP
+
+tm-forum-api:
+  enabled: true
+  defaultConfig:
+    image:
+      tag: "0.16.0"
+    additionalEnvVars:
+      - name: LOGBACK_APPENDER
+        value: CONSOLE
+    ngsiLd:
+      url: http://scorpio:9090
+    contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+  apiProxy:
+    enabled: true

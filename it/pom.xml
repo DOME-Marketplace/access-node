@@ -482,10 +482,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/charts/provider</outputDirectory>
+                            <outputDirectory>${project.build.directory}/charts/provider/access-node</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/charts/accessnode</directory>
+                                    <directory>${project.basedir}/../charts/access-node</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -497,10 +497,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/charts/consumer</outputDirectory>
+                            <outputDirectory>${project.build.directory}/charts/consumer/access-node</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/charts/accessnode</directory>
+                                    <directory>${project.basedir}/../charts/access-node</directory>
                                 </resource>
                             </resources>
                         </configuration>
