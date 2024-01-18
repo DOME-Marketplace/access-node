@@ -28,6 +28,8 @@ spec:
           env:
             - name: PRIVATE_KEY
               value: {{ .Values.deployment.privateKey }}
+            - name: CONTRACT_ADDRESS
+              value: "0x37532a3dbf29942d10fb8ba57dc35d2134fe494d"
           ports:
             - containerPort: {{ .Values.service.port}}
               name: http

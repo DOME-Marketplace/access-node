@@ -1,5 +1,6 @@
 tm-forum-api:
   defaultConfig:
+    logLevel: TRACE
     image:
       tag: "0.16.0"
     additionalEnvVars:
@@ -7,5 +8,6 @@ tm-forum-api:
         value: CONSOLE
     ngsiLd:
       url: http://scorpio:9090
+    contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
   apiProxy:
     enabled: true

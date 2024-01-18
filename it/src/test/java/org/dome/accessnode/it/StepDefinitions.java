@@ -5,19 +5,16 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
-import org.awaitility.Awaitility;
 import org.dome.accessnode.ApiException;
 import org.dome.accessnode.api.ServiceCatalogApi;
 import org.dome.accessnode.model.ServiceCatalogCreateVO;
 import org.dome.accessnode.model.ServiceCatalogVO;
-import org.junit.jupiter.api.Test;
 
-import java.time.temporal.*;
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
-import java.util.List;
+import java.time.temporal.ChronoUnit;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
@@ -26,7 +23,7 @@ public class StepDefinitions {
     ServiceCatalogApi scaProvider;
     ServiceCatalogApi scaConsumer;
 
-    ServiceCatalogVO scv;
+    ServiceCatalogVO serviceCatalog;
 
     @Before
     public void waitForTheEnvironment() {
@@ -37,23 +34,36 @@ public class StepDefinitions {
         scaConsumer.setCustomBaseUrl("http://localhost:8081/tmf-api/serviceCatalogManagement/v4");
     }
 
-    @Given("Test this")
-    public void test() throws ApiException {
-        log.warn("Hello");
+    @Given("a provider and a consumer have deployed there access nodes.")
+    public void checkProviderAndConsumerAvailable() throws ApiException {
+        assertDoesNotThrow(() -> scaProvider.listServiceCatalog(null, null, null),
+                "The service catalog api should be available at the provider.");
+        assertDoesNotThrow(() -> scaConsumer.listServiceCatalog(null, null, null),
+                "The service catalog api should be available at the consumer.");
+
+    }
+
+    @When("a catalog is created at the providers marketplace.")
+    public void createServiceCatalogAtProvider() throws ApiException {
         ServiceCatalogCreateVO scc = new ServiceCatalogCreateVO();
-        scc.setName("my-catalog");
-        scv = scaProvider.createServiceCatalog(scc);
+        scc.setName("provider-catalog");
+        serviceCatalog = scaProvider.createServiceCatalog(scc);
     }
 
-    @When("When it")
-    public void when() {
-        await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> scaConsumer.listServiceCatalog(null, null, null).size() > 0);
+    @Then("it should be avalailable at the consumer marketplace, too.")
+    public void checkServiceCatalogAtConsumer() throws ApiException {
+        await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkCatalogExistence(serviceCatalog.getId()));
+
+        assertEquals(serviceCatalog, scaConsumer.retrieveServiceCatalog(serviceCatalog.getId(), null), "The catalog should be available at the consumers tmforum api.");
     }
 
-    @Then("Then it")
-    public void then() throws ApiException {
-        var scvC = scaConsumer.retrieveServiceCatalog(scv.getId(), null);
-        assertEquals(scv, scvC);
+    private boolean checkCatalogExistence(String id) {
+        try {
+            return scaConsumer.retrieveServiceCatalog(id, null) != null;
+        } catch (ApiException e) {
+            return false;
+        }
+
     }
 
 }

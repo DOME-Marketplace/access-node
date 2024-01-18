@@ -1,10 +1,10 @@
 deployment:
   image:
-    repository: quay.io/digitelts/dlt-adapter
+    repository: quay.io/wi_stefan/dlt-adapter
     # -- tag of the image to be used
-    tag: 1.2.1
+    tag: latest
     # -- specification of the image pull policy
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   logLevel: DEBUG
 
 service:

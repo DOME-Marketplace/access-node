@@ -12,9 +12,8 @@ deployment:
     rpcAddress: http://blockchain-testnode.infra.svc.cluster.local:8545/
     subscription:
       active: false
-      notificationEndpoint:  http://blockchain-connector:8080/notifications/dlt
+      notificationEndpoint: http://blockchain-connector:8080/notifications/dlt
   broker:
-    externalDomain: http://scorpio:9090
     internalDomain: http://scorpio:9090
   ngsiSubscription:
     notificationEndpoint:  http://blockchain-connector:8080/notifications/broker
