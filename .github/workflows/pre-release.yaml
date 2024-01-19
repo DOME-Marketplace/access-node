@@ -43,6 +43,7 @@ jobs:
               version=$(yq e '.version' "./charts/access-node/Chart.yaml")
               yq e -i '.version = "'$version'-PRE"' ./charts/access-node/Chart.yaml
               cat ./charts/access-node/Chart.yaml
+              echo "index-path: ./pre/index.yaml" > config.yaml
 
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
@@ -50,4 +51,5 @@ jobs:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
           with:
-            pages_branch: chart-prereleases
+            pages_branch: gh-pages
+            config: config.yaml
