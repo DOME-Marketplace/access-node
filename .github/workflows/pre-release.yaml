@@ -43,8 +43,9 @@ jobs:
             charts=$(find ./charts -type d -maxdepth 1 -mindepth 1)
             for c in "${charts[@]}"; do
               ls -l $c
+              echo "Version "
+              echo $c/Chart.yaml
               version=$(yq e '.version' "$c/Chart.yaml")
-              echo "Version" $version $c/Chart.yaml
               yq e -i '.version = "'$version'-PRE"' $c/Chart.yaml
             done 
 
