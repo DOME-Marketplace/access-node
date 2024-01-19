@@ -43,13 +43,15 @@ jobs:
               version=$(yq e '.version' "./charts/access-node/Chart.yaml")
               yq e -i '.version = "'$version'-PRE"' ./charts/access-node/Chart.yaml
 
+
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
           env:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
           with:
-            skip_upload: true
+            skip-upload: true
+
 
         - name: Create index.yaml
           run: |
