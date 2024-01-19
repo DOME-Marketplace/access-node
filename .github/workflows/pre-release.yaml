@@ -25,12 +25,25 @@ jobs:
             git config user.name "$GITHUB_ACTOR"
             git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-        # See https://github.com/helm/chart-releaser-action/issues/6
         - name: Install Helm
           run: |
             curl -fsSLo get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
             chmod 700 get_helm.sh
             ./get_helm.sh
+
+        # prepare yaml parser
+        - uses: actions/setup-go@v4
+        - name: Install yq
+          run: |
+            go install github.com/mikefarah/yq/v4@latest
+            yq --version
+
+        - name: Set the version
+          run: |
+            for c in "charts"; do
+              version=$(yq e '.version' "charts/$c/Chart.yaml")
+              yq e -i '.version = "'$version'-PRE"' charts/$c/Chart.yaml
+            done 
 
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
