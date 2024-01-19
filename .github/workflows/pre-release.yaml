@@ -58,5 +58,6 @@ jobs:
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
             cr index -o "$owner" -r "$repo"
-            ls -l .cr-index/
-            cat .cr-index/index.yaml
+            mkdir pre
+            mv .cr-index/index.yaml pre/index.yaml
+            cr index -o "$owner" -r "$repo" --pages-index-path pre/index.yaml --push
