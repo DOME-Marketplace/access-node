@@ -61,9 +61,9 @@ jobs:
 
             mkdir pre
             mv .cr-index/index.yaml pre/index.yaml
-            git branch gh-pages
-            git add pre/index.yaml
-            git push
 
+            git checkout --orphan gh-pages
+            git add pre/index.yaml
+            git push --set-upstream --force origin gh-pages
 
         
