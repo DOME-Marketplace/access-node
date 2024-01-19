@@ -64,6 +64,7 @@ jobs:
             mv .cr-index/index.yaml pre/index.yaml
 
             git add pre/index.yaml
+            git commit -m "add pre-index"
             git push --force --set-upstream origin gh-pages
 
         
