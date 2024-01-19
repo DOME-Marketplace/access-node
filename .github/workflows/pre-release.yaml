@@ -1,0 +1,70 @@
+name: Pre-Release
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
+
+jobs:
+    deploy:
+
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Fetch history
+          run: git fetch --prune --unshallow
+
+        - name: Configure Git
+          run: |
+            git config user.name "$GITHUB_ACTOR"
+            git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+        - name: Install Helm
+          run: |
+            curl -fsSLo get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+
+        # prepare yaml parser
+        - uses: actions/setup-go@v4
+        - name: Install yq
+          run: |
+            go install github.com/mikefarah/yq/v4@latest
+            yq --version
+
+        - name: Set the version
+          run: |
+              version=$(yq e '.version' "./charts/access-node/Chart.yaml")
+              yq e -i '.version = "'$version'-PRE"' ./charts/access-node/Chart.yaml
+
+
+        - name: Run chart-releaser
+          uses: helm/chart-releaser-action@main
+          env:
+            CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+            CR_SKIP_EXISTING: true
+          with:
+            skip_upload: true
+
+
+        - name: Create index.yaml
+          run: |
+            owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
+            repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
+            cr index -o "$owner" -r "$GITHUB_REPOSITORY"
+           
+        - name: Push index.yaml
+          run: | 
+            mv .cr-index/index.yaml pre/index.yaml
+            git branch gh-pages
+            git add pre/index.yaml
+            git push
+
+
+        
