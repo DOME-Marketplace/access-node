@@ -43,12 +43,6 @@ jobs:
               version=$(yq e '.version' "./charts/access-node/Chart.yaml")
               yq e -i '.version = "'$version'-PRE"' ./charts/access-node/Chart.yaml
 
-        - name: Install chart releaser
-          run: |
-            curl -L -o /tmp/cr.tgz https://github.com/helm/chart-releaser/releases/download/v1.5.0/chart-releaser_1.5.0_linux_amd64.tar.gz
-            tar -xv -C /tmp -f /tmp/cr.tgz
-            mv /tmp/cr ~/bin/cr
-
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
           env:
