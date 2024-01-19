@@ -42,14 +42,13 @@ jobs:
           run: |
               version=$(yq e '.version' "./charts/access-node/Chart.yaml")
               yq e -i '.version = "'$version'-PRE"' ./charts/access-node/Chart.yaml
-              echo "pages-index-path: ./pre/index.yaml" > config.yaml
-              echo "index-path: ./pre/index.yaml" >> config.yaml
 
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
           env:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
+            CR_PAGES_INDEX_PATH: ./pre/index.yaml
+            CR_INDEX_PATH: ./pre/index.yaml
           with:
             pages_branch: gh-pages
-            config: config.yaml
