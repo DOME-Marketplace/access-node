@@ -10,10 +10,11 @@ blockchain-connector:
       entityTypes: service-catalog,catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
     operator:
       organizationId: PROVIDER
-      
+
 dlt-adapter:
   deployment:
     privateKey: 0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
+    contractAddress: 0x37532a3dbf29942d10fb8ba57dc35d2134fe494d
 
 tm-forum-api:
   defaultConfig:

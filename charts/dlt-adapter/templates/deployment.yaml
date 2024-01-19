@@ -4,33 +4,72 @@ metadata:
   name: {{ include "dlt-adapter.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    {{ include "dlt-adapter.labels" . | nindent 4 }}
+    {{- include "dlt-adapter.labels" . | nindent 4 }}
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "dlt-adapter.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+      {{- include "dlt-adapter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        {{ include "dlt-adapter.labels" . | nindent 8 }}
+        {{- include "dlt-adapter.selectorLabels" . | nindent 8 }}
     spec:
-      containers: 
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dlt-adapter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
         - name: {{ .Chart.Name }}
-          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          env:
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.port}}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health 
+              port: http 
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http 
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            env:
             - name: PRIVATE_KEY
               value: {{ .Values.deployment.privateKey }}
             - name: CONTRACT_ADDRESS
-              value: "0x37532a3dbf29942d10fb8ba57dc35d2134fe494d"
-          ports:
-            - containerPort: {{ .Values.service.port}}
-              name: http
-              protocol: TCP
+              value: {{ .Values.deployment.contractAddress }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

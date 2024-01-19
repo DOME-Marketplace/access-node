@@ -4,15 +4,13 @@ metadata:
   name: {{ include "dlt-adapter.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    {{ include "dlt-adapter.labels" . | nindent 4 }}
+    {{- include "dlt-adapter.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    # same as scorpio, makes other config easier
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+      targetPort: http
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "dlt-adapter.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "dlt-adapter.selectorLabels" . | nindent 4 }}

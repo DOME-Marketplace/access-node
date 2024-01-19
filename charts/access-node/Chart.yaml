@@ -9,12 +9,12 @@ appVersion: 0.0.1
 dependencies:
   - name: blockchain-connector
     condition: blockchain-connector.enabled
-    repository: file:///home/stefanwiedemann/git/wistefan/access-node/charts/blockchain-connector
-    version: 0.1.0
+    repository: https://in2workspace.github.io/helm-charts
+    version: 1.0.0
   - name: broker-adapter
     condition: broker-adapter.enabled
-    repository: file:///home/stefanwiedemann/git/wistefan/access-node/charts/broker-adapter
-    version: 0.1.0
+    repository: https://in2workspace.github.io/helm-charts
+    version: 1.0.0
   - name: dlt-adapter
     condition: dlt-adapter.enabled
     repository: file:///home/stefanwiedemann/git/wistefan/access-node/charts/dlt-adapter
