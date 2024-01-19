@@ -59,7 +59,7 @@ jobs:
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
             cr index -o "$owner" -r "$repo"
 
-            ls -l .cr-index/
+            mkdir pre
             mv .cr-index/index.yaml pre/index.yaml
             git branch gh-pages
             git add pre/index.yaml
