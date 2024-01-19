@@ -15,6 +15,10 @@ blockchain-connector:
     operator:
       organizationId: CONSUMER
 
+dlt-adapter:
+  deployment:
+    privateKey: 0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
+
 tm-forum-api:
   defaultConfig:
     endpointsPort: 8081
