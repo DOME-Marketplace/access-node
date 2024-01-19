@@ -53,11 +53,13 @@ jobs:
             skip_upload: true
 
 
-        - name: List index.yaml
+        - name: Add index.yaml
           run: |
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
-            cr index -o "$owner" -r "$repo"
-            mkdir pre
+            cr index -o "$owner" -r "$GITHUB_REPOSITORY"
             mv .cr-index/index.yaml pre/index.yaml
-            cr index -o "$owner" -r "$repo" --pages-index-path pre/index.yaml --push
+            git branch gh-pages
+            git add pre/index.yaml
+            git push
+            
