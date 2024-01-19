@@ -50,7 +50,7 @@ jobs:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
           with:
-            skip-upload: true
+            skip_upload: true
 
 
         - name: Create index.yaml
