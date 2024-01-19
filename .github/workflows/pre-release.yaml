@@ -48,7 +48,5 @@ jobs:
           env:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
-            CR_PAGES_INDEX_PATH: ./pre/index.yaml
-            CR_INDEX_PATH: ./index.yaml
           with:
             pages_branch: gh-pages
