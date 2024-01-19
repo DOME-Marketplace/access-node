@@ -55,10 +55,9 @@ jobs:
 
         - name: Create index.yaml
           run: |
-            ls -l .cr-index
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
-            cr index -o "$owner" -r "$GITHUB_REPOSITORY"
+            cr index -o "$owner" -r "$repo"
            
         - name: Push index.yaml
           run: | 
