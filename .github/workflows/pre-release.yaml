@@ -40,7 +40,7 @@ jobs:
 
         - name: Set the version
           run: |
-            for c in ./charts/; do
+            for c in ./charts/*/; do
               ls -l $c
               echo "Version "
               echo $c/Chart.yaml
