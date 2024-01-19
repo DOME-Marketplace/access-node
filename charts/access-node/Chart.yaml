@@ -9,12 +9,12 @@ appVersion: 0.0.1
 dependencies:
   - name: blockchain-connector
     condition: blockchain-connector.enabled
-    repository: https://in2workspace.github.io/helm-charts
-    version: 1.0.0
+    repository: file://../blockchain-connector
+    version: 0.1.0
   - name: broker-adapter
     condition: broker-adapter.enabled
-    repository: https://in2workspace.github.io/helm-charts
-    version: 1.0.0
+    repository: file://../broker-adapter
+    version: 0.1.0
   - name: dlt-adapter
     condition: dlt-adapter.enabled
     repository: file://../dlt-adapter
