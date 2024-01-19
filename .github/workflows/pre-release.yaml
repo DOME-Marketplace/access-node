@@ -53,6 +53,7 @@ jobs:
             skip_upload: true
 
 
-        - name: Create index.yaml
+        - name: List index.yaml
           run: |
-            ls -l
+            ls -l .cr-index/
+            cat .cr-index/index.yaml
