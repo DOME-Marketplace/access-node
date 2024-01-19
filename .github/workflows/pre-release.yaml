@@ -40,8 +40,7 @@ jobs:
 
         - name: Set the version
           run: |
-            charts=$(find ./charts -type d -maxdepth 1 -mindepth 1)
-            for c in "${charts[@]}"; do
+            for c in ./charts; do
               ls -l $c
               echo "Version "
               echo $c/Chart.yaml
