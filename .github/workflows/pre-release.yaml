@@ -55,5 +55,6 @@ jobs:
 
         - name: List index.yaml
           run: |
+            cr index
             ls -l .cr-index/
             cat .cr-index/index.yaml
