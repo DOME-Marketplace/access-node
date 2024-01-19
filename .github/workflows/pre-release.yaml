@@ -44,6 +44,7 @@ jobs:
             for c in "${charts[@]}"; do
               ls -l $c
               version=$(yq e '.version' "$c/Chart.yaml")
+              echo $version
               yq e -i '.version = "'$version'-PRE"' $c/Chart.yaml
             done 
 
