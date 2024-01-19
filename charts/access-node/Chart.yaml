@@ -18,7 +18,7 @@ dependencies:
   - name: dlt-adapter
     condition: dlt-adapter.enabled
     repository: file://../dlt-adapter
-    version: 0.1.0
+    version: 1.0.0
   - name: kafka
     condition: kafka.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
