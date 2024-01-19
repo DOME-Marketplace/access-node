@@ -57,12 +57,12 @@ jobs:
           run: |
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
+            git checkout --orphan gh-pages
             cr index -o "$owner" -r "$repo"
 
             mkdir pre
             mv .cr-index/index.yaml pre/index.yaml
 
-            git checkout --orphan gh-pages
             git add pre/index.yaml
             git push --set-upstream --force origin gh-pages
 
