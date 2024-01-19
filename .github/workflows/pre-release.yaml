@@ -40,14 +40,9 @@ jobs:
 
         - name: Set the version
           run: |
-            for c in ./charts/*/; do
-              ls -l $c
-              echo "Version "
-              echo $c/Chart.yaml
-              version=$(yq e '.version' "$c/Chart.yaml")
-              yq e -i '.version = "'$version'-PRE"' $c/Chart.yaml
-              cat $c/Chart.yaml
-            done 
+              version=$(yq e '.version' "./charts/access-node/Chart.yaml")
+              yq e -i '.version = "'$version'-PRE"' ./charts/access-node/Chart.yaml
+              cat ./charts/access-node/Chart.yaml
 
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
