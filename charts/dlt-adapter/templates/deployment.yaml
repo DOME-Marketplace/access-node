@@ -54,11 +54,11 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            env:
-            - name: PRIVATE_KEY
-              value: {{ .Values.deployment.privateKey }}
-            - name: CONTRACT_ADDRESS
-              value: {{ .Values.deployment.contractAddress }}
+          env:
+          - name: PRIVATE_KEY
+            value: {{ .Values.deployment.privateKey }}
+          - name: CONTRACT_ADDRESS
+            value: {{ .Values.deployment.contractAddress }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
