@@ -3,7 +3,7 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-01-22T10:31:35.354804487Z"
+    created: "2024-01-22T11:21:45.866402231Z"
     dependencies:
     - condition: blockchain-connector.enabled
       name: blockchain-connector
@@ -41,7 +41,7 @@ entries:
       repository: https://fiware.github.io/helm-charts
       version: 0.5.3
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: a07a4cb3bdcb36a1f144c9165c41739a843565760e23522bdf9898170ec0d4f3
+    digest: 52422c02741fb21091e56fe89cef3c9c04d6e33731c1991b1bfe824847d16c82
     name: access-node
     type: application
     urls:
@@ -49,7 +49,7 @@ entries:
     version: 0.0.1
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-01-22T11:05:23.22766902Z"
+    created: "2024-01-22T12:10:37.553584353Z"
     dependencies:
     - condition: blockchain-connector.enabled
       name: blockchain-connector
@@ -87,7 +87,7 @@ entries:
       repository: https://fiware.github.io/helm-charts
       version: 0.5.3
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: 2603eccccc501ae5b1b191f197d064bd02219b2ca506b620acda149ce514d378
+    digest: 51e89e272ce3b2d490aa607907884da11707fb5c29e8184f0578460f296d7c95
     name: access-node
     type: application
     urls:
@@ -96,9 +96,9 @@ entries:
   blockchain-connector:
   - apiVersion: v2
     appVersion: 1.1.0
-    created: "2024-01-22T10:31:35.617968829Z"
+    created: "2024-01-22T11:21:45.974688784Z"
     description: blockchain-connector Helm-Chart
-    digest: dee6e1ba86bc15e5146dcbbcbb3fdd223814400fd8a4fa3c51ab5738782a4d1b
+    digest: 5a28015353fec213fbc64e707062ab2c6fb2814e44f82c8a889ff22f16d4290e
     name: blockchain-connector
     type: application
     urls:
@@ -107,9 +107,9 @@ entries:
   broker-adapter:
   - apiVersion: v2
     appVersion: 1.1.0
-    created: "2024-01-22T10:31:35.841029946Z"
+    created: "2024-01-22T11:21:46.093311253Z"
     description: broker-adapter Helm-Chart
-    digest: 56192d5c89c0460f8697659c03f7c734a49f905d874d071d1c22f95a43e16a4c
+    digest: ea0d957ce294ab092d157fec191ab73770d99955cbfee6141c59bd2eaa2562ef
     name: broker-adapter
     type: application
     urls:
@@ -118,9 +118,9 @@ entries:
   dlt-adapter:
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2024-01-22T10:31:36.081384945Z"
+    created: "2024-01-22T11:21:46.191135437Z"
     description: A Helm chart for DLT Adapter component
-    digest: 11dd1aebe02042667b30aa38b8b1fed2aab8df520eeabaea7fa8412a3cc264bc
+    digest: 4345e0fa15225e08c90f282bf4498283951e18f98934e5f49540904c2e70d51a
     name: dlt-adapter
     sources:
     - https://github.com/alastria/DOME-blockchain_connector-dlt_interface
@@ -128,4 +128,4 @@ entries:
     urls:
     - https://github.com/wistefan/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2024-01-22T11:05:23.227682054Z"
+generated: "2024-01-22T12:10:37.553601054Z"
