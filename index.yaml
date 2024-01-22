@@ -1,0 +1,85 @@
+apiVersion: v1
+entries:
+  access-node:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-01-22T11:21:45.866402231Z"
+    dependencies:
+    - condition: blockchain-connector.enabled
+      name: blockchain-connector
+      repository: https://wistefan.github.io/access-node/pre
+      version: 0.1.0
+    - condition: broker-adapter.enabled
+      name: broker-adapter
+      repository: https://wistefan.github.io/access-node/pre
+      version: 0.1.0
+    - condition: dlt-adapter.enabled
+      name: dlt-adapter
+      repository: https://wistefan.github.io/access-node/pre
+      version: 1.0.3
+    - condition: kafka.enabled
+      name: kafka
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 26.0.0
+    - alias: postgis
+      condition: postgis.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: scorpio
+      condition: scorpio.enabled
+      name: scorpio-broker-aaio
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.7
+    - condition: tm-forum-api.enabled
+      name: tm-forum-api
+      repository: https://fiware.github.io/helm-charts
+      version: 0.5.3
+    description: Umbrella Chart for the DOME Marketplace access-node
+    digest: 52422c02741fb21091e56fe89cef3c9c04d6e33731c1991b1bfe824847d16c82
+    name: access-node
+    type: application
+    urls:
+    - https://github.com/wistefan/access-node/releases/download/access-node-0.0.1/access-node-0.0.1.tgz
+    version: 0.0.1
+  blockchain-connector:
+  - apiVersion: v2
+    appVersion: 1.1.0
+    created: "2024-01-22T11:21:45.974688784Z"
+    description: blockchain-connector Helm-Chart
+    digest: 5a28015353fec213fbc64e707062ab2c6fb2814e44f82c8a889ff22f16d4290e
+    name: blockchain-connector
+    type: application
+    urls:
+    - https://github.com/wistefan/access-node/releases/download/blockchain-connector-0.1.0/blockchain-connector-0.1.0.tgz
+    version: 0.1.0
+  broker-adapter:
+  - apiVersion: v2
+    appVersion: 1.1.0
+    created: "2024-01-22T11:21:46.093311253Z"
+    description: broker-adapter Helm-Chart
+    digest: ea0d957ce294ab092d157fec191ab73770d99955cbfee6141c59bd2eaa2562ef
+    name: broker-adapter
+    type: application
+    urls:
+    - https://github.com/wistefan/access-node/releases/download/broker-adapter-0.1.0/broker-adapter-0.1.0.tgz
+    version: 0.1.0
+  dlt-adapter:
+  - apiVersion: v2
+    appVersion: 1.2.1
+    created: "2024-01-22T11:21:46.191135437Z"
+    description: A Helm chart for DLT Adapter component
+    digest: 4345e0fa15225e08c90f282bf4498283951e18f98934e5f49540904c2e70d51a
+    name: dlt-adapter
+    sources:
+    - https://github.com/alastria/DOME-blockchain_connector-dlt_interface
+    type: application
+    urls:
+    - https://github.com/wistefan/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
+    version: 1.0.3
+generated: "2024-01-22T11:21:46.19116902Z"
