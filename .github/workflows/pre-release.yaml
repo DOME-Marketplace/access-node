@@ -56,9 +56,9 @@ jobs:
             for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
 
               echo "$file was changed"
-              baseFolder=$(cut -d'/' -f2 <<< "$file")
-              echo "$baseFolder"
-              if [ $baseFolder = "charts/access-node" ]; then
+              baseFolder=$(cut -d'/' -f1 <<< "$file")
+              chartName=$(cut -d'/' -f2 <<< "$file")
+              if [ $baseFolder = "charts" && $chartName = "access-node" ]; then
                 echo "changed=true" >> "$GITHUB_OUTPUT"
                 break;
               fi  
