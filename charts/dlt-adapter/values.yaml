@@ -12,7 +12,7 @@ port: 8080
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 livenessProbe:
   initialDelaySeconds: 30

@@ -15,13 +15,15 @@ dlt-adapter:
   deployment:
     privateKey: 0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
     contractAddress: 0x37532a3dbf29942d10fb8ba57dc35d2134fe494d
-    image:
-      repository: quay.io/wi_stefan/dlt-adapter
-      # -- tag of the image to be used
-      tag: latest
-      # -- specification of the image pull policy
-      pullPolicy: Always
-    logLevel: DEBUG
+  replicaCount: 1
+  image:
+    repository: quay.io/wi_stefan/dlt-adapter
+    # -- tag of the image to be used
+    tag: latest
+    # -- specification of the image pull policy
+    pullPolicy: Always
+  logLevel: DEBUG
+  fullnameOverride: dlt-adapter
 
 tm-forum-api:
   defaultConfig:
