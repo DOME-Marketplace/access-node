@@ -57,6 +57,7 @@ jobs:
 
               echo "$file was changed"
               baseFolder=$(cut -d'/' -f2 <<< "$file")
+              echo "$baseFolder"
               if [ $baseFolder = "charts/access-node" ]; then
                 echo "changed=true" >> "$GITHUB_OUTPUT"
                 break;
@@ -72,6 +73,7 @@ jobs:
         - name: echo
           run: |
             echo ${{ needs.check-changes.outputs.hello }}
+            echo ${{ needs.check-changes.outputs.changed }}
 
         - uses: actions/checkout@v2
 
