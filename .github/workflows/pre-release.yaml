@@ -83,8 +83,10 @@ jobs:
             mkdir pre
             mv .cr-index/index.yaml pre/index.yaml
 
+            ls -l
+
             git add pre/index.yaml
             git commit -m "add pre-index"
-            git push --force --set-upstream origin gh-pages
+            #git push --force --set-upstream origin gh-pages
 
         
