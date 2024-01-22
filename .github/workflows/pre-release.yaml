@@ -83,7 +83,6 @@ jobs:
             git switch gh-pages
             git status
 
-            mkdir pre
             mv .cr-index/index.yaml pre/index.yaml
             ls -l
 
