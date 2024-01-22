@@ -79,12 +79,12 @@ jobs:
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
             cr index -o "$owner" -r "$repo"
 
-            mkdir pre
-            mv .cr-index/index.yaml pre/index.yaml
 
             git switch gh-pages
             git status
 
+            mkdir pre
+            mv .cr-index/index.yaml pre/index.yaml
             ls -l
 
             git add pre/index.yaml
