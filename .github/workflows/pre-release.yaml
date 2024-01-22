@@ -62,11 +62,14 @@ jobs:
 
     deploy:
 
-      needs: [ "it", "check-changes" ]
+      needs: ["check-changes" ]
       runs-on: ubuntu-latest
-      if: needs.check-changes.outputs.changed == 'true'
 
       steps:
+        - name: echo
+          run: |
+            echo ${needs.check-changes.outputs.changed}
+
         - uses: actions/checkout@v2
 
         - name: Fetch history
