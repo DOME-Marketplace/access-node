@@ -75,17 +75,17 @@ jobs:
       steps:
         - uses: actions/checkout@v2
 
-        - id: pr
-          uses: actions-ecosystem/action-get-merged-pull-request@v1.0.1
+        - id: bump
+          uses: zwaldowski/match-label-action@v1
           with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
+            allowed: major,minor,patch
 
         - uses: zwaldowski/semver-release-action@v2
           with:
             dry_run: true
-            bump: ${{ steps.pr.outputs.labels }}
+            bump: ${{ steps.bump.outputs.match }}
             github_token: ${{ secrets.GITHUB_TOKEN }}
-
+          
         - name: Set version output
           id: out
           run: echo "::set-output name=version::$(echo ${VERSION})"
