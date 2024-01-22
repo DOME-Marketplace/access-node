@@ -68,7 +68,7 @@ jobs:
       steps:
         - name: echo
           run: |
-            echo ${needs.check-changes.outputs.changed}
+            echo ${{ needs.check-changes.outputs.changed }}
 
         - uses: actions/checkout@v2
 
