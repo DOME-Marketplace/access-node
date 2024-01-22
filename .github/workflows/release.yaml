@@ -27,6 +27,7 @@ jobs:
 
     deploy:
 
+      needs: [ "it" ]
       runs-on: ubuntu-latest
 
       steps:
