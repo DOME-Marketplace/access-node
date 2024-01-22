@@ -3,7 +3,7 @@ name: dlt-adapter
 description: A Helm chart for DLT Adapter component
 
 type: application
-version: 1.0.0
+version: 1.0.1
 appVersion: "1.2.1"
 
 sources:
