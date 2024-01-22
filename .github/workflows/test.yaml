@@ -21,6 +21,8 @@ jobs:
         with:
           java-version: '17'
           java-package: jdk
+          
+      - uses: azure/setup-helm@v3
 
       - name: Execute tests
         id: test
