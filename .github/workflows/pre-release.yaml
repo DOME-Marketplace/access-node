@@ -35,7 +35,6 @@ jobs:
 
       outputs:
         changed: ${{ steps.changes.outputs.changed }}
-        hello: ${{ steps.changes.outputs.hello }}
 
       steps:
 
@@ -52,7 +51,6 @@ jobs:
           shell: bash
           run: |
 
-            echo "hello=hello" >> "$GITHUB_OUTPUT"
             for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
 
               echo "$file was changed"
@@ -68,12 +66,9 @@ jobs:
 
       needs: ["check-changes" ]
       runs-on: ubuntu-latest
+      if: ${{ needs.check-changes.outputs.changed }}
 
       steps:
-        - name: echo
-          run: |
-            echo ${{ needs.check-changes.outputs.hello }}
-            echo ${{ needs.check-changes.outputs.changed }}
 
         - uses: actions/checkout@v2
 
