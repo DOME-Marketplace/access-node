@@ -30,10 +30,37 @@ jobs:
             cd it
             mvn clean test integration-test
 
+    check-changes: 
+      runs-on: ubuntu-latest
+
+      outputs:
+        changed: ${{ steps.changes.outputs.changed }}
+
+      steps:
+
+        - uses: actions/checkout@v3
+          with:
+            ref: ${{ github.head_ref }}
+
+        - name: Check changes
+          id: changes
+          shell: bash
+          run: |
+            for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
+
+              echo "$file was changed"
+              baseFolder=$(cut -d'/' -f2 <<< "$file")
+              if [ $baseFolder = "charts/access-node" ]; then
+                echo "changed=true" >> "$GITHUB_OUTPUT"
+                break;
+              fi  
+            done    
+
     deploy:
 
-      needs: [ "it" ]
+      needs: [ "it", "check-changes" ]
       runs-on: ubuntu-latest
+      if: needs.check-changes.outputs.changed == 'true'
 
       steps:
         - uses: actions/checkout@v2
