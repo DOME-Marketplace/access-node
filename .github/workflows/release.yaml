@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    it:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - uses: actions/setup-java@v1
+          with:
+            java-version: '17'
+            java-package: jdk
+
+        - uses: azure/setup-helm@v3
+
+        - name: Execute tests
+          id: test
+          run: |
+            cd it
+            mvn clean test integration-test
+
+    deploy:
+
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Fetch history
+          run: git fetch --prune --unshallow
+
+        - name: Configure Git
+          run: |
+            git config user.name "$GITHUB_ACTOR"
+            git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+        # See https://github.com/helm/chart-releaser-action/issues/6
+        - name: Install Helm
+          run: |
+            curl -fsSLo get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+
+        - name: Run chart-releaser
+          uses: helm/chart-releaser-action@v1.6.0
+          env:
+            CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+            CR_SKIP_EXISTING: true
+          with:
+            pages_branch: gh-pages

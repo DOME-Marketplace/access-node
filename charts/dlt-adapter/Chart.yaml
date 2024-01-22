@@ -1,0 +1,10 @@
+apiVersion: v2
+name: dlt-adapter
+description: A Helm chart for DLT Adapter component
+
+type: application
+version: 1.0.3
+appVersion: "1.2.1"
+
+sources:
+  - https://github.com/alastria/DOME-blockchain_connector-dlt_interface

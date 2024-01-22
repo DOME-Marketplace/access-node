@@ -1,0 +1,13 @@
+deployment:
+  image:
+    repository: trufflesuite/ganache-cli
+    # -- tag of the image to be used
+    tag: latest
+    # -- specification of the image pull policy
+    pullPolicy: Always
+
+service:
+  port: 8545
+  type: ClusterIP
+
+fullnameOverride: blockchain-testnode

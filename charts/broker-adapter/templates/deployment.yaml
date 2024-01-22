@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "broker-adapter.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{ include "broker-adapter.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "broker-adapter.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        {{ include "broker-adapter.labels" . | nindent 8 }}
+    spec:
+      containers: 
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          env: 
+            - name: BROKER_EXTERNAL_DOMAIN
+              value: {{ .Values.deployment.broker.externalDomain }}
+            - name: BROKER_INTERNAL_DOMAIN
+              value: {{ .Values.deployment.broker.internalDomain }}
+            - name: BROKER_PATHS_ENTITIES
+              value: /ngsi-ld/v1/entities
+            - name: BROKER_PATHS_SUBSCRIPTIONS
+              value: /ngsi-ld/v1/subscriptions
+          ports:
+            - containerPort: {{ .Values.service.port}}
+              name: http
+              protocol: TCP
