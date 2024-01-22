@@ -78,7 +78,7 @@ jobs:
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
 
-            git fetch origin gh-pages
+            git pull origin gh-pages
             cr index -o "$owner" -r "$repo"
 
             mkdir pre
