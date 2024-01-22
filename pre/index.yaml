@@ -49,7 +49,7 @@ entries:
     version: 0.0.1
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-01-22T13:15:29.183283365Z"
+    created: "2024-01-22T13:19:51.318871161Z"
     dependencies:
     - condition: blockchain-connector.enabled
       name: blockchain-connector
@@ -87,7 +87,7 @@ entries:
       repository: https://fiware.github.io/helm-charts
       version: 0.5.3
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: 01fcc91e67075076fa5aed7225eb68a133c89f77feae7fd11b20c9933aae4ccb
+    digest: 4d194172c3c8ecf3090abe4e1de8423cedb13c6e35ee24a7e940bfb390920a6e
     name: access-node
     type: application
     urls:
@@ -128,4 +128,4 @@ entries:
     urls:
     - https://github.com/wistefan/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2024-01-22T13:15:29.18329699Z"
+generated: "2024-01-22T13:19:51.318885026Z"
