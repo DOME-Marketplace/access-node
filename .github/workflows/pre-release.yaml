@@ -10,6 +10,7 @@ on:
       - unlabeled
 
 jobs:
+
     it:
       runs-on: ubuntu-latest
 
@@ -28,7 +29,6 @@ jobs:
           run: |
             cd it
             mvn clean test integration-test
-
 
     deploy:
 
