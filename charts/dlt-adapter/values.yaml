@@ -1,14 +1,88 @@
-deployment:
-  image:
-    repository: quay.io/wi_stefan/dlt-adapter
-    # -- tag of the image to be used
-    tag: latest
-    # -- specification of the image pull policy
-    pullPolicy: Always
-  logLevel: DEBUG
+# Default values for dltAdapter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository:  quay.io/digitelts/dlt-adapter
+  pullPolicy: Always 
+  tag: "" 
+port: 8080
 
 service:
-  port: 8080
   type: ClusterIP
+  port: 8080
 
-fullnameOverride: dlt-adapter
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 30
+readinessProbe:
+  initialDelaySeconds: 31
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 30
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+## configuration for prometheus monitoring
+prometheus:
+  # -- should prometheus scrape be enabled
+  enabled: false
+  # -- path for prometheus scrape
+  path: /prometheus
+  # -- port prometheus scrape is available at
+  port: 8081
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user.
+  # If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

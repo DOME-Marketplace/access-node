@@ -9,16 +9,16 @@ appVersion: 0.0.1
 dependencies:
   - name: blockchain-connector
     condition: blockchain-connector.enabled
-    repository: file://../blockchain-connector
+    repository: https://wistefan.github.io/access-node/pre
     version: 0.1.0
   - name: broker-adapter
     condition: broker-adapter.enabled
-    repository: file://../broker-adapter
+    repository: https://wistefan.github.io/access-node/pre
     version: 0.1.0
   - name: dlt-adapter
     condition: dlt-adapter.enabled
-    repository: file://../dlt-adapter
-    version: 1.0.0
+    repository: https://wistefan.github.io/access-node/pre
+    version: 1.0.2
   - name: kafka
     condition: kafka.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
