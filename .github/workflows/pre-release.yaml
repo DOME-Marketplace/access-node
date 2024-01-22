@@ -77,17 +77,17 @@ jobs:
           run: |
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
-
-            git pull origin gh-pages
             cr index -o "$owner" -r "$repo"
 
             mkdir pre
             mv .cr-index/index.yaml pre/index.yaml
 
+            git switch gh-pages
+            git status
+
             ls -l
 
             git add pre/index.yaml
-            git rebase  gh-pages
             git commit -m "add pre-index"
             #git push --force --set-upstream origin gh-pages
 
