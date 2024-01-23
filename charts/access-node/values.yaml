@@ -1,98 +1,201 @@
+## configuration for the blockchain-connector - see https://wistefan.github.io/access-node/blockchain-connector for configuration documentation 
 blockchain-connector:
+  # -- should the blockchain-connector be enabled
   enabled: true
-broker-adapter:
-  enabled: true
-dlt-adapter:
-  enabled: true
-
-kafka:
-  enabled: false  
-  listeners:
-    client: 
-      protocol: PLAINTEXT
-    controller:
-      protocol: PLAINTEXT
-    interbroker:
-      protocol: PLAINTEXT
-    external: 
-      protocol: PLAINTEXT
-  controller:
-    persistence:
-      enabled: false
-  broker: 
-    persistence:
-      enabled: false
-  zookeeper: 
-    persistence:
-      enabled: false
-  fullnameOverride: kafka
-
-postgis:
-  enabled: true  
-  fullnameOverride: postgis
-  nameOverride: postgis
-  auth:
-    username: postgres
-    enablePostgresUser: true
+  ## deployment specific configuration
+  deployment:
+    ## configuration to connect to the dlt-adapter
+    dltAdapter: 
+      # -- (local) address of the dlt-adapter
+      domain: http://dlt-adapter:8080
+    ## configuration of the blockchain to be used
+    blockchain:
+      # -- address of the access node at the (ethereum-compatible)blockchain
+      userEthereumAddress: someHexNumber
+      # -- rpc-address of the blockchain
+      rpcAddress: https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6
+      ## configuration of subscriptions at the blockchain
+      subscription:
+        # -- should the connector listen to events on the blockchain
+        active: true
+        # -- local address of the blockchain-connectors notification endpoint for dlt events
+        notificationEndpoint: http://blockchain-connector:8080/notifications/dlt
+        # -- a list of entity-types the connector is interested in
+        entityTypes: > 
+          product-offering
+    ## connection information for the context broker
+    broker:
+      # -- internal address of the context broker to be used by the connector
+      internalDomain: http://scorpio:9090
+      # -- extrenal addres of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
+      externalDomain: http://my-scorpio.org
+    ## configuration of ngsi-ld entities to listen for
+    ngsiSubscription:
+      # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
+      notificationEndpoint:  http://blockchain-connector:8080/notifications/broker
+      # -- a list of entity-types the connector is interested in
+      entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
+    ## connection information to the broker-adapter
+    brokerAdapter:
+      # -- (local) address of the broker-adapter
+      domain: http://broker-adapter:8080
+      # configuration of the paths provided by the broker-adapter
+      paths:
+        # -- entities path
+        entites: /api/v2/entities
+        # -- subscriptions path
+        subscriptions: /api/v2/subscriptions
+    ## information about the access-node operator 
+    operator:
+      # -- did of the organization running the node
+      organizationId: did:web:my-marketplace-operator.org
+  ## configuration of the database to be used by the blockchain-connector
+  db:
+    # -- host of the db
+    host: postgresql-connector
+    # -- password to be used
     password: postgres
+    # -- username to be used
+    username: postgres
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: blockchain-connector
+
+## configuration for the broker-adapter - see https://wistefan.github.io/access-node/broker-adapter for configuration documentation 
+broker-adapter:
+  # -- should the broker-adapter be enabled
+  enabled: true
+  ## deployment specific configuration
+  deployment:
+    ## connection information for the context broker
+    broker:
+      # -- internal address of the context broker to be used by the connector
+      internalDomain: http://scorpio:9090
+      # -- extrenal addres of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
+      externalDomain: http://my-scorpio.org
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: broker-adapter
+
+## configuration for the dlt-adapter - see https://wistefan.github.io/access-node/dlt-adapter for configuration documentation 
+dlt-adapter:
+  # -- should the dlt-adapter be enabled
+  enabled: true
+  ## deployment specific configuration
+  deployment:
+    # -- private key of the access node to sign transactions on the blockchain. Has to be the key for blockchain-connector.blockchain.userEthereumAddress  
+    privateKey: someHexNumber
+    # -- address of the contract to be used. Needs to be available on `blockchain-connector.deployment.blockchain.rpcAddress`
+    contractAddress: 0xdF6B206F89354Ee260EdC52984e6Ad2a9C8CE5Ae
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: dlt-adapter
+
+## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
+postgresql:
+  # -- should the postgresql deployment be enabled
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: postgresql-connector
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: postgresql-connector
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres  
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres 
+  ## configuration of the postgres primary replica
   primary:
-    persistence: 
-      enabled: false
+    ## provide db initialization
     initdb:
+      ## provide scripts for initialization
       scripts:
+        # -- create the database as expected by the blockchain-connector
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
+
+## configuration of the context-broker - see https://github.com/FIWARE/helm-charts/tree/main/charts/scorpio-broker-aaio for details
+scorpio:
+  # -- should scorpio be enabled
+  enabled: true
+  ## configuration of the image to be used
+  image: 
+    # -- repository to be used - resource friendly all-in-one-runner without kafka
+    repository: scorpiobroker/all-in-one-runner
+    # -- tag of the image to be used - latest java image without kafka
+    tag: java-4.1.11
+  ## configuration of the database to be used by broker
+  db:
+    # -- host of the db
+    dbhost: postgis
+    # -- username to be used
+    user: postgres
+    # -- password to be used
+    password: postgres
+  ## configuration of the readiness probe
+  readinessProbe:  
+    # -- path to be used for the readiness probe, older versions used /actuator/health
+    path: /q/health
+  ## configuration of the liveness probe
+  livenessProbe: 
+    # -- path to be used for the readiness probe, older versions used /actuator/health
+    path: /q/health
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: scorpio
+  ## configuration to be used for the service offered by scorpio
+  service:
+    # -- ClusterIP is the recommended type for most clusters
+    type: ClusterIP
+
+## configuration for kafka in case its used by scorpio - see https://github.com/bitnami/charts/tree/main/bitnami/kafka
+kafka:
+  # -- should kafka be enabled? 
+  enabled: false  
+
+## configuration of postgis to be used for scorpio - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
+postgis:
+  # -- should postgis be enabled
+  enabled: true  
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: postgis
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: postgis
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- username to be used
+    password: postgres
+  ## configuration of the postgres primary replicas
+  primary:
+    ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- enable the postgis extension and create the database as expected by scorpio
         enable.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE EXTENSION postgis;"
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE ngb;"
-  readReplicas:
-    persistence: 
-      enabled: false
 
-postgresql:
-  enabled: true
-  fullnameOverride: postgresql-connector
-  nameOverride: postgresql-connector
-  auth:
-    username: postgres  
-    enablePostgresUser: true
-    password: postgres 
-  primary:
-    persistence: 
-      enabled: false
-    initdb:
-      scripts:
-        create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
-  readReplicas:
-    persistence: 
-      enabled: false
-
-scorpio:
-  enabled: true
-  image: 
-    repository: scorpiobroker/all-in-one-runner
-    tag: java-4.1.11 
-  db:
-    dbhost: postgis
-    user: postgres
-    password: postgres
-  readinessProbe:
-    path: /q/health
-  livenessProbe: 
-    path: /q/health
-  fullnameOverride: scorpio
-  service:
-    type: ClusterIP
-
+## configuration of the tm-forum-api - see https://github.com/FIWARE/helm-charts/tree/main/charts/tm-forum-api for details
 tm-forum-api:
+  # -- should tm-forum-api be enabled
   enabled: true
+  ## configuration to be used by every api-deployment if nothing specific is provided.
   defaultConfig:
+    # -- configuration to be used for the image of the containers
     image:
+      # -- current latest tag
       tag: "0.16.0"
-    additionalEnvVars:
-      - name: LOGBACK_APPENDER
-        value: CONSOLE
+    # --  ngsi-ld broker connection information
     ngsiLd:
+      # -- address of the broker
       url: http://scorpio:9090
+    # -- default context to be used when contacting the context broker
     contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+  ## configuration for the api proxy, to serve all apis through one kubernetes service 
   apiProxy:
+    # -- should the proxy be enabled
     enabled: true
