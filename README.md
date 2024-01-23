@@ -1,7 +1,7 @@
 # The DOME Access-Node
 
 [![License](https://img.shields.io/github/license/FIWARE/canismajor.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Test](https://github.com/wistefan/access-node/actions/workflows/test.yaml/badge.svg)](https://github.com/wistefan/access-node/actions/workflows/test.yaml)
+[![Test](https://github.com/DOME-Marketplace/access-node/actions/workflows/test.yaml/badge.svg)](https://github.com/DOME-Marketplace/access-node/actions/workflows/test.yaml)
 
 The DOME Access-Node is a set of microservices, that provides access to the [DOME Marketplace](https://dome-marketplace.org). A registered participant 
 can use it to act as a federated marketplace in DOME.
@@ -63,7 +63,7 @@ Its recommended to install the Access-Node on [Kuberentes(> 1.26.7)](https://kub
 The Access-Node is provided as an [Umbrella Chart](https://helm.sh/docs/howto/charts_tips_and_tricks/#complex-charts-with-many-dependencies), containing dependencies to all mentioned [components](#components), allowing to install them all at once:
 
 ```shell
-helm repo add dome-access-node https://wistefan.github.io/access-node
+helm repo add dome-access-node https://DOME-Marketplace.github.io/access-node
 helm install <RELEASE_NAME> dome-access-node/access-node
 ```
 

@@ -1,4 +1,4 @@
-## configuration for the blockchain-connector - see https://wistefan.github.io/access-node/blockchain-connector for configuration documentation 
+## configuration for the blockchain-connector - see https://DOME-Marketplace.github.io/access-node/blockchain-connector for configuration documentation 
 blockchain-connector:
   # -- should the blockchain-connector be enabled
   enabled: true
@@ -60,7 +60,7 @@ blockchain-connector:
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: blockchain-connector
 
-## configuration for the broker-adapter - see https://wistefan.github.io/access-node/broker-adapter for configuration documentation 
+## configuration for the broker-adapter - see https://DOME-Marketplace.github.io/access-node/broker-adapter for configuration documentation 
 broker-adapter:
   # -- should the broker-adapter be enabled
   enabled: true
@@ -75,7 +75,7 @@ broker-adapter:
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: broker-adapter
 
-## configuration for the dlt-adapter - see https://wistefan.github.io/access-node/dlt-adapter for configuration documentation 
+## configuration for the dlt-adapter - see https://DOME-Marketplace.github.io/access-node/dlt-adapter for configuration documentation 
 dlt-adapter:
   # -- should the dlt-adapter be enabled
   enabled: true
