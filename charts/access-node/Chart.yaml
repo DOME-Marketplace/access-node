@@ -9,15 +9,15 @@ appVersion: 0.0.1
 dependencies:
   - name: blockchain-connector
     condition: blockchain-connector.enabled
-    repository: https://wistefan.github.io/access-node
+    repository: https://dome-marketplace.github.io/access-node
     version: 0.1.0
   - name: broker-adapter
     condition: broker-adapter.enabled
-    repository: https://wistefan.github.io/access-node
+    repository: https://dome-marketplace.github.io/access-node
     version: 0.1.0
   - name: dlt-adapter
     condition: dlt-adapter.enabled
-    repository: https://wistefan.github.io/access-node
+    repository: https://dome-marketplace.github.io/access-node
     version: 1.0.3
   - name: kafka
     condition: kafka.enabled
