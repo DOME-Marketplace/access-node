@@ -6,10 +6,89 @@ on:
       - main
 
 jobs:
+    it:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - uses: actions/setup-java@v1
+          with:
+            java-version: '17'
+            java-package: jdk
+
+        - uses: azure/setup-helm@v3
+
+        - name: Execute tests
+          id: test
+          run: |
+            cd it
+            mvn clean test integration-test
+
+    check-changes: 
+
+      needs: ["it" ]
+      runs-on: ubuntu-latest
+
+      outputs:
+        changed: ${{ steps.changes.outputs.changed }}
+
+      steps:
+
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+
+        - name: Get changed files
+          id: changed-files
+          uses: tj-actions/changed-files@v14.6
+
+        - name: Check changes
+          id: changes
+          shell: bash
+          run: |
+
+            for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
+
+              echo "$file was changed"
+              baseFolder=$(cut -d'/' -f1 <<< "$file")
+              chartName=$(cut -d'/' -f2 <<< "$file")
+              if [ $baseFolder = "charts" ] && [ $chartName = "access-node" ]; then
+                echo "changed=true" >> "$GITHUB_OUTPUT"
+                break;
+              fi  
+            done  
+
+    generate-version:
+
+      needs: [ "it", "check-changes" ]
+      runs-on: ubuntu-latest
+
+      outputs:
+        version: ${{ steps.out.outputs.version }}
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - id: pr
+          uses: actions-ecosystem/action-get-merged-pull-request@v1.0.1
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+
+        - uses: zwaldowski/semver-release-action@v2
+          with:
+            dry_run: true
+            bump: ${{ steps.pr.outputs.labels }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Set version output
+          id: out
+          run: echo "::set-output name=version::$(echo ${VERSION})"
+
     deploy:
 
+      needs: [ "it", "check-changes", "generate-version" ]
       runs-on: ubuntu-latest
-      if: github.event_name == 'push'
 
       steps:
         - uses: actions/checkout@v2
@@ -28,6 +107,17 @@ jobs:
             curl -fsSLo get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
             chmod 700 get_helm.sh
             ./get_helm.sh
+
+        # prepare yaml parser
+        - uses: actions/setup-go@v4
+        - name: Install yq
+          run: |
+            go install github.com/mikefarah/yq/v4@latest
+            yq --version
+
+        - name: Set the version
+          run: |
+              yq e -i '.version = "${{ needs.generate-version.outputs.version }}"' ./charts/access-node/Chart.yaml
 
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@v1.6.0
