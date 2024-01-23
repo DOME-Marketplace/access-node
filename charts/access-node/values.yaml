@@ -16,7 +16,7 @@ blockchain-connector:
       rpcAddress: https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6
       ## configuration of subscriptions at the blockchain
       subscription:
-        # -- should the connector listen to events on the blockchain
+        # -- should the connector listen to events on the blockchain 
         active: true
         # -- local address of the blockchain-connectors notification endpoint for dlt events
         notificationEndpoint: http://blockchain-connector:8080/notifications/dlt
