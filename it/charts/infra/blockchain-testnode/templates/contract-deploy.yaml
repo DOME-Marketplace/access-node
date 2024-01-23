@@ -9,17 +9,17 @@ metadata:
     "helm.sh/hook-weight": "1"
 spec:
   template:
-      spec:
-        containers:
-          - name: contract-create
-            image: quay.io/wi_stefan/dome-contract:latest
-            env:
-              - name: NET_CHAIN_ID
-                value: "1"
-              - name: PRIVATE_KEY
-                value: "0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f"
-                #value: "0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87"
-              - name: NODE_ENDPOINT
-                value: http://blockchain-testnode.infra.svc.cluster.local:8545/
-        restartPolicy: OnFailure
+    spec:
+      containers:
+        - name: contract-create
+          image: quay.io/wi_stefan/dome-contract:latest
+          env:
+            - name: NET_CHAIN_ID
+              value: "1"
+            - name: PRIVATE_KEY
+              value: "0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f"
+              #value: "0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87"
+            - name: NODE_ENDPOINT
+              value: http://blockchain-testnode.infra.svc.cluster.local:8545/
+      restartPolicy: OnFailure
   backoffLimit: 10
