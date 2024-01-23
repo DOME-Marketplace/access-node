@@ -21,9 +21,5 @@ spec:
                 #value: "0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87"
               - name: NODE_ENDPOINT
                 value: http://blockchain-testnode.infra.svc.cluster.local:8545/
-        volumes:
-          - name: scripts
-            configMap:
-              name: onboarding-keyrock-create-policy-cm
         restartPolicy: OnFailure
   backoffLimit: 10
