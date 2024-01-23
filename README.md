@@ -1,5 +1,8 @@
 # The DOME Access-Node
 
+[![License](https://img.shields.io/github/license/FIWARE/canismajor.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Test](https://github.com/wistefan/access-node/actions/workflows/test.yaml/badge.svg)](https://github.com/wistefan/access-node/actions/workflows/test.yaml)
+
 The DOME Access-Node is a set of microservices, that provides access to the [DOME Marketplace](https://dome-marketplace.org). A registered participant 
 can use it to act as a federated marketplace in DOME.
 
@@ -77,7 +80,7 @@ The Helm-Chart is integration-tested with a local [k3s-instance](https://k3s.io/
 
 The test uses the following tools:
 
-* templated by [Helm], using the [Helm Maven-Plugin](https://github.com/kokuwaio/helm-maven-plugin)
+* templated by [Helm](https://helm.sh), using the [Helm Maven-Plugin](https://github.com/kokuwaio/helm-maven-plugin)
 * deployed with the [k3s Maven-Plugin](https://github.com/kokuwaio/k3s-maven-plugin)
 * tested with [Cucumber](https://cucumber.io/)
 
