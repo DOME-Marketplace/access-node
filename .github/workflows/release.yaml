@@ -60,8 +60,9 @@ jobs:
             done  
 
     generate-version:
-
+    
       needs: [ "it", "check-changes" ]
+      if: ${{ needs.check-changes.outputs.changed }}
       runs-on: ubuntu-latest
 
       outputs:
@@ -88,6 +89,7 @@ jobs:
     deploy:
 
       needs: [ "it", "check-changes", "generate-version" ]
+      if: ${{ needs.check-changes.outputs.changed }}
       runs-on: ubuntu-latest
 
       steps:
