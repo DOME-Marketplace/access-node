@@ -140,7 +140,9 @@ jobs:
             git config --local user.name "github-actions[bot]"
             git status
             echo commit
+
             git commit -m "Update helm documentation" -a
+
             echo status update
             git status
 
