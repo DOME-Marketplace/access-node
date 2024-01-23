@@ -63,9 +63,10 @@ Its recommended to install the Access-Node on [Kuberentes(> 1.26.7)](https://kub
 The Access-Node is provided as an [Umbrella Chart](https://helm.sh/docs/howto/charts_tips_and_tricks/#complex-charts-with-many-dependencies), containing dependencies to all mentioned [components](#components), allowing to install them all at once:
 
 ```shell
-helm repo add dome-access-node https://DOME-Marketplace.github.io/access-node
+helm repo add dome-access-node https://dome-marketplace.github.io/access-node
 helm install <RELEASE_NAME> dome-access-node/access-node
 ```
+> :bulb: All releases of the Access-Node reside in the helm-repository https://dome-marketplace.github.io/access-node. In additon to that, all Pre-Release versions(build from the Pull Requests) are provided in the pre-repo https://dome-marketplace.github.io/access-node/pre. The pre-repo will be cleaned-up from time to time, in order to keep the index manageable.
 
 It provides a sane set of default-values. To actually use the Access-Node the following values have to be replaced:
 
@@ -114,3 +115,24 @@ var serviceCatalogApiConsumer = new ServiceCatalogApi();
 serviceCatalogApiConsumer = setCustomBaseUrl("http://localhost:8081/tmf-api/serviceCatalogManagement/v4");
 ```
 
+## CI
+
+The Access-Node repository uses a CI-Pipeline to deliver the Helm-Chart as a tested and versioned component. 
+
+The CI is setup as following:
+* integration-tests are executed on every push
+* on every PR to ```main```, the CI checks if anything inside the ```/charts/access-node``` folder was changed
+    * if false: skip release and allow merging to main
+    * if true: 
+        * generate the new version, based on the tag assigned to the PR(patch,minor,major)
+        * set the version to the Chart.yaml, postfixed with ```-PRE-<PR_NUMBER>``` following the [SemVer 2.0 Spec](https://semver.org/)
+        * generate the updated documentation
+        * add the chart to the pre-repo(https://dome-marketplace.github.io/access-node/pre)
+* on push-to-main(e.g. merged PR), the CI checks if anything inside the ```/charts/access-node``` folder was changed
+    * if false: skip release and allow merging to main
+    * if true: 
+        * generate the new version, based on the tag assigned to the PR(patch,minor,major)
+        * set the version to the Chart.yaml
+        * generate the updated documentation
+        * add the chart to the helm-repo(https://dome-marketplace.github.io/access-node)
+        * create a tag and a github release
