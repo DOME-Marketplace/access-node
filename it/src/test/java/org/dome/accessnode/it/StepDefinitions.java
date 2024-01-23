@@ -50,7 +50,7 @@ public class StepDefinitions {
         serviceCatalog = scaProvider.createServiceCatalog(scc);
     }
 
-    @Then("it should be avalailable at the consumer marketplace, too.")
+    @Then("it should be available at the consumer marketplace, too.")
     public void checkServiceCatalogAtConsumer() throws ApiException {
         await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkCatalogExistence(serviceCatalog.getId()));
 

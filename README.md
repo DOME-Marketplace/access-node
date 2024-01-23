@@ -55,7 +55,7 @@ Its recommended to install the Access-Node on [Kuberentes(> 1.26.7)](https://kub
 
 > :bulb: An example of a federated marketplace, deployed on top of a[managed Kubernetes by IONOS](https://dcd.ionos.com/) can be found in [DOME-Gitops](https://github.com/DOME-Marketplace/dome-gitops)  
 
-### Quick Install
+### Install
 
 The Access-Node is provided as an [Umbrella Chart](https://helm.sh/docs/howto/charts_tips_and_tricks/#complex-charts-with-many-dependencies), containing dependencies to all mentioned [components](#components), allowing to install them all at once:
 
@@ -70,4 +70,44 @@ It provides a sane set of default-values. To actually use the Access-Node the fo
 * `blockchain-connector.deployment.broker.externalDomain`: Externally accessible address of the context broker. Will be used by the other Access-Nodes
 * `blockchain-connector.deployment.operator.organizationId`: DID of the marketplace operator
 * `dlt-adapter.deployment.privateKey`: Private Key of the access-node operator, has to match the `blockchain-connector.deployment.blockchain.userEthereumAddress` and will be used to sign the transactions
-* 
+
+## Test
+
+The Helm-Chart is integration-tested with a local [k3s-instance](https://k3s.io/). 
+
+The test uses the following tools:
+
+* templated by [Helm], using the [Helm Maven-Plugin](https://github.com/kokuwaio/helm-maven-plugin)
+* deployed with the [k3s Maven-Plugin](https://github.com/kokuwaio/k3s-maven-plugin)
+* tested with [Cucumber](https://cucumber.io/)
+
+The test-setup looks as following:
+
+![Test Setup](./doc/test-setup.png)
+
+
+The TMForum-APIs are mapped to local ports:
+* provider: localhost:8080
+* consumer: localhost:8081
+
+### Run the tests
+
+To execute all tests, run:
+
+```shell
+    mvn clean integration-test
+```
+
+### Extend the tests
+
+The definition of features is available under the [test-resources](./it/src/test/resources/it/). Steps can be added to the [StepDefinitions](./it/src/test/java/org/dome/accessnode/it/StepDefinitions.java) or through a new class. Rest-Clients to all TMForum-APIs are generated and can be used inside the tests:
+```java
+var serviceCatalogApiProvider = new ServiceCatalogApi();
+// base address of the local provider tmforum-api
+serviceCatalogApiProvider = setCustomBaseUrl("http://localhost:8080/tmf-api/serviceCatalogManagement/v4");
+
+var serviceCatalogApiConsumer = new ServiceCatalogApi();
+// base address of the local consumer tmforum-api
+serviceCatalogApiConsumer = setCustomBaseUrl("http://localhost:8081/tmf-api/serviceCatalogManagement/v4");
+```
+
