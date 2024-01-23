@@ -144,13 +144,11 @@ jobs:
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
 
-
             git switch gh-pages
             
             cr index -o "$owner" -r "$repo"
 
             mv .cr-index/index.yaml pre/index.yaml
-            ls -l
 
             git add pre/index.yaml
             git commit -m "add pre-index"
