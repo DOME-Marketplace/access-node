@@ -129,6 +129,26 @@ jobs:
           run: |
               yq e -i '.version = "${{ needs.generate-version.outputs.version }}"' ./charts/access-node/Chart.yaml
 
+        - name: generate docs
+          run:
+            docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
+
+        - name: Commit files
+          continue-on-error: true
+          run: |
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git status
+            echo commit
+            git commit -m "[skip ci]Update helm documentation" -a
+            echo status update
+            git status
+
+        - name: Push changes
+          continue-on-error: true
+          uses: ad-m/github-push-action@master
+          with:
+            branch: ${{ github.head_ref }}
 
         - name: Run chart-releaser
           uses: helm/chart-releaser-action@main
