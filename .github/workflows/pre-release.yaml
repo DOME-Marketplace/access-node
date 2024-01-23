@@ -85,10 +85,14 @@ jobs:
             dry_run: true
             bump: ${{ steps.bump.outputs.match }}
             github_token: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Get PR Number
+          id: pr_number
+          run: echo "::set-output name=nr::$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')"
           
         - name: Set version output
           id: out
-          run: echo "::set-output name=version::$(echo ${VERSION})"
+          run: echo "::set-output name=version::$(echo ${VERSION}-PRE-${{ steps.pr_number.outputs.nr }})"
 
     deploy:
 
@@ -123,7 +127,7 @@ jobs:
 
         - name: Set the version
           run: |
-              yq e -i '.version = "${{ needs.generate-version.outputs.version }}-PRE"' ./charts/access-node/Chart.yaml
+              yq e -i '.version = "${{ needs.generate-version.outputs.version }}"' ./charts/access-node/Chart.yaml
 
 
         - name: Run chart-releaser
@@ -139,11 +143,11 @@ jobs:
           run: |
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
-            cr index -o "$owner" -r "$repo"
 
 
             git switch gh-pages
-            git status
+            
+            cr index -o "$owner" -r "$repo"
 
             mv .cr-index/index.yaml pre/index.yaml
             ls -l
