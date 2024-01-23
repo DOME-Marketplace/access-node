@@ -1,13 +1,6 @@
 name: Test
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - labeled
-      - unlabeled
   push:
 
 jobs:
@@ -22,6 +15,8 @@ jobs:
           java-version: '17'
           java-package: jdk
           
+      - uses: azure/setup-helm@v3
+
       - uses: azure/setup-helm@v3
 
       - name: Execute tests

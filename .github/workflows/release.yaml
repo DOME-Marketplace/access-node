@@ -6,10 +6,29 @@ on:
       - main
 
 jobs:
+    it:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - uses: actions/setup-java@v1
+          with:
+            java-version: '17'
+            java-package: jdk
+
+        - uses: azure/setup-helm@v3
+
+        - name: Execute tests
+          id: test
+          run: |
+            cd it
+            mvn clean test integration-test
+
     deploy:
 
+      needs: [ "it" ]
       runs-on: ubuntu-latest
-      if: github.event_name == 'push'
 
       steps:
         - uses: actions/checkout@v2

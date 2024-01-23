@@ -1,0 +1,80 @@
+name: Check PR
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
+    branches:
+      - main
+
+jobs:
+  check-changes: 
+    runs-on: ubuntu-latest
+
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v14.6
+
+      - name: Check changes
+        id: changes
+        shell: bash
+        run: |
+
+          for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
+
+            echo "$file was changed"
+            baseFolder=$(cut -d'/' -f1 <<< "$file")
+            chartName=$(cut -d'/' -f2 <<< "$file")
+            if [ $baseFolder = "charts" ] && [ $chartName = "access-node" ]; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              break;
+            fi  
+          done   
+
+  check:
+    needs: "check-changes"
+    runs-on: ubuntu-latest
+    if: ${{ needs.check-changes.outputs.changed }}
+
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+          java-package: jdk
+
+      - id: bump
+        uses: zwaldowski/match-label-action@v1
+        with:
+          allowed: major,minor,patch
+  
+  comment:
+    needs: "check"
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v2
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Comment PR
+        if:  ${{ contains(needs.check.result, 'failure') }}
+        uses: thollander/actions-comment-pull-request@1.0.2
+        with:
+          message: "Please apply one of the following labels to the PR: 'patch', 'minor', 'major'."
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
