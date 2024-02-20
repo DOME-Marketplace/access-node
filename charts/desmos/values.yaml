@@ -45,7 +45,7 @@ deployment:
     # ref: https://hub.docker.com/r/in2kizuna/desmos
     repository: in2kizuna/desmos
     # -- tag of the image to be used
-    tag: 0.5.0
+    tag: v0.5.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   resources:
@@ -128,6 +128,22 @@ prometheus:
   path: /prometheus
   # -- port prometheus scrape is available at
   port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
 # -- a list of additional env vars to be set, check the blockchain-connector-core doc for all available options
 additionalEnvVars: [ ]

@@ -6,28 +6,32 @@ desmos:
   deployment:
     ## configuration to connect to the dlt-adapter
     dlt-adapter:
+      # -- provider of the dlt-adapter component
       provider: digitelts
       # -- (local) address of the dlt-adapter
       internalDomain: http://dlt-adapter:8080
       # -- (external) address of the dlt-adapter
       externalDomain: http://localhost:8080
+      # -- paths to be used for the dlt-adapter
       paths:
         publication: /api/v1/publishEvent
         subscription: /api/v1/subscribe
         events: /api/v1/events
     ## configuration of subscriptions at the blockchain
     event-subscription:
-      # -- local address of the blockchain-connectors notification endpoint for dlt events
-      notificationEndpoint: http://localhost:8080/notifications/evm
+      # -- local address of the dlt-adapter notification endpoint for dlt events
+      notificationEndpoint: http://desmos:8080/notifications/dlt
       # -- a list of entity-types the connector is interested in
       eventTypes: product-offering
     ## connection information for the context broker
     broker:
+      # -- provider of the broker
       provider: scorpio
       # -- internal address of the context broker to be used by the connector
       externalDomain: https://my-scorpio.org
-      # -- extrenal addres of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
+      # -- external address of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
       internalDomain: http://scorpio:9090
+      # -- paths to be used for the broker
       paths:
         entities: /ngsi-ld/v1/entities
         subscriptions: /ngsi-ld/v1/subscriptions
@@ -53,7 +57,7 @@ desmos:
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
 
-## configuration for the dlt-adapter - see https://DOME-Marketplace.github.io/access-node/dlt-adapter for configuration documentation 
+## configuration for the dlt-adapter - see https://DOME-Marketplace.github.io/access-node/dlt-adapter for configuration documentation
 dlt-adapter:
   # -- should the dlt-adapter be enabled
   enabled: true
