@@ -1,52 +1,45 @@
 ## configuration for the blockchain-connector - see https://DOME-Marketplace.github.io/access-node/blockchain-connector for configuration documentation 
-blockchain-connector:
-  # -- should the blockchain-connector be enabled
+desmos:
+  # -- should the desmos-blockchain-connector be enabled
   enabled: true
   ## deployment specific configuration
   deployment:
     ## configuration to connect to the dlt-adapter
-    dltAdapter: 
+    dlt-adapter:
+      provider: digitelts
       # -- (local) address of the dlt-adapter
-      domain: http://dlt-adapter:8080
-    ## configuration of the blockchain to be used
-    blockchain:
-      # -- address of the access node at the (ethereum-compatible)blockchain
-      userEthereumAddress: someHexNumber
-      # -- rpc-address of the blockchain
-      rpcAddress: https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6
-      ## configuration of subscriptions at the blockchain
-      subscription:
-        # -- should the connector listen to events on the blockchain 
-        active: true
-        # -- local address of the blockchain-connectors notification endpoint for dlt events
-        notificationEndpoint: http://blockchain-connector:8080/notifications/dlt
-        # -- a list of entity-types the connector is interested in
-        entityTypes: > 
-          product-offering
+      internalDomain: http://dlt-adapter:8080
+      # -- (external) address of the dlt-adapter
+      externalDomain: http://localhost:8080
+      paths:
+        publication: /api/v1/publishEvent
+        subscription: /api/v1/subscribe
+        events: /api/v1/events
+    ## configuration of subscriptions at the blockchain
+    event-subscription:
+      # -- local address of the blockchain-connectors notification endpoint for dlt events
+      notificationEndpoint: http://localhost:8080/notifications/evm
+      # -- a list of entity-types the connector is interested in
+      eventTypes: product-offering
     ## connection information for the context broker
     broker:
+      provider: scorpio
       # -- internal address of the context broker to be used by the connector
-      internalDomain: http://scorpio:9090
+      externalDomain: https://my-scorpio.org
       # -- extrenal addres of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
-      externalDomain: http://my-scorpio.org
+      internalDomain: http://scorpio:9090
+      paths:
+        entities: /ngsi-ld/v1/entities
+        subscriptions: /ngsi-ld/v1/subscriptions
+        temporal: /ngsi-ld/v1/temporal/entities
     ## configuration of ngsi-ld entities to listen for
-    ngsiSubscription:
+    ngsi-subscription:
       # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
-      notificationEndpoint:  http://blockchain-connector:8080/notifications/broker
+      notificationEndpoint: http://blockchain-connector:8080/notifications/broker
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
-    ## connection information to the broker-adapter
-    brokerAdapter:
-      # -- (local) address of the broker-adapter
-      domain: http://broker-adapter:8080
-      # configuration of the paths provided by the broker-adapter
-      paths:
-        # -- entities path
-        entites: /api/v2/entities
-        # -- subscriptions path
-        subscriptions: /api/v2/subscriptions
-    ## information about the access-node operator 
-    operator:
+    ## information about the access-node operator
+    client:
       # -- did of the organization running the node
       organizationId: did:web:my-marketplace-operator.org
   ## configuration of the database to be used by the blockchain-connector
@@ -58,33 +51,12 @@ blockchain-connector:
     # -- username to be used
     username: postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: blockchain-connector
-
-## configuration for the broker-adapter - see https://DOME-Marketplace.github.io/access-node/broker-adapter for configuration documentation 
-broker-adapter:
-  # -- should the broker-adapter be enabled
-  enabled: true
-  ## deployment specific configuration
-  deployment:
-    ## connection information for the context broker
-    broker:
-      # -- internal address of the context broker to be used by the connector
-      internalDomain: http://scorpio:9090
-      # -- extrenal addres of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
-      externalDomain: http://my-scorpio.org
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: broker-adapter
+  fullnameOverride: desmos
 
 ## configuration for the dlt-adapter - see https://DOME-Marketplace.github.io/access-node/dlt-adapter for configuration documentation 
 dlt-adapter:
   # -- should the dlt-adapter be enabled
   enabled: true
-  ## deployment specific configuration
-  deployment:
-    # -- private key of the access node to sign transactions on the blockchain. Has to be the key for blockchain-connector.blockchain.userEthereumAddress  
-    privateKey: someHexNumber
-    # -- address of the contract to be used. Needs to be available on `blockchain-connector.deployment.blockchain.rpcAddress`
-    contractAddress: 0xdF6B206F89354Ee260EdC52984e6Ad2a9C8CE5Ae
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dlt-adapter
 
