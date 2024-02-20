@@ -39,7 +39,7 @@ desmos:
     ## configuration of ngsi-ld entities to listen for
     ngsi-subscription:
       # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
-      notificationEndpoint: http://blockchain-connector:8080/notifications/broker
+      notificationEndpoint: http://desmos:8080/notifications/broker
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
     ## information about the access-node operator
