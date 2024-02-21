@@ -196,7 +196,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF633_Service_Catalog_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/service-catalog/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -208,7 +208,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF666_Account_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/account/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -220,7 +220,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF651_Agreement_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/agreement/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -232,7 +232,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF678_Customer_Bill_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/customer-bill-management/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -244,7 +244,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF629_Customer_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/customer-management/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -256,7 +256,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF632_Party_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/party-catalog/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -268,7 +268,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.1.0/swagger/TMF620_Product_Catalog_Management_API_swagger_v4.1.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/product-catalog/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -280,7 +280,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF637_Product_Inventory_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/product-inventory/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -292,7 +292,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF622_Product_Ordering_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/product-ordering-management/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -304,7 +304,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.1.0/swagger/TMF634_Resource_Catalog_Management_API_swagger_v4.1.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/resource-catalog/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -316,7 +316,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF664_Resource_Function_Activation_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/resource-function-activation/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -328,7 +328,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF639_Resource_Inventory_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/resource-inventory/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
@@ -340,7 +340,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://tmf-open-api-table-documents.s3.eu-west-1.amazonaws.com/OpenApiTable/4.0.0/swagger/TMF635_Usage_Management_API_swagger_v4.0.0.json
+                                https://raw.githubusercontent.com/FIWARE/tmforum-api/main/api/tm-forum/usage-management/api.json
                             </inputSpec>
                         </configuration>
                     </execution>
