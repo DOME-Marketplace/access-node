@@ -15,7 +15,7 @@
         <release.version>17</release.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+        <version.maven-resources-plugin>3.3.1</version.maven-resources-plugin>
         <version.org.apache.maven.plugins.maven-surefire-plugin>3.0.0-M5
         </version.org.apache.maven.plugins.maven-surefire-plugin>
         <version.io.kokuwa.maven.k3s-plugin>1.2.4</version.io.kokuwa.maven.k3s-plugin>
@@ -459,6 +459,7 @@
             <!-- copy the charts to the target repo to keep the sources clean -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>${version.maven-resources-plugin}</version>
                 <executions>
                     <execution>
                         <id>copy-resources-infra</id>
@@ -541,6 +542,7 @@
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
                             <templateOutputDir>${project.build.directory}/k3s/provider</templateOutputDir>
+                            <namespace>provider</namespace>
                             <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider-values.yaml</additionalArguments>
                         </configuration>
                     </execution>
@@ -557,6 +559,7 @@
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
                             <templateOutputDir>${project.build.directory}/k3s/consumer</templateOutputDir>
+                            <namespace>consumer</namespace>
                             <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer-values.yaml</additionalArguments>
                         </configuration>
                     </execution>
@@ -573,6 +576,7 @@
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
                             <templateOutputDir>${project.build.directory}/k3s/infra</templateOutputDir>
+                            <namespace>infra</namespace>
                             <additionalArguments>--name-template=testnode --namespace=infra</additionalArguments>
                         </configuration>
                     </execution>
