@@ -1,4 +1,4 @@
-blockchain-connector:
+desmos:
   deployment:
     broker:
       provider: scorpio
