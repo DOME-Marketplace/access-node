@@ -1,18 +1,15 @@
-blockchain-connector:
+desmos:
   deployment:
-    blockchain:
-      rpcAddress: http://blockchain-testnode.infra.svc.cluster.local:8545/
-      userEthereumAddress: 0x72b440177bcDfD339eF00ffF6B78c3620c09c469
-      subscription:
-        active: true
-        eventTypes: service-catalog
-        notificationEndpoint: http://blockchain-connector.consumer.svc.cluster.local:8080/notifications/dlt
+    eventSubscription:
+      notificationEndpoint: http://desmos.consumer.svc.cluster.local:8080/notifications/dlt
+      eventTypes: service-catalog
     broker:
+      provider: scorpio
       externalDomain: http://scorpio.consumer.svc.cluster.local:9090
       internalDomain: http://scorpio.consumer.svc.cluster.local:9090
     ngsiSubscription:
       entityTypes: party
-    operator:
+    client:
       organizationId: did:web:consumer.org
 
 dlt-adapter:
@@ -21,9 +18,9 @@ dlt-adapter:
     contractAddress: 0x37532a3dbf29942d10fb8ba57dc35d2134fe494d
   replicaCount: 1
   image:
-    repository: quay.io/wi_stefan/dlt-adapter
+    repository: quay.io/digitelts/dlt-adapter
     # -- tag of the image to be used
-    tag: latest
+    tag: ""
     # -- specification of the image pull policy
     pullPolicy: Always
   logLevel: DEBUG
