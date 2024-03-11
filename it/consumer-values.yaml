@@ -1,5 +1,5 @@
 desmos:
-  deployment:
+  app:
     eventSubscription:
       notificationEndpoint: http://desmos.consumer.svc.cluster.local:8080/notifications/dlt
       eventTypes: service-catalog

@@ -3,7 +3,7 @@ desmos:
   # -- should the desmos-blockchain-connector be enabled
   enabled: true
   ## deployment specific configuration
-  deployment:
+  app:
     ## configuration to connect to the dlt-adapter
     dltAdapter:
       # -- provider of the dlt-adapter component
