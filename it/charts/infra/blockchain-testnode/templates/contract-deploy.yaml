@@ -22,8 +22,8 @@ spec:
             - name: NODE_ENDPOINT
               value: http://blockchain-testnode.infra.svc.cluster.local:8545/
             - name: T_NET_CHAIN_ID
-              value: 83584648538
+              value: "83584648538"
             - name: B_NET_CHAIN_ID
-              value: 2020
+              value: "2020"
       restartPolicy: OnFailure
   backoffLimit: 10
