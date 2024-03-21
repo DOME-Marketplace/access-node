@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: contract-create
-          image: quay.io/wi_stefan/dome-contract:latest
+          image: quay.io/digitelts/dome-contract-deploy:1.0.0
           env:
             - name: NET_CHAIN_ID
               value: "1"
@@ -21,5 +21,9 @@ spec:
               #value: "0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87"
             - name: NODE_ENDPOINT
               value: http://blockchain-testnode.infra.svc.cluster.local:8545/
+            - name: T_NET_CHAIN_ID
+              value: 83584648538
+            - name: B_NET_CHAIN_ID
+              value: 2020
       restartPolicy: OnFailure
   backoffLimit: 10
