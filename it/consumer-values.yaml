@@ -22,12 +22,6 @@ dlt-adapter:
     DOME_PRODUCTION_BLOCK_NUMBER: "0"
     ISS: "0x9eb763b0a6b7e617d56b85f1df943f176018c8eedb2dd9dd37c0bd77496833fe"
   replicaCount: 1
-  image:
-    repository: quay.io/digitelts/dlt-adapter
-    # -- tag of the image to be used
-    tag: ""
-    # -- specification of the image pull policy
-    pullPolicy: Always
   logLevel: DEBUG
   fullnameOverride: dlt-adapter
 
