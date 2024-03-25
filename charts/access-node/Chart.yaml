@@ -5,18 +5,14 @@ type: application
 version: 0.0.1-PRE-8
 appVersion: 0.0.1
 dependencies:
-  - name: blockchain-connector
-    condition: blockchain-connector.enabled
-    repository: https://dome-marketplace.github.io/access-node
-    version: 0.1.0
-  - name: broker-adapter
-    condition: broker-adapter.enabled
-    repository: https://dome-marketplace.github.io/access-node
-    version: 0.1.0
+  - name: desmos
+    condition: desmos.enabled
+    repository: https://in2workspace.github.io/helm-charts
+    version: 0.5.0
   - name: dlt-adapter
     condition: dlt-adapter.enabled
-    repository: https://dome-marketplace.github.io/access-node
-    version: 1.0.3
+    repository: https://alastria.github.io/helm-charts
+    version: 1.0.0
   - name: kafka
     condition: kafka.enabled
     repository: oci://registry-1.docker.io/bitnamicharts

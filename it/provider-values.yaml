@@ -1,30 +1,27 @@
-blockchain-connector:
-  deployment:
-    blockchain:
-      rpcAddress: http://blockchain-testnode.infra.svc.cluster.local:8545/
-      userEthereumAddress: 0x72b440177bcDfD339eF00ffF6B78c3620c09c469
-      subscription:
-        active: false
-    privateKey: 0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
+desmos:
+  app:
+    eventSubscription:
+      notificationEndpoint: http://desmos.provider.svc.cluster.local:8080/notifications/dlt
+      eventTypes: service-catalog
     broker:
+      provider: scorpio
       externalDomain: http://scorpio.provider.svc.cluster.local:9090
       internalDomain: http://scorpio.provider.svc.cluster.local:9090
     ngsiSubscription:
+      notificationEndpoint: http://desmos.provider.svc.cluster.local:8080/notifications/broker
       entityTypes: service-catalog,catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
-    operator:
+    client:
       organizationId: did:web:provider.org
+  fullnameOverride: desmos
 
 dlt-adapter:
-  deployment:
-    privateKey: 0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
-    contractAddress: 0x37532a3dbf29942d10fb8ba57dc35d2134fe494d
+  env:
+    PRIVATE_KEY: "0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f"
+    DOME_EVENTS_CONTRACT_ADDRESS: ""
+    RPC_ADDRESS: "http://blockchain-testnode.infra.svc.cluster.local:8545/"
+    DOME_PRODUCTION_BLOCK_NUMBER: "0"
+    ISS: "0xb95536636339fb1ee3b29e322feac9aa65a85ab098640aedc4fe998d063424c8"
   replicaCount: 1
-  image:
-    repository: quay.io/wi_stefan/dlt-adapter
-    # -- tag of the image to be used
-    tag: latest
-    # -- specification of the image pull policy
-    pullPolicy: Always
   logLevel: DEBUG
   fullnameOverride: dlt-adapter
 

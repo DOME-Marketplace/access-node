@@ -36,17 +36,17 @@ The Blockchain-Connector is responsible for publishing and retrieving all change
 
 ![Blockchain-Connector](./doc/blockchain-connector.png)
 
-* [Blockchain-Connector](https://github.com/in2workspace/blockchain-connector): 
-    * receives events from the Broker-Adapter and the DLT-Adapter
-    * generates the blockchain events and writes them to the DLT-Adapter
-    * resolves blockchain events and retrieves the actual entities from their source, writes them to the Broker-Adapter
-* [Broker-Adapter](https://github.com/in2workspace/broker-adapter):
-    * listens for changes events from the local broker and notifies
-    the Blockchain-Connector about them 
-    * writes entities from the Blockchain-Connector to the local broker
+* [Blockchain-Connector](https://github.com/in2workspace/desmos):
+  * listens for changes events from the local broker and the DLT-Adapter (subscription)
+  * receives events from the local broker and the DLT-Adapter
+  * generates the blockchain events and writes them to the DLT-Adapter
+  * resolves blockchain events and retrieves the actual entities from their source, writes them to the Context Broker 
+  * writes entities from the Blockchain-Connector to the local broker
+  * audit any transaction processed by the Blockchain-Connector and writes them to the local database.
 * [DLT-Adapter](https://github.com/alastria/DOME-blockchain_connector-dlt_interface):
     * listens for DOME Events and notifies the Blockchain-Connector
     * writes transactions with events received from the Blockchain-Connector to the blockchain
+    * retrieves transactions from the blockchain using a range of time parameter, and notifies the Blockchain-Connector
 
 There are no known alternatives to the components at the moment. 
 
