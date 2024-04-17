@@ -22,7 +22,6 @@ public class StepDefinitions {
 
     ServiceCatalogApi scaProvider;
     ServiceCatalogApi scaConsumer;
-
     ServiceCatalogVO serviceCatalog;
 
     @Before
@@ -40,7 +39,6 @@ public class StepDefinitions {
                 "The service catalog api should be available at the provider.");
         assertDoesNotThrow(() -> scaConsumer.listServiceCatalog(null, null, null),
                 "The service catalog api should be available at the consumer.");
-
     }
 
     @When("a catalog is created at the providers marketplace.")
@@ -63,7 +61,6 @@ public class StepDefinitions {
         } catch (ApiException e) {
             return false;
         }
-
     }
 
 }
