@@ -13,11 +13,11 @@ desmos:
       # -- (external) address of the dlt-adapter
       externalDomain: http://dlt-adapter:8080
       ## configuration of subscriptions at the blockchain
-      eventSubscription:
+    eventSubscription:
         # -- local address of the blockchain-connectors notification endpoint for dlt events
-        notificationEndpoint: http://desmos:8080/notifications/dlt
+      notificationEndpoint: http://desmos:8080/notifications/dlt
         # -- a list of entity-types the connector is interested in
-        eventTypes: catalog,product-offering,category
+      eventTypes: catalog,product-offering,category
       ## connection information for the context broker
     broker:
         # -- provider of the broker
