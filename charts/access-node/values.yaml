@@ -161,6 +161,8 @@ tm-forum-api:
       url: http://scorpio:9090
     # -- default context to be used when contacting the context broker
     contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+    # -- host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually
+    serverHost: http://localhost:8080
   ## configuration for the api proxy, to serve all apis through one kubernetes service 
   apiProxy:
     # -- should the proxy be enabled
