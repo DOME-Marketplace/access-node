@@ -9,9 +9,9 @@ desmos:
       # -- provider of the dlt-adapter component
       provider: digitelts
       # -- (local) address of the dlt-adapter
-      internalDomain: http://dlt-adapter:8080
+      internalDomain: http://dlt-adapter:80
       # -- (external) address of the dlt-adapter
-      externalDomain: http://dlt-adapter:8080
+      externalDomain: http://dlt-adapter:80
       ## configuration of subscriptions at the blockchain
       eventSubscription:
         # -- local address of the blockchain-connectors notification endpoint for dlt events
