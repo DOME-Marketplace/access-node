@@ -9,9 +9,9 @@ desmos:
       # -- provider of the dlt-adapter component
       provider: digitelts
       # -- (local) address of the dlt-adapter
-      internalDomain: http://dlt-adapter:8080
+      internalDomain: http://dlt-adapter:80
       # -- (external) address of the dlt-adapter
-      externalDomain: http://dlt-adapter:8080
+      externalDomain: http://dlt-adapter:80
       ## configuration of subscriptions at the blockchain
       eventSubscription:
         # -- local address of the blockchain-connectors notification endpoint for dlt events
@@ -161,6 +161,8 @@ tm-forum-api:
       url: http://scorpio:9090
     # -- default context to be used when contacting the context broker
     contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+    # -- host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually
+    serverHost: http://localhost:8080
   ## configuration for the api proxy, to serve all apis through one kubernetes service 
   apiProxy:
     # -- should the proxy be enabled
