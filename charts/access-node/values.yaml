@@ -13,29 +13,29 @@ desmos:
       # -- (external) address of the dlt-adapter
       externalDomain: http://dlt-adapter:80
       ## configuration of subscriptions at the blockchain
-      eventSubscription:
+    eventSubscription:
         # -- local address of the blockchain-connectors notification endpoint for dlt events
-        notificationEndpoint: http://desmos:8080/notifications/dlt
+      notificationEndpoint: http://desmos:8080/notifications/dlt
         # -- a list of entity-types the connector is interested in
-        eventTypes: catalog,product-offering,category
+      eventTypes: catalog,product-offering,category
       ## connection information for the context broker
-      broker:
+    broker:
         # -- provider of the broker
-        provider: scorpio
+      provider: scorpio
         # -- internal address of the context broker to be used by the connector
-        internalDomain: http://scorpio:9090
-        # -- external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities
-        externalDomain: https://my-scorpio.org
+      internalDomain: http://scorpio:9090
+      # -- external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities
+      externalDomain: https://my-scorpio.org
       ## configuration of ngsi-ld entities to listen for
-      ngsiSubscription:
-        # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
-        notificationEndpoint: http://desmos:8080/notifications/broker
-        # -- a list of entity-types the connector is interested in
-        entityTypes: catalog,product-offering,category
+    ngsiSubscription:
+      # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
+      notificationEndpoint: http://desmos:8080/notifications/broker
+      # -- a list of entity-types the connector is interested in
+      entityTypes: catalog,product-offering,category
       ## information about the access-node operator
-      client:
-        # -- did of the organization running the node
-        organizationId: did:web:my-marketplace-operator.org
+    client:
+      # -- did of the organization running the node
+      organizationId: did:web:my-marketplace-operator.org
     ## configuration of the database to be used by the blockchain-connector
     db:
       # -- host of the db
