@@ -13,7 +13,7 @@ desmos:
       # -- (external) address of the dlt-adapter
       externalDomain: http://dlt-adapter:80
       ## configuration of subscriptions at the blockchain
-    tx-subscription:
+    txsubscription:
         # -- local address of the blockchain-connectors notification endpoint for dlt events
       notificationEndpoint: http://desmos:8080/notifications/dlt
         # -- a list of entity-types the connector is interested in
