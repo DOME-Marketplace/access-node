@@ -44,6 +44,12 @@ desmos:
   db:
     # -- host of the db
     host: postgresql-connector
+    # -- port of the host of the db
+    port: 5432
+    # -- should be true if is an external service
+    externalService: false
+    # -- name of the db
+    name: mktdb
     # -- password to be used
     password: postgres
     # -- username to be used
