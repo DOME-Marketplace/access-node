@@ -5,7 +5,7 @@
 
 The DOME Access-Node is a set of microservices, that provides access to the [DOME Marketplace](https://dome-marketplace.org). A registered participant 
 can use it to act as a federated marketplace in DOME.
-
+ 
 > :bulb: For detailed information on how to integrate with the DOME Marketplace, check the [Integration Guide](https://github.com/DOME-Marketplace/integration-guide)
 
 ## Components
