@@ -8,7 +8,7 @@ desmos:
     profile: dev
     ## debug level
     logLevel: DEBUG
-    ## information about the access-node operator
+    ## information about the access-node operator 
     operator:
       # -- did of the organization running the node
       organizationIdentifier: did:elsi:VATES-S9999999
