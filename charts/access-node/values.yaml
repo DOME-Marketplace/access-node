@@ -6,8 +6,8 @@ desmos:
   fullnameOverride: desmos
   ## deployment specific configuration
   app:
-    ## profile (dev == sbx)
-    profile: dev
+    ## profile (test == dev)
+    profile: test
     ## debug level
     logLevel: DEBUG
     # internal server port
