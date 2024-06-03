@@ -1,14 +1,14 @@
 desmos:
   app:
-    eventSubscription:
-      notificationEndpoint: http://desmos.provider.svc.cluster.local:8080/notifications/api/v1/dlt
+    txSubscription:
+      notificationEndpoint: /api/v1/notifications/dlt
       eventTypes: service-catalog
     broker:
       provider: scorpio
       externalDomain: http://scorpio.provider.svc.cluster.local:9090
       internalDomain: http://scorpio.provider.svc.cluster.local:9090
     ngsiSubscription:
-      notificationEndpoint: http://desmos.provider.svc.cluster.local:8080/notifications/api/v1/broker
+      notificationEndpoint: /api/v1/notifications/broker
       entityTypes: service-catalog,catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
     client:
       organizationId: did:web:provider.org
