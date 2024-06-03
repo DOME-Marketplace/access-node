@@ -72,6 +72,8 @@ dlt-adapter:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dlt-adapter
+  service:
+    port: 8080
   env:
     DEBUG: "*"
     PRIVATE_KEY: "0xe2afef2c880b138d741995ba56936e389b0b5dd2943e21e4363cc70d81c89346"
