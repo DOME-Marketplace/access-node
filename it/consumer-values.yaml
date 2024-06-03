@@ -2,7 +2,7 @@ desmos:
   app:
     txSubscription:
       notificationEndpoint: /api/v1/notifications/dlt
-      eventTypes: service-catalog
+      entityTypes: service-catalog
     broker:
       provider: scorpio
       externalDomain: http://scorpio.consumer.svc.cluster.local:9090
@@ -10,8 +10,8 @@ desmos:
     ngsiSubscription:
       notificationEndpoint: /api/v1/notifications/broker
       entityTypes: party
-    client:
-      organizationId: did:web:consumer.org
+    operator:
+      organizationIdentifier: did:web:consumer.org
   fullnameOverride: desmos
 
 dlt-adapter:
