@@ -2,16 +2,20 @@
 desmos:
   # -- should the desmos-blockchain-connector be enabled 
   enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: desmos
   ## deployment specific configuration
   app:
-    ## profile (dev == sbx)
-    profile: dev
+    ## profile (test == dev)
+    profile: test
     ## debug level
     logLevel: DEBUG
+    # internal server port
+    internalServerPort: 8080
     ## information about the access-node operator 
     operator:
       # -- did of the organization running the node
-      organizationIdentifier: did:elsi:VATES-S9999999
+      organizationIdentifier: did:elsi:VATES-S9999999E
     ## connection information for the context broker
     broker:
       # -- provider of the broker
@@ -23,7 +27,7 @@ desmos:
     ## configuration of ngsi-ld entities to listen for
     ngsiSubscription:
       # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
-      notificationEndpoint: http://desmos:8080/notifications/broker
+      notificationEndpoint: /api/v1/notifications/broker
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
     ## configuration to connect to the dlt-adapter
@@ -31,13 +35,13 @@ desmos:
       # -- provider of the dlt-adapter component
       provider: digitelts
       # -- (local) address of the dlt-adapter
-      internalDomain: http://dlt-adapter:80
+      internalDomain: http://dlt-adapter:8080
       # -- (external) address of the dlt-adapter
-      externalDomain: http://dlt-adapter:80
+      externalDomain: http://dlt-adapter:8080
       ## configuration of subscriptions at the blockchain
     txSubscription:
       # -- local address of the blockchain-connectors notification endpoint for dlt events
-      notificationEndpoint: http://desmos:8080/notifications/dlt
+      notificationEndpoint: /api/v1/notifications/dlt
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
     ## configuration of the database to be used by the blockchain-connector
@@ -50,10 +54,10 @@ desmos:
     externalService: false
     # -- name of the db
     name: mktdb
-    # -- password to be used
-    password: postgres
     # -- username to be used
     username: postgres
+    # -- default password to be used
+    password: postgres
     existingSecret:
       # -- should an existing secret be used
       enabled: false
@@ -61,8 +65,6 @@ desmos:
       name: desmos-secret
       # -- key to retrieve the password from
       key: desmos-db-password
-    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-    fullnameOverride: desmos
 
 ## configuration for the dlt-adapter - see https://DOME-Marketplace.github.io/access-node/dlt-adapter for configuration documentation
 dlt-adapter:
@@ -70,6 +72,8 @@ dlt-adapter:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dlt-adapter
+  service:
+    port: 8080
   env:
     DEBUG: "*"
     PRIVATE_KEY: "0xe2afef2c880b138d741995ba56936e389b0b5dd2943e21e4363cc70d81c89346"
@@ -87,11 +91,11 @@ postgresql:
   ## auth configuration for the database
   auth:
     # -- username to be used
-    username: postgres  
+    username: postgres
     # -- should the default postgres user be enabled
     enablePostgresUser: true
     # -- password to be used
-    password: postgres 
+    password: postgres
   ## configuration of the postgres primary replica
   primary:
     ## provide db initialization
