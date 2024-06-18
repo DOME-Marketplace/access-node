@@ -2,7 +2,7 @@ apiVersion: v2
 name: access-node
 description: Umbrella Chart for the DOME Marketplace access-node
 type: application
-version: 0.1.0-PRE-23
+version: 0.1.3-PRE-27
 appVersion: 0.0.1
 dependencies:
   - name: desmos
@@ -31,7 +31,7 @@ dependencies:
     condition: scorpio.enabled
     alias: scorpio
     repository: https://fiware.github.io/helm-charts
-    version: 0.1.7
+    version: 0.4.9
   - name: tm-forum-api
     condition: tm-forum-api.enabled
     repository: https://fiware.github.io/helm-charts
