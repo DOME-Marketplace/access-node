@@ -44,6 +44,10 @@ desmos:
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+    # -- external access nodes urls
+    externalAccessNodesUrls: "http://example-external-access-node.org"
+    # -- operator external domain
+    operatorExternalDomain: "http://example-operator-external.org"
     ## configuration of the database to be used by the blockchain-connector
   db:
     # -- host of the db
