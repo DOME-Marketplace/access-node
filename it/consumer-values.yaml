@@ -15,6 +15,9 @@ desmos:
       externalDomain: http://desmos.consumer.svc.cluster.local:8080
     privateKey:
       value:
+    externalAccessNodesUrls:
+      enableCustomUrls: true
+      customUrls: ""
   fullnameOverride: desmos
 
 dlt-adapter:
