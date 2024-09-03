@@ -12,6 +12,9 @@ desmos:
       entityTypes: party
     operator:
       organizationIdentifier: did:web:consumer.org
+      externalDomain: http://desmos.consumer.svc.cluster.local:8080
+    privateKey:
+      value:
   fullnameOverride: desmos
 
 dlt-adapter:
