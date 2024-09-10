@@ -1,4 +1,7 @@
 desmos:
+  image:
+    repository: in2workspace/in2-desmos-api
+    tag: v1.0.0-SNAPSHOT
   app:
     profile: dev
     txSubscription:
