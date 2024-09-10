@@ -1,5 +1,6 @@
 desmos:
   app:
+    profile: dev
     txSubscription:
       notificationEndpoint: http://desmos.consumer.svc.cluster.local:8080/api/v1/notifications/dlt
       entityTypes: service-catalog
@@ -15,6 +16,7 @@ desmos:
       externalDomain: http://desmos.consumer.svc.cluster.local:8080
     privateKey:
       value: "0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f"
+    externalDomain: "http://external-domain.org"
     externalAccessNodesUrls:
       enableCustomUrls: true
       customUrls: ""
