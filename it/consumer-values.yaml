@@ -14,7 +14,7 @@ desmos:
       organizationIdentifier: did:web:consumer.org
       externalDomain: http://desmos.consumer.svc.cluster.local:8080
     privateKey:
-      value:
+      value: "0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f"
     externalAccessNodesUrls:
       enableCustomUrls: true
       customUrls: ""
