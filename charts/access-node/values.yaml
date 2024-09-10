@@ -1,21 +1,21 @@
 ## configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
 desmos:
-  # -- should the desmos-blockchain-connector be enabled 
+  # -- should the desmos-blockchain-connector be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
   ## deployment specific configuration
   app:
     ## profile (test == dev)
-    profile: test
+    profile: <ENVIRONMENT-PROFILE>
     ## debug level
     logLevel: DEBUG
     # internal server port
     internalServerPort: 8080
-    ## information about the access-node operator 
+    ## information about the access-node operator
     operator:
       # -- did of the organization running the node
-      organizationIdentifier: did:elsi:VATES-S9999999E
+      organizationIdentifier: <YOUR-ORGANIZATION-ID>
     ## connection information for the context broker
     broker:
       # -- provider of the broker
@@ -44,6 +44,22 @@ desmos:
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+      # -- a list of external access node with which to synchronize
+    externalDomain: <YOUR-EXTERNAL-DOMAIN>
+    externalAccessNodesUrls:
+      enableCustomUrls: false
+      customUrls: "http://your-custom-url.org"
+    # -- configuration to set your private key
+    privateKey:
+      # -- your Ethereum private key
+      value: <YOUR-PRIVATE-KEY>
+      existingSecret:
+        # -- should an existing secret be used
+        enabled: false
+        # -- name of the secret
+        name: <PRIVATE-KEY-SECRET>
+        # -- key to retrieve the password from
+        key: <PRIVATE-KEY>
     ## configuration of the database to be used by the blockchain-connector
   db:
     # -- host of the db
@@ -74,11 +90,17 @@ dlt-adapter:
   fullnameOverride: dlt-adapter
   service:
     port: 8080
+
+  existingSecret:
+    enabled: false
+    name: private-key-secret
+    key: private-key
+
   env:
     DEBUG: "*"
-    PRIVATE_KEY: "0xe2afef2c880b138d741995ba56936e389b0b5dd2943e21e4363cc70d81c89346"
-    RPC_ADDRESS: "https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"
-    ISS: "0x43b27fef24cfe8a0b797ed8a36de2884f9963c0c2a0da640e3ec7ad6cd0c493d"
+    PRIVATE_KEY: <YOUR-PRIVATE-KEY>
+    RPC_ADDRESS: <RPC-ADDRESS>
+    ISS: <YOUR-ORGANIZATION-ID-IN-SHA256>
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
 postgresql:
