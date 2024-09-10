@@ -3,16 +3,16 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-07-25T07:12:16.614429289Z"
+    created: "2024-09-10T10:04:12.750488556Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
       repository: https://in2workspace.github.io/helm-charts
-      version: 0.9.0
+      version: 0.15.0
     - condition: dlt-adapter.enabled
       name: dlt-adapter
       repository: https://alastria.github.io/helm-charts
-      version: 4.0.0
+      version: 6.0.0
     - condition: kafka.enabled
       name: kafka
       repository: oci://registry-1.docker.io/bitnamicharts
@@ -37,12 +37,12 @@ entries:
       repository: https://fiware.github.io/helm-charts
       version: 0.9.0
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: 201902b353cdb2e73b84b4605b7cb1914e42c6065c4e1edc15df6055e14f4b02
+    digest: c52c7c5a853f1e54140536b61179f0326e8cf9e1b03deccff4ac897ffed7c7c2
     name: access-node
     type: application
     urls:
-    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.1.5-PRE-30/access-node-0.1.5-PRE-30.tgz
-    version: 0.1.5-PRE-30
+    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.2.0-PRE-31/access-node-0.2.0-PRE-31.tgz
+    version: 0.2.0-PRE-31
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2024-06-19T09:43:23.363316163Z"
@@ -334,4 +334,4 @@ entries:
     urls:
     - https://github.com/dome-marketplace/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2024-07-25T07:12:16.61445661Z"
+generated: "2024-09-10T10:04:12.750525595Z"
