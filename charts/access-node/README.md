@@ -8,10 +8,10 @@ Umbrella Chart for the DOME Marketplace access-node
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://alastria.github.io/helm-charts | dlt-adapter | 6.0.0 |
+| https://alastria.github.io/helm-charts | dlt-adapter | 7.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.9.0 |
-| https://in2workspace.github.io/helm-charts | desmos | 0.15.0 |
+| https://in2workspace.github.io/helm-charts | desmos | 0.16.0 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -53,6 +53,9 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.username | string | `"postgres"` | username to be used |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
+| desmos.image.pullPolicy | string | `"Always"` |  |
+| desmos.image.repository | string | `"<your-image-repository>"` |  |
+| desmos.image.tag | string | `"<your-image-tag>"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |

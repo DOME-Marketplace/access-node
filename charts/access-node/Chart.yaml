@@ -2,7 +2,7 @@ apiVersion: v2
 name: access-node
 description: Umbrella Chart for the DOME Marketplace access-node
 type: application
-version: 0.3.0
+version: 0.2.1-PRE-32
 appVersion: 0.0.1
 dependencies:
   - name: desmos
