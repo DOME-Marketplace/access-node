@@ -4,6 +4,13 @@ desmos:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
+  image:
+    ## image repository
+    repository: <your-image-repository>
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: <your-image-tag>
+    ## image pull policy
+    pullPolicy: Always
   ## deployment specific configuration
   app:
     ## profile (test == dev)
