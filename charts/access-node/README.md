@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.3.0-PRE-32](https://img.shields.io/badge/Version-0.3.0--PRE--32-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.4.0-PRE-33](https://img.shields.io/badge/Version-0.4.0--PRE--33-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -8,7 +8,7 @@ Umbrella Chart for the DOME Marketplace access-node
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://alastria.github.io/helm-charts | dlt-adapter | 7.0.0 |
+| https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.9.0 |
 | https://in2workspace.github.io/helm-charts | desmos | 0.16.0 |
