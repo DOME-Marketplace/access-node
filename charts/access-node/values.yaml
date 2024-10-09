@@ -209,7 +209,7 @@ tm-forum-api:
     # -- configuration to be used for the image of the containers
     image:
       # -- current latest tag
-      tag: "0.21.0"
+      tag: "0.21.1"
     # --  ngsi-ld broker connection information
     ngsiLd:
       # -- address of the broker
