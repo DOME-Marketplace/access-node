@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.5.0-PRE-34](https://img.shields.io/badge/Version-0.5.0--PRE--34-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.5.1-PRE-35](https://img.shields.io/badge/Version-0.5.1--PRE--35-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -93,8 +93,8 @@ Umbrella Chart for the DOME Marketplace access-node
 | scorpio.service.type | string | `"ClusterIP"` | ClusterIP is the recommended type for most clusters |
 | tm-forum-api.apiProxy.enabled | bool | `true` | should the proxy be enabled |
 | tm-forum-api.defaultConfig.contextUrl | string | `"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"` | default context to be used when contacting the context broker |
-| tm-forum-api.defaultConfig.image | object | `{"tag":"0.21.0"}` | configuration to be used for the image of the containers |
-| tm-forum-api.defaultConfig.image.tag | string | `"0.21.0"` | current latest tag |
+| tm-forum-api.defaultConfig.image | object | `{"tag":"0.21.1"}` | configuration to be used for the image of the containers |
+| tm-forum-api.defaultConfig.image.tag | string | `"0.21.1"` | current latest tag |
 | tm-forum-api.defaultConfig.ngsiLd | object | `{"url":"http://scorpio:9090"}` | ngsi-ld broker connection information |
 | tm-forum-api.defaultConfig.ngsiLd.url | string | `"http://scorpio:9090"` | address of the broker |
 | tm-forum-api.defaultConfig.serverHost | string | `"http://localhost:8080"` | host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually |
