@@ -170,7 +170,7 @@ The public key should look like this:
 
 3. Register as a valid organization following the instructions in the [DOME Trust Framework](https://github.com/DOME-Marketplace/trust-framework), with the keys that you created in the previous steps.
 
-2. Create a configuration file for your DOME Access Node. A [configuration file](config/accessnode.yaml) is provided with default values, but you have to complete the following ones:
+4. Create a configuration file for your DOME Access Node. A [configuration file](config/accessnode.yaml) is provided with default values, but you have to complete the following ones:
 
 | Key                                                        | Sample Value                                                          | Description                                                                                                                |
 |------------------------------------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -180,7 +180,7 @@ The public key should look like this:
 
 If you want to update the default values, please refer to the [How to configure](#how-to-configure) section.
 
-3. Add the DOME Helm Chart Repository to your helm installation
+5. Add the DOME Helm Chart Repository to your helm installation
 
   ```
     helm repo add dome-access-node https://dome-marketplace.github.io/access-node
@@ -192,16 +192,12 @@ In addition to that, all Pre-Release versions(build from the Pull Requests) are 
 pre-repo https://dome-marketplace.github.io/access-node/pre. The pre-repo will be cleaned-up from time to time, in
 order to keep the index manageable.
 
-4. Install the DOME Access Node
+6. Install the DOME Access Node
   ```
     helm install access-node dome-access-node/access-node --namespace <NAMESPACE> -f config/accessnode.yaml
   ```
 
 NAMESPACE: The Kubernetes Cluster namespace where the DOME Access Node will be deployed.
-
-The Helm Chart will deploy the required pods:
-
-![access-node-pods](doc/img/access-node-pods.png)
 
 #### How to configure
 
