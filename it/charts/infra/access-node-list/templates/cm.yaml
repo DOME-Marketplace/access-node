@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: access-node-list
+  namespace: {{ $.Release.Namespace | quote }}
+data:
+  trusted_access_nodes_list.yaml: |-
+    organizations:
+      - name: provider
+        publicKey: 0x0456dfacbf8a69f873132251ddadcc7dea98ecee43f7e9f41fec37e7e9bf1c4accdb47da9f127f8b09c16d758956a86ea1fb146bc1ce05322e47fc1221c32c195a
+        url: http://desmos.provider.svc.cluster.local:8080
+        dlt_address: 0x72b440177bcDfD339eF00ffF6B78c3620c09c469
+      - name: consumer
+        publicKey: 0x0487d09309a2a6212c1b5d4cf97d6f4515a003fdc26e05f8c8fa176fbdead54c3210874c71b6f1f2a0df7c091cd49fd5fd72a3162200fb7b09b5f4085a6ad1dd3b
+        url: http://desmos.consumer.svc.cluster.local:8080
+        dlt_address: 0xE377C763792bA6E3ec384c9572F3f03F9FEc2D70

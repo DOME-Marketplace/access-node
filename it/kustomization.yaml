@@ -1,0 +1,13 @@
+resources:
+  - all.yaml
+patches:
+  - target:
+      version: v1
+      kind: Deployment
+      name: desmos
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: ACCESS_NODE_TRUSTED_ACCESS_NODES_LIST
+          value: "http://access-node-list.infra.svc.cluster.local:8080/access-node-list/trusted_access_nodes_list.yaml"

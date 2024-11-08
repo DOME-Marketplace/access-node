@@ -1,13 +1,17 @@
 deployment:
   image:
-    repository: trufflesuite/ganache-cli
+    repository: ethereum/client-go
     # -- tag of the image to be used
-    tag: latest
+    tag: stable
     # -- specification of the image pull policy
     pullPolicy: Always
 
 service:
   port: 8545
-  type: ClusterIP
+  type: LoadBalancer
+
+blockchain:
+  address: http://blockchain-testnode.infra.svc.cluster.local:8545/
+  key: 304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
 
 fullnameOverride: blockchain-testnode
