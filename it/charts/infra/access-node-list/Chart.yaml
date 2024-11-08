@@ -1,6 +1,6 @@
 apiVersion: v2
 name: access-node-list
-description: access-node-list Helm-Chart
+description: access-node-list Helm-Chart, mimics the trust repo on github
 
 type: application
 version: 0.1.0
