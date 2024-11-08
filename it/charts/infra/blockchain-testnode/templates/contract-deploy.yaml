@@ -10,19 +10,33 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: init-account
+          image: ubuntu
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - /bin/init.sh
+          volumeMounts:
+            - name: account-registration
+              mountPath: /bin/init.sh
+              subPath: init.sh
       containers:
         - name: contract-create
-          image: quay.io/digitelts/dome-contract-deploy:1.0.0
+          image: quay.io/wi_stefan/dome-contract:0.0.2
           env:
             - name: PRIVATE_KEY
-              value: "0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f"
-              #value: "0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87"
+              value: 0x{{ .Values.blockchain.key }}
             - name: NODE_ENDPOINT
-              value: http://blockchain-testnode.infra.svc.cluster.local:8545/
-            - name: T_NET_CHAIN_ID
-              value: "83584648538"
-            - name: B_NET_CHAIN_ID
-              value: "2020"
+              value: {{ .Values.blockchain.address }}
+            - name: NET_CHAIN_ID
+              value: "1"
       restartPolicy: OnFailure
+      volumes:
+        - name: account-registration
+          configMap:
+            name: account-registration
+            defaultMode: 0755
   backoffLimit: 10
 
