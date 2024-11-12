@@ -163,7 +163,7 @@ be used as followed.
    Trusted Access Node List:
 
    | Trusted Access Node List | DOME Key Generator        | 
-                                                   |--------------------------|---------------------------|
+                                                                  |--------------------------|---------------------------|
    | publicKey                | Desmos keys -> Public Key |
    | dlt_address              | DLT keys -> DLT Address   |
 
@@ -176,7 +176,7 @@ be used as followed.
    Trusted Access Node List and the Access Node Helm Chart:
 
    | Access Node Helm Chart                     | DOME Key Generator         |
-                                                       |--------------------------------------------|----------------------------|
+                                                                      |--------------------------------------------|----------------------------|
    | desmos.app.privateKey                      | Desmos keys -> Private Key |
    | desmos.app.operator.organizationIdentifier | Desmos keys -> DID         |
    | dlt-adapter.env.PRIVATE_KEY                | DLT keys -> Private Key    |
@@ -230,7 +230,7 @@ integrators.
    The following fields should be configured as specified, as they must always have the same values:
 
    | Key                                     | Description                       | Value                                                         |
-               |-----------------------------------------|-----------------------------------|---------------------------------------------------------------|
+      |-----------------------------------------|-----------------------------------|---------------------------------------------------------------|
    | access-node.desmos.image.repository     | Repository of the image to deploy | in2workspace/in2-desmos-api                                   |
    | access-node.desmos.image.tag            | Image version                     | v1.0.0                                                        | 
    | access-node.dlt-adapter.env.RPC_ADDRESS | node address                      | https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6 |
@@ -241,7 +241,7 @@ integrators.
    the [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/):
 
    | Key                                                    | Description                          | Explanation                                                                                                                             |
-                   |--------------------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+      |--------------------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
    | access-node.desmos.app.operator.organizationIdentifier | DID of the operator                  | The "DID" key generated in the "Desmos keys" part [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/)       |
    | access-node.desmos.app.privateKey                      | Private key to sign JWT              | The "Private Key" generated in the "Desmos keys" part [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/)   |
    | access-node.dlt-adapter.env.PRIVATE_KEY                | Private key for transaction signing  | The "Private Key" generated in the "DLT keys" part [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/)      |
@@ -249,25 +249,25 @@ integrators.
 
 3. **Custom Required Fields**
 
-These additional fields must also be specified by integrators:
+   These additional fields must also be specified by integrators:
 
-| Key                                          | Description                                                                             | Explanation                                        |
-                |----------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------|
-| access-node.desmos.app.profile               | allows the environment filtering                                                        | dev/test/prod (see the desmos profile table below) |
-| access-node.desmos.app.broker.externalDomain | must be set since it is used by third parties to retrieve your data; it should be https | The external domain you're using to expose Desmos  |
+   | Key                                          | Description                                                                             | Explanation                                        |
+      |----------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------|
+   | access-node.desmos.app.profile               | allows the environment filtering                                                        | dev/test/prod (see the desmos profile table below) |
+   | access-node.desmos.app.broker.externalDomain | must be set since it is used by third parties to retrieve your data; it should be https | The external domain you're using to expose Desmos  |
 
-The Blockchain Connector uses the _dev_, _test_ and _prod_ configuration profiles. On the other hand, DOME uses the
-profile names _sbx_, _dev_ and _prd_. It is important that users use the profile names used by the Blockchain
-Connector
-(_dev_, _test_, _prod_), since the application is responsible for carrying out the necessary correspondence and
-mapping
-between the profile names of the Blockchain Connector and those of DOME automatically.
+   The Blockchain Connector uses the _dev_, _test_ and _prod_ configuration profiles. On the other hand, DOME uses the
+   profile names _sbx_, _dev_ and _prd_. It is important that users use the profile names used by the Blockchain
+   Connector
+   (_dev_, _test_, _prod_), since the application is responsible for carrying out the necessary correspondence and
+   mapping
+   between the profile names of the Blockchain Connector and those of DOME automatically.
 
-| desmos-api profiles | DOME-Gitops environments |
-                |:-------------------:|:------------------------:|
-|         dev         |           sbx            |
-|        test         |           dev            |
-|        prod         |           prd            |
+   | desmos-api profiles | DOME-Gitops environments |
+      |:-------------------:|:------------------------:|
+   |         dev         |           sbx            |
+   |        test         |           dev            |
+   |        prod         |           prd            |
 
 #### Additional configuration
 
