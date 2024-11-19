@@ -3,7 +3,7 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-11-19T10:44:18.445740173Z"
+    created: "2024-11-19T11:21:26.87540677Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -37,12 +37,54 @@ entries:
       repository: https://fiware.github.io/helm-charts
       version: 0.9.0
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: ed36339eaefefe42716afd91e336198f0e9c52afe668ed90a45fdb61a1e617e8
+    digest: b9740221e95276d0cfafa2e0c0e415eabf9234afa48ecaf7c146974410edad1f
     name: access-node
     type: application
     urls:
-    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.6.0-PRE-39/access-node-0.6.0-PRE-39.tgz
-    version: 0.6.0-PRE-39
+    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.7.0-PRE-40/access-node-0.7.0-PRE-40.tgz
+    version: 0.7.0-PRE-40
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-11-19T10:56:51.80088761Z"
+    dependencies:
+    - condition: desmos.enabled
+      name: desmos
+      repository: https://in2workspace.github.io/helm-charts
+      version: 0.16.0
+    - condition: dlt-adapter.enabled
+      name: dlt-adapter
+      repository: https://alastria.github.io/helm-charts
+      version: 8.0.0
+    - condition: kafka.enabled
+      name: kafka
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 26.0.0
+    - alias: postgis
+      condition: postgis.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: scorpio
+      condition: scorpio.enabled
+      name: scorpio-broker-aaio
+      repository: https://fiware.github.io/helm-charts
+      version: 0.4.9
+    - condition: tm-forum-api.enabled
+      name: tm-forum-api
+      repository: https://fiware.github.io/helm-charts
+      version: 0.9.0
+    description: Umbrella Chart for the DOME Marketplace access-node
+    digest: 5835c2ec7a0c2f3bc48278962bdf3f628f3adde9bbff0ef88e8eb0f5697b3669
+    name: access-node
+    type: application
+    urls:
+    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.6.0/access-node-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2024-10-09T08:29:40.843419181Z"
@@ -544,4 +586,4 @@ entries:
     urls:
     - https://github.com/dome-marketplace/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2024-11-19T10:44:18.445804925Z"
+generated: "2024-11-19T11:21:26.875486339Z"
