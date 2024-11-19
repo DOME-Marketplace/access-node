@@ -8,57 +8,23 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    #TODO: @oriolcanades please insert something sane here.
     tag: v1.0.0
-    ## image pull policy
-    pullPolicy: IfNotPresent
-  ## service config
-  service:
-    port: 8080
   ## deployment specific configuration
   app:
     ## profile (test == dev)
-    #TODO: @oriolcanades please explain this config. profile switches are very bad practice, environment config should happen through the config.
-    profile: dev
-    logLevel: DEBUG
-    # internal server port
-    internalServerPort: 8080
+    profile: <ENVIRONMENT-PROFILE>
+    ## debug level
+    logLevel: INFO
     ## information about the access-node operator
     operator:
       # -- did of the organization running the node
       organizationIdentifier: <YOUR-ORGANIZATION-ID>
-    ## connection information for the context broker
-    broker:
-      paths:
-        entities: "/ngsi-ld/v1/entities"
-        entityOperations: "/ngsi-ld/v1/entityOperations"
-        subscriptions: "/ngsi-ld/v1/subscriptions"
-        temporal: "/ngsi-ld/v1/temporal/entities"
-
-      # -- provider of the broker
-      provider: scorpio
-      # -- internal address of the context broker to be used by the connector
-      internalDomain: http://scorpio:9090
-      # -- external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities
-      externalDomain: http://scorpio:9090
     ## configuration of ngsi-ld entities to listen for
     ngsiSubscription:
-      # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
-      notificationEndpoint: http://desmos:8080/api/v1/notifications/broker
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
-    ## configuration to connect to the dlt-adapter
-    dltAdapter:
-      # -- provider of the dlt-adapter component
-      provider: digitelts
-      # -- (local) address of the dlt-adapter
-      internalDomain: http://dlt-adapter:8080
-      # -- (external) address of the dlt-adapter
-      externalDomain: http://dlt-adapter:8080
       ## configuration of subscriptions at the blockchain
     txSubscription:
-      # -- local address of the blockchain-connectors notification endpoint for dlt events
-      notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
       # -- a list of external access node with which to synchronize
@@ -116,7 +82,7 @@ dlt-adapter:
   env:
     DEBUG: "*"
     PRIVATE_KEY: <YOUR-PRIVATE-KEY>
-    RPC_ADDRESS: <RPC-ADDRESS>
+    RPC_ADDRESS: "https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"
     ISS: <YOUR-ORGANIZATION-ID-IN-SHA256>
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
