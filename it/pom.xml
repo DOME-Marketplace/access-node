@@ -507,6 +507,44 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>copy-resources-consumer-kustomize</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/charts/consumer/access-node</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>kustomize.sh</include>
+                                        <include>kustomization.yaml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-resources-provider-kustomize</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/charts/provider/access-node</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>kustomize.sh</include>
+                                        <include>kustomization.yaml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-resources-namespaces</id>
                         <phase>validate</phase>
                         <goals>
@@ -538,12 +576,13 @@
                         </goals>
                         <phase>test-compile</phase>
                         <configuration>
-                            <chartDirectory>${project.build.directory}/charts/provider</chartDirectory>
+                            <chartDirectory>${project.build.directory}/charts/provider/access-node</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
-                            <templateOutputDir>${project.build.directory}/k3s/provider</templateOutputDir>
                             <namespace>provider</namespace>
-                            <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider-values.yaml</additionalArguments>
+                            <!-- post renderer required to account for missing env config support, that points to the tusted access nodes list -->
+                            <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider/values.yaml --post-renderer ${project.build.directory}/charts/provider/access-node/kustomize.sh --post-renderer-args ${project.build.directory}/charts/provider/access-node,${project.build.directory}/k3s/provider/access-node
+                            </additionalArguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -555,12 +594,13 @@
                         </goals>
                         <phase>test-compile</phase>
                         <configuration>
-                            <chartDirectory>${project.build.directory}/charts/consumer</chartDirectory>
+                            <chartDirectory>${project.build.directory}/charts/consumer/access-node</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
-                            <templateOutputDir>${project.build.directory}/k3s/consumer</templateOutputDir>
+                            <!-- post renderer required to account for missing env config support, that points to the tusted access nodes list -->
                             <namespace>consumer</namespace>
-                            <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer-values.yaml</additionalArguments>
+                            <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer/values.yaml --post-renderer ${project.build.directory}/charts/consumer/access-node/kustomize.sh --post-renderer-args ${project.build.directory}/charts/consumer/access-node,${project.build.directory}/k3s/consumer/access-node
+                            </additionalArguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -601,6 +641,21 @@
                             <portBindings>
                                 <portBinding>8080:8080</portBinding>
                                 <portBinding>8081:8081</portBinding>
+                                <portBinding>8545:8545</portBinding>
+                            </portBindings>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>apply-infra</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <configuration>
+                            <failIfExists>false</failIfExists>
+                            <manifests>${project.build.directory}/k3s/infra</manifests>
+                            <portBindings>
+                                <portBinding>8545:8545</portBinding>
                             </portBindings>
                         </configuration>
                     </execution>
@@ -612,10 +667,23 @@
                         </goals>
                         <configuration>
                             <failIfExists>false</failIfExists>
-                            <manifests>${project.build.directory}/k3s</manifests>
+                            <manifests>${project.build.directory}/k3s/consumer</manifests>
+                            <portBindings>
+                                <portBinding>8081:8081</portBinding>
+                            </portBindings>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>apply-provider</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <configuration>
+                            <failIfExists>false</failIfExists>
+                            <manifests>${project.build.directory}/k3s/provider</manifests>
                             <portBindings>
                                 <portBinding>8080:8080</portBinding>
-                                <portBinding>8081:8081</portBinding>
                             </portBindings>
                         </configuration>
                     </execution>
@@ -623,6 +691,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

@@ -1,0 +1,67 @@
+desmos:
+  app:
+    profile: dev
+    txSubscription:
+      notificationEndpoint: http://desmos.consumer.svc.cluster.local:8080/api/v1/notifications/dlt
+      entityTypes: service-catalog
+    broker:
+      provider: scorpio
+      externalDomain: http://scorpio.consumer.svc.cluster.local:9090
+      internalDomain: http://scorpio.consumer.svc.cluster.local:9090
+    ngsiSubscription:
+      notificationEndpoint: http://desmos.consumer.svc.cluster.local:8080/api/v1/notifications/broker
+      entityTypes: party
+    operator:
+      organizationIdentifier: did:web:consumer.org
+      externalDomain: http://desmos.consumer.svc.cluster.local:8080
+    privateKey:
+      value: "0x14dff9a9a0c9e7edf82359e1caabc31b708941dcdbcb6d95e3f331f6eebee03c"
+    externalDomain: "http://desmos.consumer.svc.cluster.local:8080"
+    externalAccessNodesUrls:
+      enableCustomUrls: true
+      customUrls: ""
+  fullnameOverride: desmos
+
+dlt-adapter:
+  existingSecret:
+    enabled: false
+    name: private-key-secret
+    key: private-key
+  env:
+    PRIVATE_KEY: "0x14dff9a9a0c9e7edf82359e1caabc31b708941dcdbcb6d95e3f331f6eebee03c"
+    DOME_EVENTS_CONTRACT_ADDRESS: "0x37532A3dBF29942d10Fb8BA57dc35d2134Fe494d"
+    RPC_ADDRESS: "http://blockchain-testnode.infra.svc.cluster.local:8545/"
+    DOME_PRODUCTION_BLOCK_NUMBER: "0"
+    ISS: "0xE377C763792bA6E3ec384c9572F3f03F9FEc2D70"
+    DOME_EVENTS_CONTRACT_ABI: '[ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint256", "name": "index", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "timestamp", "type": "uint256" }, { "indexed": true, "internalType": "bytes32", "name": "publisherAddress", "type": "bytes32" }, { "indexed": false, "internalType": "address", "name": "authorAddress", "type": "address" }, { "indexed": true, "internalType": "bytes32", "name": "entityIDHash", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousEntityHash", "type": "bytes32" }, { "indexed": false, "internalType": "string", "name": "eventType", "type": "string" }, { "indexed": false, "internalType": "string", "name": "dataLocation", "type": "string" }, { "indexed": false, "internalType": "string[]", "name": "metadata", "type": "string[]" } ], "name": "EventDOMEv1", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "OwnershipTransferred", "type": "event" }, { "inputs": [ { "internalType": "bytes32", "name": "_publisherAddress", "type": "bytes32" }, { "internalType": "address", "name": "_authorAdress", "type": "address" }, { "internalType": "bytes32", "name": "_entityIDHash", "type": "bytes32" }, { "internalType": "bytes32", "name": "_previousEntityHash", "type": "bytes32" }, { "internalType": "string", "name": "_eventType", "type": "string" }, { "internalType": "string", "name": "_dataLocation", "type": "string" }, { "internalType": "string[]", "name": "_metadata", "type": "string[]" } ], "name": "emitNewEvent", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "index", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ]'
+  replicaCount: 1
+  logLevel: DEBUG
+  fullnameOverride: dlt-adapter
+
+postgresql:
+  primary:
+    persistence:
+      enabled: false
+  readReplicas:
+    persistence:
+      enabled: false
+
+postgis:
+  primary:
+    persistence:
+      enabled: false
+  readReplicas:
+    persistence:
+      enabled: false
+
+tm-forum-api:
+  defaultConfig:
+    endpointsPort: 8081
+    additionalEnvVars:
+      - name: LOGBACK_APPENDER
+        value: CONSOLE
+
+  apiProxy:
+    service:
+      type: LoadBalancer
+      port: 8081
