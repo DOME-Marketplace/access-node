@@ -45,12 +45,12 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.0.0"` |  |
+| desmos.image.tag | string | `"v1.0.1"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
 | dlt-adapter.env.PRIVATE_KEY | string | `"<YOUR-PRIVATE-KEY>"` |  |
-| dlt-adapter.env.RPC_ADDRESS | string | `"<RPC-ADDRESS>"` |  |
+| dlt-adapter.env.RPC_ADDRESS | string | `"https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"` |  |
 | dlt-adapter.existingSecret.enabled | bool | `false` |  |
 | dlt-adapter.existingSecret.key | string | `"private-key"` |  |
 | dlt-adapter.existingSecret.name | string | `"private-key-secret"` |  |
