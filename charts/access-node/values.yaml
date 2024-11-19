@@ -9,9 +9,6 @@ desmos:
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
     tag: v1.0.0
-  ## service config
-  service:
-    port: 8080
   ## deployment specific configuration
   app:
     ## profile (test == dev)
