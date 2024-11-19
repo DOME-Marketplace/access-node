@@ -15,8 +15,8 @@ desmos:
   ## deployment specific configuration
   app:
     ## profile (test == dev)
-    #TODO: @oriolcanades please explain this config. profile switches are very bad practice, environment config should happen through the config.
     profile: <ENVIRONMENT-PROFILE>
+    ## debug level
     logLevel: INFO
     ## information about the access-node operator
     operator:
