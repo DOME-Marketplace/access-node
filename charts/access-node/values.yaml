@@ -6,16 +6,20 @@ desmos:
   fullnameOverride: desmos
   image:
     ## image repository
-    repository: <your-image-repository>
+    repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: <your-image-tag>
+    #TODO: @oriolcanades please insert something sane here.
+    tag: v1.0.0
     ## image pull policy
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
+  ## service config
+  service:
+    port: 8080
   ## deployment specific configuration
   app:
     ## profile (test == dev)
-    profile: <ENVIRONMENT-PROFILE>
-    ## debug level
+    #TODO: @oriolcanades please explain this config. profile switches are very bad practice, environment config should happen through the config.
+    profile: dev
     logLevel: DEBUG
     # internal server port
     internalServerPort: 8080
@@ -25,6 +29,12 @@ desmos:
       organizationIdentifier: <YOUR-ORGANIZATION-ID>
     ## connection information for the context broker
     broker:
+      paths:
+        entities: "/ngsi-ld/v1/entities"
+        entityOperations: "/ngsi-ld/v1/entityOperations"
+        subscriptions: "/ngsi-ld/v1/subscriptions"
+        temporal: "/ngsi-ld/v1/temporal/entities"
+
       # -- provider of the broker
       provider: scorpio
       # -- internal address of the context broker to be used by the connector
@@ -209,7 +219,7 @@ tm-forum-api:
     # -- configuration to be used for the image of the containers
     image:
       # -- current latest tag
-      tag: "0.21.1"
+      tag: "0.25.1"
     # --  ngsi-ld broker connection information
     ngsiLd:
       # -- address of the broker

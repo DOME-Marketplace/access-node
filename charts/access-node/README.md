@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.5.1-PRE-35](https://img.shields.io/badge/Version-0.5.1--PRE--35-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.6.0-PRE-39](https://img.shields.io/badge/Version-0.6.0--PRE--39-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -22,6 +22,10 @@ Umbrella Chart for the DOME Marketplace access-node
 |-----|------|---------|-------------|
 | desmos.app.broker.externalDomain | string | `"http://scorpio:9090"` | external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities |
 | desmos.app.broker.internalDomain | string | `"http://scorpio:9090"` | internal address of the context broker to be used by the connector |
+| desmos.app.broker.paths.entities | string | `"/ngsi-ld/v1/entities"` |  |
+| desmos.app.broker.paths.entityOperations | string | `"/ngsi-ld/v1/entityOperations"` |  |
+| desmos.app.broker.paths.subscriptions | string | `"/ngsi-ld/v1/subscriptions"` |  |
+| desmos.app.broker.paths.temporal | string | `"/ngsi-ld/v1/temporal/entities"` |  |
 | desmos.app.broker.provider | string | `"scorpio"` | provider of the broker |
 | desmos.app.dltAdapter.externalDomain | external | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
 | desmos.app.dltAdapter.internalDomain | local | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
@@ -39,7 +43,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.privateKey.existingSecret.key | string | `"<PRIVATE-KEY>"` | key to retrieve the password from |
 | desmos.app.privateKey.existingSecret.name | string | `"<PRIVATE-KEY-SECRET>"` | name of the secret |
 | desmos.app.privateKey.value | string | `"<YOUR-PRIVATE-KEY>"` | your Ethereum private key |
-| desmos.app.profile | string | `"<ENVIRONMENT-PROFILE>"` |  |
+| desmos.app.profile | string | `"dev"` |  |
 | desmos.app.txSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
@@ -53,9 +57,10 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.username | string | `"postgres"` | username to be used |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
-| desmos.image.pullPolicy | string | `"Always"` |  |
-| desmos.image.repository | string | `"<your-image-repository>"` |  |
-| desmos.image.tag | string | `"<your-image-tag>"` |  |
+| desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
+| desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
+| desmos.image.tag | string | `"v1.0.0"` |  |
+| desmos.service.port | int | `8080` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
@@ -93,8 +98,8 @@ Umbrella Chart for the DOME Marketplace access-node
 | scorpio.service.type | string | `"ClusterIP"` | ClusterIP is the recommended type for most clusters |
 | tm-forum-api.apiProxy.enabled | bool | `true` | should the proxy be enabled |
 | tm-forum-api.defaultConfig.contextUrl | string | `"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"` | default context to be used when contacting the context broker |
-| tm-forum-api.defaultConfig.image | object | `{"tag":"0.21.1"}` | configuration to be used for the image of the containers |
-| tm-forum-api.defaultConfig.image.tag | string | `"0.21.1"` | current latest tag |
+| tm-forum-api.defaultConfig.image | object | `{"tag":"0.25.1"}` | configuration to be used for the image of the containers |
+| tm-forum-api.defaultConfig.image.tag | string | `"0.25.1"` | current latest tag |
 | tm-forum-api.defaultConfig.ngsiLd | object | `{"url":"http://scorpio:9090"}` | ngsi-ld broker connection information |
 | tm-forum-api.defaultConfig.ngsiLd.url | string | `"http://scorpio:9090"` | address of the broker |
 | tm-forum-api.defaultConfig.serverHost | string | `"http://localhost:8080"` | host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually |
