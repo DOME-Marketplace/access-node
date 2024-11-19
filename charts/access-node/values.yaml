@@ -16,10 +16,8 @@ desmos:
   app:
     ## profile (test == dev)
     #TODO: @oriolcanades please explain this config. profile switches are very bad practice, environment config should happen through the config.
-    profile: dev
-    logLevel: DEBUG
-    # internal server port
-    internalServerPort: 8080
+    profile: <ENVIRONMENT-PROFILE>
+    logLevel: INFO
     ## information about the access-node operator
     operator:
       # -- did of the organization running the node
