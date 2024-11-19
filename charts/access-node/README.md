@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.6.0-PRE-39](https://img.shields.io/badge/Version-0.6.0--PRE--39-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.7.0-PRE-40](https://img.shields.io/badge/Version-0.7.0--PRE--40-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -33,8 +33,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.externalAccessNodesUrls.customUrls | string | `"http://your-custom-url.org"` |  |
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
 | desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
-| desmos.app.internalServerPort | int | `8080` |  |
-| desmos.app.logLevel | string | `"DEBUG"` |  |
+| desmos.app.logLevel | string | `"INFO"` |  |
 | desmos.app.ngsiSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
@@ -43,7 +42,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.privateKey.existingSecret.key | string | `"<PRIVATE-KEY>"` | key to retrieve the password from |
 | desmos.app.privateKey.existingSecret.name | string | `"<PRIVATE-KEY-SECRET>"` | name of the secret |
 | desmos.app.privateKey.value | string | `"<YOUR-PRIVATE-KEY>"` | your Ethereum private key |
-| desmos.app.profile | string | `"dev"` |  |
+| desmos.app.profile | string | `"<ENVIRONMENT-PROFILE>"` |  |
 | desmos.app.txSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
@@ -57,7 +56,6 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.username | string | `"postgres"` | username to be used |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
-| desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
 | desmos.image.tag | string | `"v1.0.0"` |  |
 | desmos.service.port | int | `8080` |  |
