@@ -33,8 +33,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.externalAccessNodesUrls.customUrls | string | `"http://your-custom-url.org"` |  |
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
 | desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
-| desmos.app.internalServerPort | int | `8080` |  |
-| desmos.app.logLevel | string | `"DEBUG"` |  |
+| desmos.app.logLevel | string | `"INFO"` |  |
 | desmos.app.ngsiSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
@@ -43,7 +42,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.privateKey.existingSecret.key | string | `"<PRIVATE-KEY>"` | key to retrieve the password from |
 | desmos.app.privateKey.existingSecret.name | string | `"<PRIVATE-KEY-SECRET>"` | name of the secret |
 | desmos.app.privateKey.value | string | `"<YOUR-PRIVATE-KEY>"` | your Ethereum private key |
-| desmos.app.profile | string | `"dev"` |  |
+| desmos.app.profile | string | `"<ENVIRONMENT-PROFILE>"` |  |
 | desmos.app.txSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
