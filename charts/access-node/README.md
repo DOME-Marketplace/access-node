@@ -20,19 +20,32 @@ Umbrella Chart for the DOME Marketplace access-node
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| desmos.app.broker.externalDomain | string | `"http://scorpio:9090"` | external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities |
+| desmos.app.broker.internalDomain | string | `"http://scorpio:9090"` | internal address of the context broker to be used by the connector |
+| desmos.app.broker.paths.entities | string | `"/ngsi-ld/v1/entities"` |  |
+| desmos.app.broker.paths.entityOperations | string | `"/ngsi-ld/v1/entityOperations"` |  |
+| desmos.app.broker.paths.subscriptions | string | `"/ngsi-ld/v1/subscriptions"` |  |
+| desmos.app.broker.paths.temporal | string | `"/ngsi-ld/v1/temporal/entities"` |  |
+| desmos.app.broker.provider | string | `"scorpio"` | provider of the broker |
+| desmos.app.dltAdapter.externalDomain | external | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
+| desmos.app.dltAdapter.internalDomain | local | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
+| desmos.app.dltAdapter.provider | string | `"digitelts"` | provider of the dlt-adapter component |
 | desmos.app.externalAccessNodesUrls.customUrls | string | `"http://your-custom-url.org"` |  |
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
 | desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
-| desmos.app.logLevel | string | `"INFO"` |  |
+| desmos.app.internalServerPort | int | `8080` |  |
+| desmos.app.logLevel | string | `"DEBUG"` |  |
 | desmos.app.ngsiSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
+| desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
 | desmos.app.privateKey | object | `{"existingSecret":{"enabled":false,"key":"<PRIVATE-KEY>","name":"<PRIVATE-KEY-SECRET>"},"value":"<YOUR-PRIVATE-KEY>"}` | configuration to set your private key |
 | desmos.app.privateKey.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | desmos.app.privateKey.existingSecret.key | string | `"<PRIVATE-KEY>"` | key to retrieve the password from |
 | desmos.app.privateKey.existingSecret.name | string | `"<PRIVATE-KEY-SECRET>"` | name of the secret |
 | desmos.app.privateKey.value | string | `"<YOUR-PRIVATE-KEY>"` | your Ethereum private key |
-| desmos.app.profile | string | `"<ENVIRONMENT-PROFILE>"` |  |
+| desmos.app.profile | string | `"dev"` |  |
 | desmos.app.txSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
+| desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | desmos.db.existingSecret.key | string | `"desmos-db-password"` | key to retrieve the password from |
 | desmos.db.existingSecret.name | string | `"desmos-secret"` | name of the secret |
@@ -44,13 +57,15 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.username | string | `"postgres"` | username to be used |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
+| desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
 | desmos.image.tag | string | `"v1.0.0"` |  |
+| desmos.service.port | int | `8080` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
 | dlt-adapter.env.PRIVATE_KEY | string | `"<YOUR-PRIVATE-KEY>"` |  |
-| dlt-adapter.env.RPC_ADDRESS | string | `"https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"` |  |
+| dlt-adapter.env.RPC_ADDRESS | string | `"<RPC-ADDRESS>"` |  |
 | dlt-adapter.existingSecret.enabled | bool | `false` |  |
 | dlt-adapter.existingSecret.key | string | `"private-key"` |  |
 | dlt-adapter.existingSecret.name | string | `"private-key-secret"` |  |
