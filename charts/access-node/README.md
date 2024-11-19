@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.6.0-PRE-39](https://img.shields.io/badge/Version-0.6.0--PRE--39-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.7.0-PRE-40](https://img.shields.io/badge/Version-0.7.0--PRE--40-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -57,7 +57,6 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.username | string | `"postgres"` | username to be used |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
-| desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
 | desmos.image.tag | string | `"v1.0.0"` |  |
 | desmos.service.port | int | `8080` |  |
