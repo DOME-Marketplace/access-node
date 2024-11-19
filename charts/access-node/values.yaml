@@ -8,7 +8,7 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.0.0
+    tag: v1.0.1
   ## deployment specific configuration
   app:
     ## profile (test == dev)
@@ -82,7 +82,7 @@ dlt-adapter:
   env:
     DEBUG: "*"
     PRIVATE_KEY: <YOUR-PRIVATE-KEY>
-    RPC_ADDRESS: <RPC-ADDRESS>
+    RPC_ADDRESS: "https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"
     ISS: <YOUR-ORGANIZATION-ID-IN-SHA256>
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
