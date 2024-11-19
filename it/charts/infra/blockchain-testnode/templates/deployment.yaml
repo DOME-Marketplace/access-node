@@ -27,17 +27,28 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          args:
-            - -l 800000
-            - --account
-            # pub 0x40ec977Bd68917E8ffd7A4F3a439ab77149B86e5
-            - '0x041de193683f117a4b0f0b94f8e3e98d9dcf233010a538c6662c41a18188e038, 100000000000000000000'
-            - --account
-            # pub 0x72b440177bcDfD339eF00ffF6B78c3620c09c469
-            - '0x304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f, 100000000000000000000'
-            - --account
-            # pub 0x91ccCB37E514ba81282aA3dC8A72ab1Fa2e27094
-            - '0x09bac90daf84adc6ca0e3161e3a67c80e4a2ab79d7f55bf9b82f566e6d62ad87, 100000000000000000000'
+          env:
+            - name: GETH_DEV
+              value: "true"
+            - name: GETH_HTTP
+              value: "true"
+            - name: GETH_HTTP_ADDR
+              value: "0.0.0.0"
+            - name: GETH_HTTP_API
+              value: "eth,web3,personal,net"
+            - name: GETH_ALLOW_INSECURE_UNLOCK
+              value: "true"
+            - name: GETH_RPC_GASCAP
+              value: "0"
+            - name: GETH_RPC_TXFEECAP
+              value: "0"
+            # required so that the init container can connect
+            - name: GETH_HTTP_VHOSTS
+              value: "*"
+            # required so that the init container can connect
+            - name: GETH_VERBOSITY
+              value: "5"
+
           ports:
             - name: http
               containerPort: {{ .Values.service.port}}

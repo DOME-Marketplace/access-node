@@ -1,0 +1,2253 @@
+apiVersion: v1
+automountServiceAccountToken: true
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desmos
+    app.kubernetes.io/version: v1.0.0
+    helm.sh/chart: desmos-0.16.0
+  name: desmos
+  namespace: default
+---
+apiVersion: v1
+data:
+  enable.sh: |
+    psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE EXTENSION postgis;"
+    psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE ngb;"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgis-13.1.5
+  name: postgis-init-scripts
+  namespace: default
+---
+apiVersion: v1
+data:
+  create.sh: |
+    psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-connector
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgresql-13.1.5
+  name: postgresql-connector-init-scripts
+  namespace: default
+---
+apiVersion: v1
+data:
+  envoy-config.yaml: "static_resources:\n  listeners:\n    - name: listener_0\n      address:\n
+    \       socket_address:\n          address: 0.0.0.0\n          port_value: 10000\n
+    \     filter_chains:\n      - filters: \n        - name: envoy.filters.network.http_connection_manager\n
+    \         typed_config:\n            \"@type\": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager\n
+    \           stat_prefix: ingress_http\n            codec_type: AUTO\n            route_config:\n
+    \             name: tmforum-api\n              virtual_hosts:\n                -
+    name: tmforum-api\n                  domains: [\"*\"]\n                  routes:\n
+    \                   - match: \n                        prefix: \"/tmf-api/party/v4\"\n
+    \                     route:\n                        cluster: party-catalog\n
+    \                   - match: \n                        prefix: \"/tmf-api/customerBillManagement/v4\"\n
+    \                     route:\n                        cluster: customer-bill-management\n
+    \                   - match: \n                        prefix: \"/tmf-api/customerManagement/v4\"\n
+    \                     route:\n                        cluster: customer-management\n
+    \                   - match: \n                        prefix: \"/tmf-api/productCatalogManagement/v4\"\n
+    \                     route:\n                        cluster: product-catalog\n
+    \                   - match: \n                        prefix: \"/tmf-api/productInventory/v4\"\n
+    \                     route:\n                        cluster: product-inventory\n
+    \                   - match: \n                        prefix: \"/tmf-api/productOrderingManagement/v4\"\n
+    \                     route:\n                        cluster: product-ordering-management\n
+    \                   - match: \n                        prefix: \"/tmf-api/resourceCatalog/v4\"\n
+    \                     route:\n                        cluster: resource-catalog\n
+    \                   - match: \n                        prefix: \"/tmf-api/resourceFunctionActivation/v4\"\n
+    \                     route:\n                        cluster: resource-function-activation\n
+    \                   - match: \n                        prefix: \"/tmf-api/resourceInventoryManagement/v4\"\n
+    \                     route:\n                        cluster: resource-inventory\n
+    \                   - match: \n                        prefix: \"/tmf-api/serviceCatalogManagement/v4\"\n
+    \                     route:\n                        cluster: service-catalog
+    \                       \n            http_filters:\n              - name: http_router\n
+    \               typed_config:\n                  \"@type\": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router\n
+    \ clusters:\n    - name: party-catalog\n      connect_timeout: 15s\n      type:
+    STRICT_DNS\n      dns_lookup_family: V4_ONLY\n      lb_policy: ROUND_ROBIN\n      load_assignment:\n
+    \       cluster_name: party-catalog\n        endpoints:\n          - lb_endpoints:\n
+    \             - endpoint:\n                  address:\n                    socket_address:\n
+    \                     protocol: TCP\n                      address: provider-tm-forum-api-party-catalog\n
+    \                     port_value: 8080\n    - name: customer-bill-management\n
+    \     connect_timeout: 15s\n      type: STRICT_DNS\n      dns_lookup_family: V4_ONLY\n
+    \     lb_policy: ROUND_ROBIN\n      load_assignment:\n        cluster_name: customer-bill-management\n
+    \       endpoints:\n          - lb_endpoints:\n              - endpoint:\n                  address:\n
+    \                   socket_address:\n                      protocol: TCP\n                      address:
+    provider-tm-forum-api-customer-bill-management\n                      port_value:
+    8080\n    - name: customer-management\n      connect_timeout: 15s\n      type:
+    STRICT_DNS\n      dns_lookup_family: V4_ONLY\n      lb_policy: ROUND_ROBIN\n      load_assignment:\n
+    \       cluster_name: customer-management\n        endpoints:\n          - lb_endpoints:\n
+    \             - endpoint:\n                  address:\n                    socket_address:\n
+    \                     protocol: TCP\n                      address: provider-tm-forum-api-customer-management\n
+    \                     port_value: 8080\n    - name: product-catalog\n      connect_timeout:
+    15s\n      type: STRICT_DNS\n      dns_lookup_family: V4_ONLY\n      lb_policy:
+    ROUND_ROBIN\n      load_assignment:\n        cluster_name: product-catalog\n        endpoints:\n
+    \         - lb_endpoints:\n              - endpoint:\n                  address:\n
+    \                   socket_address:\n                      protocol: TCP\n                      address:
+    provider-tm-forum-api-product-catalog\n                      port_value: 8080\n
+    \   - name: product-inventory\n      connect_timeout: 15s\n      type: STRICT_DNS\n
+    \     dns_lookup_family: V4_ONLY\n      lb_policy: ROUND_ROBIN\n      load_assignment:\n
+    \       cluster_name: product-inventory\n        endpoints:\n          - lb_endpoints:\n
+    \             - endpoint:\n                  address:\n                    socket_address:\n
+    \                     protocol: TCP\n                      address: provider-tm-forum-api-product-inventory\n
+    \                     port_value: 8080\n    - name: product-ordering-management\n
+    \     connect_timeout: 15s\n      type: STRICT_DNS\n      dns_lookup_family: V4_ONLY\n
+    \     lb_policy: ROUND_ROBIN\n      load_assignment:\n        cluster_name: product-ordering-management\n
+    \       endpoints:\n          - lb_endpoints:\n              - endpoint:\n                  address:\n
+    \                   socket_address:\n                      protocol: TCP\n                      address:
+    provider-tm-forum-api-product-ordering-management\n                      port_value:
+    8080\n    - name: resource-catalog\n      connect_timeout: 15s\n      type: STRICT_DNS\n
+    \     dns_lookup_family: V4_ONLY\n      lb_policy: ROUND_ROBIN\n      load_assignment:\n
+    \       cluster_name: resource-catalog\n        endpoints:\n          - lb_endpoints:\n
+    \             - endpoint:\n                  address:\n                    socket_address:\n
+    \                     protocol: TCP\n                      address: provider-tm-forum-api-resource-catalog\n
+    \                     port_value: 8080\n    - name: resource-function-activation\n
+    \     connect_timeout: 15s\n      type: STRICT_DNS\n      dns_lookup_family: V4_ONLY\n
+    \     lb_policy: ROUND_ROBIN\n      load_assignment:\n        cluster_name: resource-function-activation\n
+    \       endpoints:\n          - lb_endpoints:\n              - endpoint:\n                  address:\n
+    \                   socket_address:\n                      protocol: TCP\n                      address:
+    provider-tm-forum-api-resource-function-activation\n                      port_value:
+    8080\n    - name: resource-inventory\n      connect_timeout: 15s\n      type:
+    STRICT_DNS\n      dns_lookup_family: V4_ONLY\n      lb_policy: ROUND_ROBIN\n      load_assignment:\n
+    \       cluster_name: resource-inventory\n        endpoints:\n          - lb_endpoints:\n
+    \             - endpoint:\n                  address:\n                    socket_address:\n
+    \                     protocol: TCP\n                      address: provider-tm-forum-api-resource-inventory\n
+    \                     port_value: 8080\n    - name: service-catalog\n      connect_timeout:
+    15s\n      type: STRICT_DNS\n      dns_lookup_family: V4_ONLY\n      lb_policy:
+    ROUND_ROBIN\n      load_assignment:\n        cluster_name: service-catalog\n        endpoints:\n
+    \         - lb_endpoints:\n              - endpoint:\n                  address:\n
+    \                   socket_address:\n                      protocol: TCP\n                      address:
+    provider-tm-forum-api-service-catalog\n                      port_value: 8080\n"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-envoy
+  namespace: default
+---
+apiVersion: v1
+data:
+  desmos-db-password: cG9zdGdyZXM=
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desmos
+    app.kubernetes.io/version: v1.0.0
+    helm.sh/chart: desmos-0.16.0
+  name: desmos
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+data:
+  privateKey: PFlPVVItUFJJVkFURS1LRVk+
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desmos
+    app.kubernetes.io/version: v1.0.0
+    helm.sh/chart: desmos-0.16.0
+  name: desmos-private-key-secret
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+data:
+  postgres-password: cG9zdGdyZXM=
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgis-13.1.5
+  name: postgis
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+data:
+  postgres-password: cG9zdGdyZXM=
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-connector
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgresql-13.1.5
+  name: postgresql-connector
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+data:
+  password: cG9zdGdyZXM=
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: scorpio
+    app.kubernetes.io/version: 2.1.0
+    helm.sh/chart: scorpio-0.4.9
+  name: scorpio
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desmos
+    app.kubernetes.io/version: v1.0.0
+    helm.sh/chart: desmos-0.16.0
+  name: desmos
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: desmos
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dlt-adapter
+    app.kubernetes.io/version: 1.5.1
+    helm.sh/chart: dlt-adapter-8.0.0
+  name: dlt-adapter
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: dlt-adapter
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgis-13.1.5
+  name: postgis
+  namespace: default
+spec:
+  ports:
+  - name: tcp-postgresql
+    nodePort: null
+    port: 5432
+    targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: postgis
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgis-13.1.5
+  name: postgis-hl
+  namespace: default
+spec:
+  clusterIP: None
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: tcp-postgresql
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: postgis
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-connector
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgresql-13.1.5
+  name: postgresql-connector
+  namespace: default
+spec:
+  ports:
+  - name: tcp-postgresql
+    nodePort: null
+    port: 5432
+    targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: postgresql-connector
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-connector
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgresql-13.1.5
+  name: postgresql-connector-hl
+  namespace: default
+spec:
+  clusterIP: None
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: tcp-postgresql
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: postgresql-connector
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-customer-bill-management
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-customer-bill-management
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-customer-management
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-customer-management
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-envoy
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-envoy
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-party-catalog
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-party-catalog
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-product-catalog
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-product-catalog
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-product-inventory
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-product-inventory
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-product-ordering-management
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-product-ordering-management
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-resource-catalog
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-resource-catalog
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-resource-function-activation
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-resource-function-activation
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-resource-inventory
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-resource-inventory
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-service-catalog
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: tm-forum-api-service-catalog
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: scorpio
+    app.kubernetes.io/version: 2.1.0
+    helm.sh/chart: scorpio-0.4.9
+  name: scorpio
+  namespace: default
+spec:
+  ports:
+  - name: "9090"
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
+  selector:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/name: scorpio
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: desmos
+    app.kubernetes.io/version: v1.0.0
+    helm.sh/chart: desmos-0.16.0
+  name: desmos
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: desmos
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/name: desmos
+    spec:
+      containers:
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: dev
+        - name: LOGGING_LEVEL_ROOT
+          value: DEBUG
+        - name: SERVER_PORT
+          value: "8080"
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:postgresql://postgresql-connector:5432/mktdb
+        - name: SPRING_R2DBC_USERNAME
+          value: postgres
+        - name: SPRING_R2DBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: desmos-db-password
+              name: desmos
+        - name: SPRING_FLYWAY_URL
+          value: jdbc:postgresql://postgresql-connector:5432/mktdb
+        - name: OPERATOR_ORGANIZATION_IDENTIFIER
+          value: <YOUR-ORGANIZATION-ID>
+        - name: BROKER_PROVIDER
+          value: scorpio
+        - name: BROKER_EXTERNAL_DOMAIN
+          value: http://scorpio:9090
+        - name: BROKER_INTERNAL_DOMAIN
+          value: http://scorpio:9090
+        - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+          value: http://desmos:8080/api/v1/notifications/broker
+        - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
+          value: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+        - name: DLT_ADAPTER_PROVIDER
+          value: digitelts
+        - name: DLT_ADAPTER_INTERNAL_DOMAIN
+          value: http://dlt-adapter:8080
+        - name: DLT_ADAPTER_EXTERNAL_DOMAIN
+          value: http://dlt-adapter:8080
+        - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+          value: http://desmos:8080/api/v1/notifications/dlt
+        - name: TX_SUBSCRIPTION_ENTITY_TYPES
+          value: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+        - name: API_EXTERNAL_DOMAIN
+          value: <YOUR-EXTERNAL-DOMAIN>
+        - name: SECURITY_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              key: privateKey
+              name: desmos-private-key-secret
+        - name: ACCESS_NODE_PREFIX_DIRECTORY
+          value: https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-
+        - name: ACCESS_NODE_TRUSTED_ACCESS_NODES_LIST
+          value: http://access-node-list.infra.svc.cluster.local:8080/access-node-list/trusted_access_nodes_list.yaml
+        image: in2workspace/in2-desmos-api:v1.0.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 40
+          periodSeconds: 10
+        name: desmos
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 2
+        securityContext: {}
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          echo "Checking availability for: http://scorpio:9090/q/health"; echo "Checking availability for: http://dlt-adapter:8080/health"; response1=$(curl -si http://scorpio:9090/q/health); response2=$(curl -si http://dlt-adapter:8080/health); until echo "$response1" | grep -q "HTTP/1.[01] 200 OK" && echo "$response2" | grep -q "HTTP/1.[01] 200 OK"; do
+
+            echo "Waiting for external services to be available at http://scorpio:9090/q/health and http://dlt-adapter:8080/health...";
+            echo "Response from http://scorpio:9090/q/health:";
+            echo "$response1";
+            echo "Response from http://dlt-adapter:8080/health:";
+            echo "$response2";
+            sleep 10;
+            response1=$(curl -si http://scorpio:9090/q/health);
+            response2=$(curl -si http://dlt-adapter:8080/health);
+          done;
+        image: curlimages/curl
+        name: check-external-services
+      securityContext: {}
+      serviceAccountName: desmos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dlt-adapter
+    app.kubernetes.io/version: 1.5.1
+    helm.sh/chart: dlt-adapter-8.0.0
+  name: dlt-adapter
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: dlt-adapter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/name: dlt-adapter
+    spec:
+      containers:
+      - env:
+        - name: DEBUG
+          value: '*'
+        - name: PRIVATE_KEY
+          value: <YOUR-PRIVATE-KEY>
+        - name: DOME_EVENTS_CONTRACT_ADDRESS
+          value: 0xeBA8507227af9e6DfB8D4575549C52457112C957
+        - name: DOME_EVENTS_CONTRACT_ABI
+          value: '[ { "anonymous": false, "inputs": [ { "indexed": false, "internalType":
+            "uint256", "name": "index", "type": "uint256" }, { "indexed": false, "internalType":
+            "uint256", "name": "timestamp", "type": "uint256" }, { "indexed": true,
+            "internalType": "bytes32", "name": "publisherAddress", "type": "bytes32"
+            }, { "indexed": false, "internalType": "address", "name": "authorAddress",
+            "type": "address" }, { "indexed": true, "internalType": "bytes32", "name":
+            "entityIDHash", "type": "bytes32" }, { "indexed": true, "internalType":
+            "bytes32", "name": "previousEntityHash", "type": "bytes32" }, { "indexed":
+            false, "internalType": "string", "name": "eventType", "type": "string"
+            }, { "indexed": false, "internalType": "string", "name": "dataLocation",
+            "type": "string" }, { "indexed": false, "internalType": "string[]", "name":
+            "metadata", "type": "string[]" } ], "name": "EventDOMEv1", "type": "event"
+            }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType":
+            "address", "name": "previousOwner", "type": "address" }, { "indexed":
+            true, "internalType": "address", "name": "newOwner", "type": "address"
+            } ], "name": "OwnershipTransferred", "type": "event" }, { "inputs": [
+            { "internalType": "bytes32", "name": "_publisherAddress", "type": "bytes32"
+            }, { "internalType": "address", "name": "_authorAdress", "type": "address"
+            }, { "internalType": "bytes32", "name": "_entityIDHash", "type": "bytes32"
+            }, { "internalType": "bytes32", "name": "_previousEntityHash", "type":
+            "bytes32" }, { "internalType": "string", "name": "_eventType", "type":
+            "string" }, { "internalType": "string", "name": "_dataLocation", "type":
+            "string" }, { "internalType": "string[]", "name": "_metadata", "type":
+            "string[]" } ], "name": "emitNewEvent", "outputs": [ { "internalType":
+            "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable",
+            "type": "function" }, { "inputs": [], "name": "index", "outputs": [ {
+            "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability":
+            "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs":
+            [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability":
+            "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership",
+            "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [ { "internalType": "address", "name": "newOwner", "type":
+            "address" } ], "name": "transferOwnership", "outputs": [], "stateMutability":
+            "nonpayable", "type": "function" } ]'
+        - name: DOME_PRODUCTION_BLOCK_NUMBER
+          value: "118733266"
+        - name: RPC_ADDRESS
+          value: <RPC-ADDRESS>
+        - name: ISS
+          value: <YOUR-ORGANIZATION-ID-IN-SHA256>
+        image: quay.io/digitelts/dlt-adapter:1.5.1
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: dlt-adapter
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 31
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        resources: {}
+        securityContext: {}
+      securityContext: {}
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-customer-bill-management
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-customer-bill-management
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-customer-bill-management
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/customerBillManagement/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-customer-bill-management:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: customer-bill-management
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-customer-management
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-customer-management
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-customer-management
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/customerManagement/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-customer-management:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: customer-management
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-envoy
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-envoy
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/name: tm-forum-api-envoy
+    spec:
+      containers:
+      - args:
+        - -c /config/envoy-config.yaml
+        - -l debug
+        image: envoyproxy/envoy:v1.27-latest
+        imagePullPolicy: IfNotPresent
+        name: envoy-proxy
+        ports:
+        - containerPort: 10000
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: config
+      volumes:
+      - configMap:
+          name: provider-tm-forum-api-envoy
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-party-catalog
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-party-catalog
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-party-catalog
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/party/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-party-catalog:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: party-catalog
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-product-catalog
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-product-catalog
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-product-catalog
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/productCatalogManagement/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-product-catalog:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: product-catalog
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-product-inventory
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-product-inventory
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-product-inventory
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/productInventory/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-product-inventory:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: product-inventory
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-product-ordering-management
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-product-ordering-management
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-product-ordering-management
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/productOrderingManagement/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-product-ordering-management:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: product-ordering-management
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-resource-catalog
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-resource-catalog
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-resource-catalog
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/resourceCatalog/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-resource-catalog:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: resource-catalog
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-resource-function-activation
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-resource-function-activation
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-resource-function-activation
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/resourceFunctionActivation/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-resource-function-activation:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: resource-function-activation
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-resource-inventory
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-resource-inventory
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-resource-inventory
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/resourceInventoryManagement/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-resource-inventory:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: resource-inventory
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 0.13.2
+    helm.sh/chart: tm-forum-api-0.9.0
+  name: provider-tm-forum-api-service-catalog
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: tm-forum-api-service-catalog
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tm-forum-api-service-catalog
+        app.kubernetes.io/version: 0.13.2
+        helm.sh/chart: tm-forum-api-0.9.0
+    spec:
+      containers:
+      - env:
+        - name: ENDPOINTS_ALL_PORT
+          value: "9090"
+        - name: MICRONAUT_SERVER_PORT
+          value: "8080"
+        - name: MICRONAUT_METRICS_ENABLED
+          value: "true"
+        - name: ENDPOINTS_HEALTH_ENABLED
+          value: "true"
+        - name: LOGGER_LEVELS_ROOT
+          value: DEBUG
+        - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+          value: 30s
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+          value: ngsi-ld/v1
+        - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+          value: http://scorpio:9090
+        - name: GENERAL_BASEPATH
+          value: /tmf-api/serviceCatalogManagement/v4
+        - name: GENERAL_CONTEXT_URL
+          value: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
+        - name: GENERAL_SERVER_HOST
+          value: http://localhost:8080
+        - name: MICRONAUT_ENVIRONMENTS
+          value: in-memory
+        - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+          value: 2s
+        - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+          value: 2s
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+          value: "1000"
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+          value: 14d
+        - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+          value: 14d
+        image: quay.io/fiware/tmforum-service-catalog:0.25.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: service-catalog
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: http-health
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http-health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: scorpio
+    app.kubernetes.io/version: 2.1.0
+    helm.sh/chart: scorpio-0.4.9
+  name: scorpio
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: scorpio
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/name: scorpio
+    spec:
+      containers:
+      - env:
+        - name: DBHOST
+          value: postgis
+        - name: DBPASS
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: scorpio
+        - name: DBUSER
+          value: postgres
+        - name: POSTGRES_DB
+          value: postgis
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: scorpio
+        - name: POSTGRES_USER
+          value: postgres
+        - name: KAFKA_ADVERTISED_HOST_NAME
+          value: kafka
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: zookeeper:2181
+        - name: KAFKA_ADVERTISED_PORT
+          value: "9092"
+        - name: QUARKUS_LOG_LEVEL
+          value: INFO
+        image: scorpiobroker/all-in-one-runner:java-4.1.11
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /q/health
+            port: 9090
+          initialDelaySeconds: 40
+          periodSeconds: 10
+        name: scorpio
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /q/health
+            port: 9090
+          initialDelaySeconds: 40
+          periodSeconds: 10
+        resources: {}
+        securityContext: {}
+      securityContext: {}
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgis-13.1.5
+  name: postgis
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: postgis
+  serviceName: postgis-hl
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: primary
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgis
+        app.kubernetes.io/version: 16.0.0
+        helm.sh/chart: postgis-13.1.5
+      name: postgis
+    spec:
+      affinity:
+        nodeAffinity: null
+        podAffinity: null
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/component: primary
+                  app.kubernetes.io/instance: provider
+                  app.kubernetes.io/name: postgis
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_PORT_NUMBER
+          value: "5432"
+        - name: POSTGRESQL_VOLUME_DIR
+          value: /bitnami/postgresql
+        - name: PGDATA
+          value: /bitnami/postgresql/data
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-password
+              name: postgis
+        - name: POSTGRESQL_ENABLE_LDAP
+          value: "no"
+        - name: POSTGRESQL_ENABLE_TLS
+          value: "no"
+        - name: POSTGRESQL_LOG_HOSTNAME
+          value: "false"
+        - name: POSTGRESQL_LOG_CONNECTIONS
+          value: "false"
+        - name: POSTGRESQL_LOG_DISCONNECTIONS
+          value: "false"
+        - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+          value: "off"
+        - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+          value: error
+        - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+          value: pgaudit
+        image: docker.io/bitnami/postgresql:16.0.0-debian-11-r13
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: postgresql
+        ports:
+        - containerPort: 5432
+          name: tcp-postgresql
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - -e
+            - |
+              exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+              [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          failureThreshold: 6
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits: {}
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 0
+          runAsNonRoot: true
+          runAsUser: 1001
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: custom-init-scripts
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /bitnami/postgresql
+          name: data
+      hostIPC: false
+      hostNetwork: false
+      securityContext:
+        fsGroup: 1001
+      serviceAccountName: default
+      volumes:
+      - configMap:
+          name: postgis-init-scripts
+        name: custom-init-scripts
+      - emptyDir:
+          medium: Memory
+        name: dshm
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: provider
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-connector
+    app.kubernetes.io/version: 16.0.0
+    helm.sh/chart: postgresql-13.1.5
+  name: postgresql-connector
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: provider
+      app.kubernetes.io/name: postgresql-connector
+  serviceName: postgresql-connector-hl
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: primary
+        app.kubernetes.io/instance: provider
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql-connector
+        app.kubernetes.io/version: 16.0.0
+        helm.sh/chart: postgresql-13.1.5
+      name: postgresql-connector
+    spec:
+      affinity:
+        nodeAffinity: null
+        podAffinity: null
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/component: primary
+                  app.kubernetes.io/instance: provider
+                  app.kubernetes.io/name: postgresql-connector
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_PORT_NUMBER
+          value: "5432"
+        - name: POSTGRESQL_VOLUME_DIR
+          value: /bitnami/postgresql
+        - name: PGDATA
+          value: /bitnami/postgresql/data
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-password
+              name: postgresql-connector
+        - name: POSTGRESQL_ENABLE_LDAP
+          value: "no"
+        - name: POSTGRESQL_ENABLE_TLS
+          value: "no"
+        - name: POSTGRESQL_LOG_HOSTNAME
+          value: "false"
+        - name: POSTGRESQL_LOG_CONNECTIONS
+          value: "false"
+        - name: POSTGRESQL_LOG_DISCONNECTIONS
+          value: "false"
+        - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+          value: "off"
+        - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+          value: error
+        - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+          value: pgaudit
+        image: docker.io/bitnami/postgresql:16.0.0-debian-11-r13
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: postgresql
+        ports:
+        - containerPort: 5432
+          name: tcp-postgresql
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - -e
+            - |
+              exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+              [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          failureThreshold: 6
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits: {}
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 0
+          runAsNonRoot: true
+          runAsUser: 1001
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: custom-init-scripts
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /bitnami/postgresql
+          name: data
+      hostIPC: false
+      hostNetwork: false
+      securityContext:
+        fsGroup: 1001
+      serviceAccountName: default
+      volumes:
+      - configMap:
+          name: postgresql-connector-init-scripts
+        name: custom-init-scripts
+      - emptyDir:
+          medium: Memory
+        name: dshm
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
