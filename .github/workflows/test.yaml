@@ -8,8 +8,7 @@ on:
       - reopened
       - labeled
       - unlabeled
-  push:
-
+      
 jobs:
   it:
     runs-on: ubuntu-latest
