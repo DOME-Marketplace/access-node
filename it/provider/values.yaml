@@ -1,7 +1,4 @@
 desmos:
-  ## service config
-  service:
-    port: 8080
   app:
     profile: dev
     txSubscription:
