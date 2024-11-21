@@ -2,7 +2,7 @@ deployment:
   image:
     repository: ethereum/client-go
     # -- tag of the image to be used
-    tag: stable
+    tag: v1.14.11
     # -- specification of the image pull policy
     pullPolicy: Always
 
