@@ -251,10 +251,10 @@ integrators.
 
    These additional fields must also be specified by integrators:
 
-   | Key                                          | Description                                                                             | Explanation                                        |
-   |----------------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------|
-   | access-node.desmos.app.profile               | allows the environment filtering                                                        | dev/test/prod (see the desmos profile table below) |
-   | access-node.desmos.app.broker.externalDomain | must be set since it is used by third parties to retrieve your data; it should be https | The external domain you're using to expose Desmos  |
+   | Key                                     | Description                                                                             | Explanation                                        |
+   |-----------------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------------------|
+   | access-node.desmos.app.profile          | allows the environment filtering                                                        | dev/test/prod (see the desmos profile table below) |
+   | access-node.desmos.app.externalDomain   | must be set since it is used by third parties to retrieve your data; it should be https | The external domain you're using to expose Desmos  |
 
    The Blockchain Connector uses the _dev_, _test_ and _prod_ configuration profiles. On the other hand, DOME uses the
    profile names _sbx_, _dev_ and _prd_. It is important that users use the profile names used by the Blockchain
