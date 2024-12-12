@@ -61,7 +61,7 @@ tm-forum-api:
       - name: LOGBACK_APPENDER
         value: CONSOLE
       - name: API_EXTENSION_ENABLED
-        value: true
+        value: "true"
 
 
   apiProxy:
