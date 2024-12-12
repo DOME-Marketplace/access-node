@@ -216,10 +216,6 @@ tm-forum-api:
   enabled: true
   ## configuration to be used by every api-deployment if nothing specific is provided.
   defaultConfig:
-    # -- configuration to be used for the image of the containers
-    image:
-      # -- current latest tag
-      tag: "0.25.1"
     # --  ngsi-ld broker connection information
     ngsiLd:
       # -- address of the broker
