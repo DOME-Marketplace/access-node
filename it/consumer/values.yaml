@@ -60,6 +60,9 @@ tm-forum-api:
     additionalEnvVars:
       - name: LOGBACK_APPENDER
         value: CONSOLE
+      - name: API_EXTENSION_ENABLED
+        value: "true"
+
 
   apiProxy:
     service:
