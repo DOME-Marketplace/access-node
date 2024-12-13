@@ -1,6 +1,8 @@
 # access-node
 
-![Version: 0.6.6-PRE-55](https://img.shields.io/badge/Version-0.6.6--PRE--55-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+
+![Version: 0.6.6-PRE-56](https://img.shields.io/badge/Version-0.6.6--PRE--56-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -34,7 +36,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
 | desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
 | desmos.app.internalServerPort | int | `8080` |  |
-| desmos.app.logLevel | string | `"DEBUG"` |  |
+| desmos.app.logLevel | string | `"INFO"` |  |
 | desmos.app.ngsiSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
@@ -59,13 +61,13 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.0.1"` |  |
+| desmos.image.tag | string | `"v1.0.2"` |  |
 | desmos.service.port | int | `8080` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
 | dlt-adapter.env.PRIVATE_KEY | string | `"<YOUR-PRIVATE-KEY>"` |  |
-| dlt-adapter.env.RPC_ADDRESS | string | `"<RPC-ADDRESS>"` |  |
+| dlt-adapter.env.RPC_ADDRESS | string | `"https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"` |  |
 | dlt-adapter.existingSecret.enabled | bool | `false` |  |
 | dlt-adapter.existingSecret.key | string | `"private-key"` |  |
 | dlt-adapter.existingSecret.name | string | `"private-key-secret"` |  |
