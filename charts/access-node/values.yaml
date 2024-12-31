@@ -64,6 +64,9 @@ desmos:
     externalAccessNodesUrls:
       enableCustomUrls: false
       customUrls: "http://your-custom-url.org"
+    trustedAccessNodesList:
+      enableCustomTrustedList: false
+      customTrustedList: "https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"
     # -- configuration to set your private key
     privateKey:
       # -- your Ethereum private key
