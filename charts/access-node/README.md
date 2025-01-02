@@ -1,6 +1,7 @@
 # access-node
 
-![Version: 0.6.9-PRE-58](https://img.shields.io/badge/Version-0.6.9--PRE--58-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+
+![Version: 0.6.9-PRE-59](https://img.shields.io/badge/Version-0.6.9--PRE--59-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -10,8 +11,8 @@ Umbrella Chart for the DOME Marketplace access-node
 |------------|------|---------|
 | https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
-| https://fiware.github.io/helm-charts | tm-forum-api | 0.10.7 |
-| https://in2workspace.github.io/helm-charts | desmos | 0.16.0 |
+| https://fiware.github.io/helm-charts | tm-forum-api | 0.10.2 |
+| https://in2workspace.github.io/helm-charts | desmos | 1.0.2 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -44,6 +45,8 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.privateKey.existingSecret.name | string | `"<PRIVATE-KEY-SECRET>"` | name of the secret |
 | desmos.app.privateKey.value | string | `"<YOUR-PRIVATE-KEY>"` | your Ethereum private key |
 | desmos.app.profile | string | `"dev"` |  |
+| desmos.app.trustedAccessNodesList.customTrustedList | string | `"https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"` |  |
+| desmos.app.trustedAccessNodesList.enableCustomTrustedList | bool | `false` |  |
 | desmos.app.txSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
