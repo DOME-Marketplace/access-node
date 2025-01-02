@@ -3,7 +3,7 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2025-01-02T06:59:59.451184644Z"
+    created: "2025-01-02T07:13:00.264301277Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -35,9 +35,9 @@ entries:
     - condition: tm-forum-api.enabled
       name: tm-forum-api
       repository: https://fiware.github.io/helm-charts
-      version: 0.10.7
+      version: 0.10.8
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: ef808434139f5c86d8f602d2a7cc116b2cbb09f02c0d288bd47a805057bd76ce
+    digest: eea0bd0eaafc044f556ee78b9c97174db7b03c91a799788eb19b2c9a7a1d3748
     name: access-node
     type: application
     urls:
@@ -964,4 +964,4 @@ entries:
     urls:
     - https://github.com/dome-marketplace/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2025-01-02T06:59:59.451336636Z"
+generated: "2025-01-02T07:13:00.264492254Z"
