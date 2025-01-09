@@ -27,10 +27,10 @@ public class StepDefinitions {
     @Before
     public void waitForTheEnvironment() {
         catalogProvider = new CatalogApi();
-        catalogProvider.setCustomBaseUrl("http://localhost:8080/tmf-api/catalogManagement/v4");
+        catalogProvider.setCustomBaseUrl("http://localhost:8080/tmf-api/productCatalogManagement/v4");
 
         catalogConsumer = new CatalogApi();
-        catalogConsumer.setCustomBaseUrl("http://localhost:8081/tmf-api/catalogManagement/v4");
+        catalogConsumer.setCustomBaseUrl("http://localhost:8081/tmf-api/productCatalogManagement/v4");
     }
 
     @Given("a provider and a consumer have deployed there access nodes.")
