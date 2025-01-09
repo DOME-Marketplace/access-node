@@ -18,7 +18,9 @@ desmos:
   app:
     ## profile (test == dev)
     profile: dev
-    logLevel: INFO
+    logLevel:
+      root: INFO
+      app: INFO
     # internal server port
     internalServerPort: 8080
     ## information about the access-node operator
