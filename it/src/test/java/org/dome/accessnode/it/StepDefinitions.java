@@ -11,6 +11,7 @@ import org.dome.accessnode.api.ProductSpecificationApi;
 import org.dome.accessnode.model.ProductSpecificationCreateVO;
 import org.dome.accessnode.model.ProductSpecificationRefVO;
 import org.dome.accessnode.model.ProductOfferingCreateVO;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -56,18 +57,10 @@ public class StepDefinitions {
 
     @When("a product offering and product specification are created at the providers marketplace.")
     public void createCatalogAtProvider() throws ApiException {
-        ProductSpecificationCreateVO productSpecificationCreateVO = new ProductSpecificationCreateVO();
-        productSpecificationCreateVO.setName("provider-product-specification");
-
+        ProductSpecificationCreateVO productSpecificationCreateVO = getProductSpecificationCreateVO();
         productSpecification = productSpecificationProvider.createProductSpecification(productSpecificationCreateVO);
 
-        ProductSpecificationRefVO productSpecificationRef = new ProductSpecificationRefVO();
-        productSpecificationRef.setId(productSpecification.getId());
-
-        ProductOfferingCreateVO productOfferingCreateVO = new ProductOfferingCreateVO();
-        productOfferingCreateVO.setName("provider-product-offering");
-        productOfferingCreateVO.setLifecycleStatus("Launched");
-        productOfferingCreateVO.setProductSpecification(productSpecificationRef);
+        ProductOfferingCreateVO productOfferingCreateVO = getProductOfferingCreateVO();
         productOffering = productOfferingProvider.createProductOffering(productOfferingCreateVO);
     }
 
@@ -79,6 +72,27 @@ public class StepDefinitions {
         assertEquals(productOffering, productOfferingConsumer.retrieveProductOffering(productOffering.getId(), null), "The product offering should be available at the consumers TMForum api.");
         assertEquals(productSpecification, productSpecificationConsumer.retrieveProductSpecification(productSpecification.getId(), null), "The product specification should be available at the consumers TMForum api.");
 
+    }
+
+    @NotNull
+    private static ProductSpecificationCreateVO getProductSpecificationCreateVO() {
+        ProductSpecificationCreateVO productSpecificationCreateVO = new ProductSpecificationCreateVO();
+        productSpecificationCreateVO.setName("provider-product-specification");
+        return productSpecificationCreateVO;
+    }
+
+    @NotNull
+    private ProductOfferingCreateVO getProductOfferingCreateVO() {
+        ProductSpecificationRefVO productSpecificationRef = new ProductSpecificationRefVO();
+        productSpecificationRef.setId(productSpecification.getId());
+        productSpecificationRef.setName(productSpecification.getName());
+        productSpecificationRef.href(productSpecification.getHref());
+
+        ProductOfferingCreateVO productOfferingCreateVO = new ProductOfferingCreateVO();
+        productOfferingCreateVO.setName("provider-product-offering");
+        productOfferingCreateVO.setLifecycleStatus("Launched");
+        productOfferingCreateVO.setProductSpecification(productSpecificationRef);
+        return productOfferingCreateVO;
     }
 
     private boolean checkProductOfferingExistence(String id) {
