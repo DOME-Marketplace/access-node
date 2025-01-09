@@ -1,6 +1,7 @@
 package org.dome.accessnode.it;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -55,16 +56,19 @@ public class StepDefinitions {
                 "The product catalog api should be available at the consumer.");
     }
 
-    @When("a product offering and product specification are created at the providers marketplace.")
-    public void createCatalogAtProvider() throws ApiException {
+    @When("a product specification is created at the providers marketplace.")
+    public void aProductSpecificationIsCreatedAtTheProvidersMarketplace() throws ApiException {
         ProductSpecificationCreateVO productSpecificationCreateVO = getProductSpecificationCreateVO();
         productSpecification = productSpecificationProvider.createProductSpecification(productSpecificationCreateVO);
+    }
 
+    @And("a product offering related to the previous product specification is created at the providers marketplace.")
+    public void aProductOfferingRelatedToThePreviousProductSpecificationIsCreatedAtTheProvidersMarketplace() throws ApiException {
         ProductOfferingCreateVO productOfferingCreateVO = getProductOfferingCreateVO();
         productOffering = productOfferingProvider.createProductOffering(productOfferingCreateVO);
     }
 
-    @Then("it should be available at the consumer marketplace, too.")
+    @Then("they should be available at the consumer marketplace, too.")
     public void checkCatalogAtConsumer() throws ApiException {
         await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkProductOfferingExistence(productOffering.getId()));
         await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkProductSpecificationExistence(productSpecification.getId()));
@@ -110,5 +114,4 @@ public class StepDefinitions {
             return false;
         }
     }
-
 }
