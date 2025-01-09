@@ -1,14 +1,18 @@
 package org.dome.accessnode.it;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
 import org.dome.accessnode.ApiException;
-import org.dome.accessnode.api.ServiceCatalogApi;
-import org.dome.accessnode.model.ServiceCatalogCreateVO;
-import org.dome.accessnode.model.ServiceCatalogVO;
+import org.dome.accessnode.api.ProductOfferingApi;
+import org.dome.accessnode.api.ProductSpecificationApi;
+import org.dome.accessnode.model.ProductSpecificationCreateVO;
+import org.dome.accessnode.model.ProductSpecificationRefVO;
+import org.dome.accessnode.model.ProductOfferingCreateVO;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -20,47 +24,94 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 public class StepDefinitions {
 
-    ServiceCatalogApi scaProvider;
-    ServiceCatalogApi scaConsumer;
-    ServiceCatalogVO serviceCatalog;
+    ProductOfferingApi productOfferingProvider;
+    ProductOfferingApi productOfferingConsumer;
+    org.dome.accessnode.model.ProductOfferingVO productOffering;
+
+    ProductSpecificationApi productSpecificationProvider;
+    ProductSpecificationApi productSpecificationConsumer;
+    org.dome.accessnode.model.ProductSpecificationVO productSpecification;
 
     @Before
     public void waitForTheEnvironment() {
-        scaProvider = new ServiceCatalogApi();
-        scaProvider.setCustomBaseUrl("http://localhost:8080/tmf-api/serviceCatalogManagement/v4");
+        productOfferingProvider = new ProductOfferingApi();
+        productOfferingProvider.setCustomBaseUrl("http://localhost:8080/tmf-api/productCatalogManagement/v4");
 
-        scaConsumer = new ServiceCatalogApi();
-        scaConsumer.setCustomBaseUrl("http://localhost:8081/tmf-api/serviceCatalogManagement/v4");
+        productOfferingConsumer = new ProductOfferingApi();
+        productOfferingConsumer.setCustomBaseUrl("http://localhost:8081/tmf-api/productCatalogManagement/v4");
+
+        productSpecificationProvider = new ProductSpecificationApi();
+        productSpecificationProvider.setCustomBaseUrl("http://localhost:8080/tmf-api/productCatalogManagement/v4");
+
+        productSpecificationConsumer = new ProductSpecificationApi();
+        productSpecificationConsumer.setCustomBaseUrl("http://localhost:8081/tmf-api/productCatalogManagement/v4");
+
     }
 
     @Given("a provider and a consumer have deployed there access nodes.")
-    public void checkProviderAndConsumerAvailable() throws ApiException {
-        assertDoesNotThrow(() -> scaProvider.listServiceCatalog(null, null, null),
-                "The service catalog api should be available at the provider.");
-        assertDoesNotThrow(() -> scaConsumer.listServiceCatalog(null, null, null),
-                "The service catalog api should be available at the consumer.");
+    public void checkProviderAndConsumerAvailable() {
+        assertDoesNotThrow(() -> productOfferingProvider.listProductOffering(null, null, null),
+                "The product catalog api should be available at the provider.");
+        assertDoesNotThrow(() -> productOfferingConsumer.listProductOffering(null, null, null),
+                "The product catalog api should be available at the consumer.");
     }
 
-    @When("a catalog is created at the providers marketplace.")
-    public void createServiceCatalogAtProvider() throws ApiException {
-        ServiceCatalogCreateVO scc = new ServiceCatalogCreateVO();
-        scc.setName("provider-catalog");
-        serviceCatalog = scaProvider.createServiceCatalog(scc);
+    @When("a product specification is created at the providers marketplace.")
+    public void aProductSpecificationIsCreatedAtTheProvidersMarketplace() throws ApiException {
+        ProductSpecificationCreateVO productSpecificationCreateVO = getProductSpecificationCreateVO();
+        productSpecification = productSpecificationProvider.createProductSpecification(productSpecificationCreateVO);
     }
 
-    @Then("it should be available at the consumer marketplace, too.")
-    public void checkServiceCatalogAtConsumer() throws ApiException {
-        await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkCatalogExistence(serviceCatalog.getId()));
-
-        assertEquals(serviceCatalog, scaConsumer.retrieveServiceCatalog(serviceCatalog.getId(), null), "The catalog should be available at the consumers tmforum api.");
+    @And("a product offering related to the previous product specification is created at the providers marketplace.")
+    public void aProductOfferingRelatedToThePreviousProductSpecificationIsCreatedAtTheProvidersMarketplace() throws ApiException {
+        ProductOfferingCreateVO productOfferingCreateVO = getProductOfferingCreateVO();
+        productOffering = productOfferingProvider.createProductOffering(productOfferingCreateVO);
     }
 
-    private boolean checkCatalogExistence(String id) {
+    @Then("they should be available at the consumer marketplace, too.")
+    public void checkCatalogAtConsumer() throws ApiException {
+        await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkProductOfferingExistence(productOffering.getId()));
+        await().atMost(Duration.of(30, ChronoUnit.SECONDS)).until(() -> checkProductSpecificationExistence(productSpecification.getId()));
+
+        assertEquals(productOffering, productOfferingConsumer.retrieveProductOffering(productOffering.getId(), null), "The product offering should be available at the consumers TMForum api.");
+        assertEquals(productSpecification, productSpecificationConsumer.retrieveProductSpecification(productSpecification.getId(), null), "The product specification should be available at the consumers TMForum api.");
+
+    }
+
+    @NotNull
+    private static ProductSpecificationCreateVO getProductSpecificationCreateVO() {
+        ProductSpecificationCreateVO productSpecificationCreateVO = new ProductSpecificationCreateVO();
+        productSpecificationCreateVO.setName("provider-product-specification");
+        return productSpecificationCreateVO;
+    }
+
+    @NotNull
+    private ProductOfferingCreateVO getProductOfferingCreateVO() {
+        ProductSpecificationRefVO productSpecificationRef = new ProductSpecificationRefVO();
+        productSpecificationRef.setId(productSpecification.getId());
+        productSpecificationRef.setName(productSpecification.getName());
+        productSpecificationRef.href(productSpecification.getHref());
+
+        ProductOfferingCreateVO productOfferingCreateVO = new ProductOfferingCreateVO();
+        productOfferingCreateVO.setName("provider-product-offering");
+        productOfferingCreateVO.setLifecycleStatus("Launched");
+        productOfferingCreateVO.setProductSpecification(productSpecificationRef);
+        return productOfferingCreateVO;
+    }
+
+    private boolean checkProductOfferingExistence(String id) {
         try {
-            return scaConsumer.retrieveServiceCatalog(id, null) != null;
+            return productOfferingConsumer.retrieveProductOffering(id, null) != null;
         } catch (ApiException e) {
             return false;
         }
     }
 
+    private boolean checkProductSpecificationExistence(String id) {
+        try {
+            return productSpecificationConsumer.retrieveProductSpecification(id, null) != null;
+        } catch (ApiException e) {
+            return false;
+        }
+    }
 }
