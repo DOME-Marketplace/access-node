@@ -45,6 +45,7 @@ public class StepDefinitions {
     public void createCatalogAtProvider() throws ApiException {
         CatalogCreateVO catalogCreateVO = new CatalogCreateVO();
         catalogCreateVO.setName("provider-catalog");
+        catalogCreateVO.setLifecycleStatus("Launched");
         catalog = catalogProvider.createCatalog(catalogCreateVO);
     }
 
