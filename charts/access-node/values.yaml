@@ -43,8 +43,6 @@ desmos:
     ngsiSubscription:
       # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/broker
-      # -- a list of entity-types the connector is interested in
-      entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
     ## configuration to connect to the dlt-adapter
     dltAdapter:
       # -- provider of the dlt-adapter component
@@ -57,8 +55,6 @@ desmos:
     txSubscription:
       # -- local address of the blockchain-connectors notification endpoint for dlt events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
-      # -- a list of entity-types the connector is interested in
-      entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
       # -- a list of external access node with which to synchronize
     externalDomain: <YOUR-EXTERNAL-DOMAIN>
     externalAccessNodesUrls:
