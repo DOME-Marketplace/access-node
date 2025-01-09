@@ -8,7 +8,7 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.0.2
+    tag: v1.0.4
     ## image pull policy
     pullPolicy: IfNotPresent
   ## service config
@@ -18,7 +18,9 @@ desmos:
   app:
     ## profile (test == dev)
     profile: dev
-    logLevel: INFO
+    logLevel:
+      root: INFO
+      app: INFO
     # internal server port
     internalServerPort: 8080
     ## information about the access-node operator
@@ -43,8 +45,6 @@ desmos:
     ngsiSubscription:
       # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/broker
-      # -- a list of entity-types the connector is interested in
-      entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
     ## configuration to connect to the dlt-adapter
     dltAdapter:
       # -- provider of the dlt-adapter component
@@ -57,8 +57,6 @@ desmos:
     txSubscription:
       # -- local address of the blockchain-connectors notification endpoint for dlt events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
-      # -- a list of entity-types the connector is interested in
-      entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
       # -- a list of external access node with which to synchronize
     externalDomain: <YOUR-EXTERNAL-DOMAIN>
     externalAccessNodesUrls:
@@ -155,7 +153,7 @@ scorpio:
     # -- repository to be used - resource friendly all-in-one-runner without kafka
     repository: scorpiobroker/all-in-one-runner
     # -- tag of the image to be used - latest java image without kafka
-    tag: java-4.1.11
+    tag: java-4.1.10
   ## configuration of the database to be used by broker
   db:
     # -- host of the db
