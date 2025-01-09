@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.6.10-PRE-58](https://img.shields.io/badge/Version-0.6.10--PRE--58-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.7.0-PRE-60](https://img.shields.io/badge/Version-0.7.0--PRE--60-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -11,7 +11,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.10.8 |
-| https://in2workspace.github.io/helm-charts | desmos | 1.0.2 |
+| https://in2workspace.github.io/helm-charts | desmos | 1.0.3 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -34,8 +34,8 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
 | desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
 | desmos.app.internalServerPort | int | `8080` |  |
-| desmos.app.logLevel | string | `"INFO"` |  |
-| desmos.app.ngsiSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
+| desmos.app.logLevel.app | string | `"INFO"` |  |
+| desmos.app.logLevel.root | string | `"INFO"` |  |
 | desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
 | desmos.app.privateKey | object | `{"existingSecret":{"enabled":false,"key":"<PRIVATE-KEY>","name":"<PRIVATE-KEY-SECRET>"},"value":"<YOUR-PRIVATE-KEY>"}` | configuration to set your private key |
@@ -46,7 +46,6 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.profile | string | `"dev"` |  |
 | desmos.app.trustedAccessNodesList.customTrustedList | string | `"https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"` |  |
 | desmos.app.trustedAccessNodesList.enableCustomTrustedList | bool | `false` |  |
-| desmos.app.txSubscription.entityTypes | string | `"catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification"` | a list of entity-types the connector is interested in |
 | desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | desmos.db.existingSecret.key | string | `"desmos-db-password"` | key to retrieve the password from |
@@ -61,7 +60,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.0.2"` |  |
+| desmos.image.tag | string | `"v1.0.4"` |  |
 | desmos.service.port | int | `8080` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
@@ -94,7 +93,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | scorpio.enabled | bool | `true` | should scorpio be enabled |
 | scorpio.fullnameOverride | string | `"scorpio"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | scorpio.image.repository | string | `"scorpiobroker/all-in-one-runner"` | repository to be used - resource friendly all-in-one-runner without kafka |
-| scorpio.image.tag | string | `"java-4.1.11"` | tag of the image to be used - latest java image without kafka |
+| scorpio.image.tag | string | `"java-4.1.10"` | tag of the image to be used - latest java image without kafka |
 | scorpio.livenessProbe.path | string | `"/q/health"` | path to be used for the readiness probe, older versions used /actuator/health |
 | scorpio.readinessProbe.path | string | `"/q/health"` | path to be used for the readiness probe, older versions used /actuator/health |
 | scorpio.service.type | string | `"ClusterIP"` | ClusterIP is the recommended type for most clusters |
