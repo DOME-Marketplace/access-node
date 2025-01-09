@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.6.10-PRE-58](https://img.shields.io/badge/Version-0.6.10--PRE--58-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.7.0-PRE-60](https://img.shields.io/badge/Version-0.7.0--PRE--60-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -94,7 +94,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | scorpio.enabled | bool | `true` | should scorpio be enabled |
 | scorpio.fullnameOverride | string | `"scorpio"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | scorpio.image.repository | string | `"scorpiobroker/all-in-one-runner"` | repository to be used - resource friendly all-in-one-runner without kafka |
-| scorpio.image.tag | string | `"java-4.1.11"` | tag of the image to be used - latest java image without kafka |
+| scorpio.image.tag | string | `"java-4.1.10"` | tag of the image to be used - latest java image without kafka |
 | scorpio.livenessProbe.path | string | `"/q/health"` | path to be used for the readiness probe, older versions used /actuator/health |
 | scorpio.readinessProbe.path | string | `"/q/health"` | path to be used for the readiness probe, older versions used /actuator/health |
 | scorpio.service.type | string | `"ClusterIP"` | ClusterIP is the recommended type for most clusters |
