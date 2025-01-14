@@ -259,15 +259,6 @@ integrators.
    |        test         |           dev            |
    |        prod         |           prd            |
 
-#### Additional configuration
-
-Fields to clarify in the original config:
-
-| Key                                                 | Comment                                                       | Default Values                                                                                                                                              |
-|-----------------------------------------------------|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| access-node.desmos.app.ngsiSubscription.entityTypes | this list ensures that you can work with all type of entities | catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification |
-| access-node.desmos.app.txSubscription.entityTypes   | this list ensures that you can work with all type of entities | catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification |
-
 ##### Configure custom secrets
 
 While secrets can be configured via plain helm/k8s entities, another more secure approach is to

@@ -8,12 +8,9 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.0.4
+    tag: v1.0.6
     ## image pull policy
     pullPolicy: IfNotPresent
-  ## service config
-  service:
-    port: 8080
   ## deployment specific configuration
   app:
     ## profile (test == dev)
@@ -27,14 +24,6 @@ desmos:
     operator:
       # -- did of the organization running the node
       organizationIdentifier: <YOUR-ORGANIZATION-ID>
-    ## connection information for the context broker
-    broker:
-      paths:
-        entities: "/ngsi-ld/v1/entities"
-        entityOperations: "/ngsi-ld/v1/entityOperations"
-        subscriptions: "/ngsi-ld/v1/subscriptions"
-        temporal: "/ngsi-ld/v1/temporal/entities"
-
       # -- provider of the broker
       provider: scorpio
       # -- internal address of the context broker to be used by the connector
