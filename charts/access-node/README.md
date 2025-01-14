@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.7.0-PRE-60](https://img.shields.io/badge/Version-0.7.0--PRE--60-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.8.0-PRE-62](https://img.shields.io/badge/Version-0.8.0--PRE--62-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -11,7 +11,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.10.8 |
-| https://in2workspace.github.io/helm-charts | desmos | 1.0.3 |
+| https://in2workspace.github.io/helm-charts | desmos | 1.0.4 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -20,13 +20,6 @@ Umbrella Chart for the DOME Marketplace access-node
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| desmos.app.broker.externalDomain | string | `"http://scorpio:9090"` | external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities |
-| desmos.app.broker.internalDomain | string | `"http://scorpio:9090"` | internal address of the context broker to be used by the connector |
-| desmos.app.broker.paths.entities | string | `"/ngsi-ld/v1/entities"` |  |
-| desmos.app.broker.paths.entityOperations | string | `"/ngsi-ld/v1/entityOperations"` |  |
-| desmos.app.broker.paths.subscriptions | string | `"/ngsi-ld/v1/subscriptions"` |  |
-| desmos.app.broker.paths.temporal | string | `"/ngsi-ld/v1/temporal/entities"` |  |
-| desmos.app.broker.provider | string | `"scorpio"` | provider of the broker |
 | desmos.app.dltAdapter.externalDomain | external | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
 | desmos.app.dltAdapter.internalDomain | local | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
 | desmos.app.dltAdapter.provider | string | `"digitelts"` | provider of the dlt-adapter component |
@@ -37,7 +30,10 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.logLevel.app | string | `"INFO"` |  |
 | desmos.app.logLevel.root | string | `"INFO"` |  |
 | desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
+| desmos.app.operator.externalDomain | string | `"http://scorpio:9090"` | external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities |
+| desmos.app.operator.internalDomain | string | `"http://scorpio:9090"` | internal address of the context broker to be used by the connector |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
+| desmos.app.operator.provider | string | `"scorpio"` | provider of the broker |
 | desmos.app.privateKey | object | `{"existingSecret":{"enabled":false,"key":"<PRIVATE-KEY>","name":"<PRIVATE-KEY-SECRET>"},"value":"<YOUR-PRIVATE-KEY>"}` | configuration to set your private key |
 | desmos.app.privateKey.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | desmos.app.privateKey.existingSecret.key | string | `"<PRIVATE-KEY>"` | key to retrieve the password from |
@@ -60,8 +56,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.0.4"` |  |
-| desmos.service.port | int | `8080` |  |
+| desmos.image.tag | string | `"v1.0.6"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
