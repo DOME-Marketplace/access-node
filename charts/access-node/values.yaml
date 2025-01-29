@@ -8,22 +8,33 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.0.6
+    #TODO: @oriolcanades please insert something sane here.
+    tag: v1.0.2
     ## image pull policy
     pullPolicy: IfNotPresent
+  ## service config
+  service:
+    port: 8080
   ## deployment specific configuration
   app:
     ## profile (test == dev)
+    #TODO: @oriolcanades please explain this config. profile switches are very bad practice, environment config should happen through the config.
     profile: dev
-    logLevel:
-      root: INFO
-      app: INFO
+    logLevel: INFO
     # internal server port
     internalServerPort: 8080
     ## information about the access-node operator
     operator:
       # -- did of the organization running the node
       organizationIdentifier: <YOUR-ORGANIZATION-ID>
+    ## connection information for the context broker
+    broker:
+      paths:
+        entities: "/ngsi-ld/v1/entities"
+        entityOperations: "/ngsi-ld/v1/entityOperations"
+        subscriptions: "/ngsi-ld/v1/subscriptions"
+        temporal: "/ngsi-ld/v1/temporal/entities"
+
       # -- provider of the broker
       provider: scorpio
       # -- internal address of the context broker to be used by the connector
@@ -34,6 +45,8 @@ desmos:
     ngsiSubscription:
       # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/broker
+      # -- a list of entity-types the connector is interested in
+      entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
     ## configuration to connect to the dlt-adapter
     dltAdapter:
       # -- provider of the dlt-adapter component
@@ -46,14 +59,13 @@ desmos:
     txSubscription:
       # -- local address of the blockchain-connectors notification endpoint for dlt events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
+      # -- a list of entity-types the connector is interested in
+      entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
       # -- a list of external access node with which to synchronize
     externalDomain: <YOUR-EXTERNAL-DOMAIN>
     externalAccessNodesUrls:
       enableCustomUrls: false
       customUrls: "http://your-custom-url.org"
-    trustedAccessNodesList:
-      enableCustomTrustedList: false
-      customTrustedList: "https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"
     # -- configuration to set your private key
     privateKey:
       # -- your Ethereum private key
@@ -104,7 +116,7 @@ dlt-adapter:
   env:
     DEBUG: "*"
     PRIVATE_KEY: <YOUR-PRIVATE-KEY>
-    RPC_ADDRESS: https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6
+    RPC_ADDRESS: "https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"
     ISS: <YOUR-ORGANIZATION-ID-IN-SHA256>
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
@@ -142,7 +154,7 @@ scorpio:
     # -- repository to be used - resource friendly all-in-one-runner without kafka
     repository: scorpiobroker/all-in-one-runner
     # -- tag of the image to be used - latest java image without kafka
-    tag: java-4.1.10
+    tag: java-4.1.11
   ## configuration of the database to be used by broker
   db:
     # -- host of the db
@@ -204,6 +216,12 @@ tm-forum-api:
   enabled: true
   ## configuration to be used by every api-deployment if nothing specific is provided.
   defaultConfig:
+    # -- configuration to be used for the image of the containers
+    image:
+      # -- current latest tag
+      tag: "0.30.1"
+      ## image pull policy
+      #pullPolicy: Always
     # --  ngsi-ld broker connection information
     ngsiLd:
       # -- address of the broker
@@ -211,8 +229,75 @@ tm-forum-api:
     # -- default context to be used when contacting the context broker
     contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
     # -- host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually
-    serverHost: http://localhost:8080
+    serverHost: http://access-node-tm-forum-api-envoy:8080
+    # additional env vars (If you want the requests to fail in case of unresolvable relationships, you can use the defaults)
+    additionalEnvVars: 
+    - name: MAPPING_STRICT_RELATIONSHIPS
+      value: "false"
+    - name: API_EXTENSION_ENABLED
+      value: "true"
   ## configuration for the api proxy, to serve all apis through one kubernetes service
   apiProxy:
     # -- should the proxy be enabled
     enabled: true
+ 
+  apis:
+    - name: party-catalog
+      image: tmforum-party-catalog
+      basePath: /tmf-api/party/v4
+
+    - name: customer-bill-management
+      image: tmforum-customer-bill-management
+      basePath: /tmf-api/customerBillManagement/v4
+
+    - name: customer-management
+      image: tmforum-customer-management
+      basePath: /tmf-api/customerManagement/v4
+
+    - name: product-catalog
+      image: tmforum-product-catalog
+      basePath: /tmf-api/productCatalogManagement/v4
+
+    - name: product-inventory
+      image: tmforum-product-inventory
+      basePath: /tmf-api/productInventory/v4
+
+    - name: product-ordering-management
+      image: tmforum-product-ordering-management
+      basePath: /tmf-api/productOrderingManagement/v4
+
+    - name: resource-catalog
+      image: tmforum-resource-catalog
+      basePath: /tmf-api/resourceCatalog/v4
+
+    - name: resource-function-activation
+      image: tmforum-resource-function-activation
+      basePath: /tmf-api/resourceFunctionActivation/v4
+
+    - name: resource-inventory
+      image: tmforum-resource-inventory
+      basePath: /tmf-api/resourceInventoryManagement/v4
+
+    - name: service-catalog
+      image: tmforum-service-catalog
+      basePath: /tmf-api/serviceCatalogManagement/v4
+
+    - name: service-inventory
+      image: tmforum-service-inventory
+      basePath: /tmf-api/serviceInventory/v4
+
+    - name: account-management
+      image: tmforum-account
+      basePath: /tmf-api/accountManagement/v4
+
+    - name: agreement-management
+      image: tmforum-agreement
+      basePath: /tmf-api/agreementManagement/v4
+
+    - name: party-role
+      image: tmforum-party-role
+      basePath: /tmf-api/partyRoleManagement/v4
+
+    - name: usage-management
+      image: tmforum-usage-management
+      basePath: /tmf-api/usageManagement/v4 
