@@ -212,6 +212,12 @@ tm-forum-api:
     contextUrl: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld
     # -- host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually
     serverHost: http://localhost:8080
+    # additional env vars (If you want the requests to fail in case of unresolvable relationships, you can use the defaults)
+    additionalEnvVars: 
+    - name: MAPPING_STRICT_RELATIONSHIPS
+      value: "false"
+    - name: API_EXTENSION_ENABLED
+      value: "true"
   ## configuration for the api proxy, to serve all apis through one kubernetes service
   apiProxy:
     # -- should the proxy be enabled
