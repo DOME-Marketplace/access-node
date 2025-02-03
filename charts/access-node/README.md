@@ -93,51 +93,6 @@ Umbrella Chart for the DOME Marketplace access-node
 | scorpio.readinessProbe.path | string | `"/q/health"` | path to be used for the readiness probe, older versions used /actuator/health |
 | scorpio.service.type | string | `"ClusterIP"` | ClusterIP is the recommended type for most clusters |
 | tm-forum-api.apiProxy.enabled | bool | `true` | should the proxy be enabled |
-| tm-forum-api.apis[0].basePath | string | `"/tmf-api/party/v4"` |  |
-| tm-forum-api.apis[0].image | string | `"tmforum-party-catalog"` |  |
-| tm-forum-api.apis[0].name | string | `"party-catalog"` |  |
-| tm-forum-api.apis[10].basePath | string | `"/tmf-api/serviceInventory/v4"` |  |
-| tm-forum-api.apis[10].image | string | `"tmforum-service-inventory"` |  |
-| tm-forum-api.apis[10].name | string | `"service-inventory"` |  |
-| tm-forum-api.apis[11].basePath | string | `"/tmf-api/accountManagement/v4"` |  |
-| tm-forum-api.apis[11].image | string | `"tmforum-account"` |  |
-| tm-forum-api.apis[11].name | string | `"account-management"` |  |
-| tm-forum-api.apis[12].basePath | string | `"/tmf-api/agreementManagement/v4"` |  |
-| tm-forum-api.apis[12].image | string | `"tmforum-agreement"` |  |
-| tm-forum-api.apis[12].name | string | `"agreement-management"` |  |
-| tm-forum-api.apis[13].basePath | string | `"/tmf-api/partyRoleManagement/v4"` |  |
-| tm-forum-api.apis[13].image | string | `"tmforum-party-role"` |  |
-| tm-forum-api.apis[13].name | string | `"party-role"` |  |
-| tm-forum-api.apis[14].basePath | string | `"/tmf-api/usageManagement/v4"` |  |
-| tm-forum-api.apis[14].image | string | `"tmforum-usage-management"` |  |
-| tm-forum-api.apis[14].name | string | `"usage-management"` |  |
-| tm-forum-api.apis[1].basePath | string | `"/tmf-api/customerBillManagement/v4"` |  |
-| tm-forum-api.apis[1].image | string | `"tmforum-customer-bill-management"` |  |
-| tm-forum-api.apis[1].name | string | `"customer-bill-management"` |  |
-| tm-forum-api.apis[2].basePath | string | `"/tmf-api/customerManagement/v4"` |  |
-| tm-forum-api.apis[2].image | string | `"tmforum-customer-management"` |  |
-| tm-forum-api.apis[2].name | string | `"customer-management"` |  |
-| tm-forum-api.apis[3].basePath | string | `"/tmf-api/productCatalogManagement/v4"` |  |
-| tm-forum-api.apis[3].image | string | `"tmforum-product-catalog"` |  |
-| tm-forum-api.apis[3].name | string | `"product-catalog"` |  |
-| tm-forum-api.apis[4].basePath | string | `"/tmf-api/productInventory/v4"` |  |
-| tm-forum-api.apis[4].image | string | `"tmforum-product-inventory"` |  |
-| tm-forum-api.apis[4].name | string | `"product-inventory"` |  |
-| tm-forum-api.apis[5].basePath | string | `"/tmf-api/productOrderingManagement/v4"` |  |
-| tm-forum-api.apis[5].image | string | `"tmforum-product-ordering-management"` |  |
-| tm-forum-api.apis[5].name | string | `"product-ordering-management"` |  |
-| tm-forum-api.apis[6].basePath | string | `"/tmf-api/resourceCatalog/v4"` |  |
-| tm-forum-api.apis[6].image | string | `"tmforum-resource-catalog"` |  |
-| tm-forum-api.apis[6].name | string | `"resource-catalog"` |  |
-| tm-forum-api.apis[7].basePath | string | `"/tmf-api/resourceFunctionActivation/v4"` |  |
-| tm-forum-api.apis[7].image | string | `"tmforum-resource-function-activation"` |  |
-| tm-forum-api.apis[7].name | string | `"resource-function-activation"` |  |
-| tm-forum-api.apis[8].basePath | string | `"/tmf-api/resourceInventoryManagement/v4"` |  |
-| tm-forum-api.apis[8].image | string | `"tmforum-resource-inventory"` |  |
-| tm-forum-api.apis[8].name | string | `"resource-inventory"` |  |
-| tm-forum-api.apis[9].basePath | string | `"/tmf-api/serviceCatalogManagement/v4"` |  |
-| tm-forum-api.apis[9].image | string | `"tmforum-service-catalog"` |  |
-| tm-forum-api.apis[9].name | string | `"service-catalog"` |  |
 | tm-forum-api.defaultConfig.additionalEnvVars[0].name | string | `"MAPPING_STRICT_RELATIONSHIPS"` |  |
 | tm-forum-api.defaultConfig.additionalEnvVars[0].value | string | `"false"` |  |
 | tm-forum-api.defaultConfig.additionalEnvVars[1].name | string | `"API_EXTENSION_ENABLED"` |  |
@@ -145,7 +100,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | tm-forum-api.defaultConfig.contextUrl | string | `"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"` | default context to be used when contacting the context broker |
 | tm-forum-api.defaultConfig.ngsiLd | object | `{"url":"http://scorpio:9090"}` | ngsi-ld broker connection information |
 | tm-forum-api.defaultConfig.ngsiLd.url | string | `"http://scorpio:9090"` | address of the broker |
-| tm-forum-api.defaultConfig.serverHost | string | `"http://access-node-tm-forum-api-envoy:8080"` | host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually |
+| tm-forum-api.defaultConfig.serverHost | string | `"http://localhost:8080"` | host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually |
 | tm-forum-api.enabled | bool | `true` | should tm-forum-api be enabled |
 
 ----------------------------------------------
