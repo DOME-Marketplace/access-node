@@ -3,7 +3,49 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2025-02-24T07:29:47.651279875Z"
+    created: "2025-02-24T14:45:12.414849714Z"
+    dependencies:
+    - condition: desmos.enabled
+      name: desmos
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.0.6
+    - condition: dlt-adapter.enabled
+      name: dlt-adapter
+      repository: https://alastria.github.io/helm-charts
+      version: 8.0.0
+    - condition: kafka.enabled
+      name: kafka
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 26.0.0
+    - alias: postgis
+      condition: postgis.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: scorpio
+      condition: scorpio.enabled
+      name: scorpio-broker-aaio
+      repository: https://fiware.github.io/helm-charts
+      version: 0.4.9
+    - condition: tm-forum-api.enabled
+      name: tm-forum-api
+      repository: https://fiware.github.io/helm-charts
+      version: 0.10.8
+    description: Umbrella Chart for the DOME Marketplace access-node
+    digest: 82d4c87faae7ec3f759c19b5ab30ab877f3f7b4eaa3f100384e5ffe78d5b58ec
+    name: access-node
+    type: application
+    urls:
+    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.8.4-PRE-70/access-node-0.8.4-PRE-70.tgz
+    version: 0.8.4-PRE-70
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-02-24T07:40:44.945871861Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -37,12 +79,12 @@ entries:
       repository: https://fiware.github.io/helm-charts
       version: 0.10.8
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: 269ae5db99b35d07679d854a8baef4cd038e0786b30b28c416bd2419c938cb87
+    digest: b7fd68341e32b545b7f63a4e039ec8aa6cc2fc0d13320d1148b341297cb735b7
     name: access-node
     type: application
     urls:
-    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.8.3-PRE-69/access-node-0.8.3-PRE-69.tgz
-    version: 0.8.3-PRE-69
+    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-0.8.3/access-node-0.8.3.tgz
+    version: 0.8.3
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2025-02-11T13:18:48.231225431Z"
@@ -1174,4 +1216,4 @@ entries:
     urls:
     - https://github.com/dome-marketplace/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2025-02-24T07:29:47.651488344Z"
+generated: "2025-02-24T14:45:12.415108619Z"
