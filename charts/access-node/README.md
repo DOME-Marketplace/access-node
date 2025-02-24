@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.8.3-PRE-66](https://img.shields.io/badge/Version-0.8.3--PRE--66-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.8.3-PRE-69](https://img.shields.io/badge/Version-0.8.3--PRE--69-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
