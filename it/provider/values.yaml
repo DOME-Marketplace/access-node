@@ -18,9 +18,6 @@ desmos:
     externalAccessNodesUrls:
       enableCustomUrls: true
       customUrls: ""
-    verifier:
-      enableCustomVerifier: true
-      customVerifier: "http://localhost:9596"
   fullnameOverride: desmos
 
 dlt-adapter:

@@ -5,7 +5,7 @@ desmos:
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
   image:
-    ## image repositor
+    ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
     tag: v1.1.0-snapshot
@@ -51,9 +51,6 @@ desmos:
     externalAccessNodesUrls:
       enableCustomUrls: false
       customUrls: "http://your-custom-url.org"
-    trustedAccessNodesList:
-      enableCustomTrustedList: false
-      customTrustedList: "https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"
     # -- configuration to set your private key
     privateKey:
       # -- your Ethereum private key
@@ -65,6 +62,19 @@ desmos:
         name: <PRIVATE-KEY-SECRET>
         # -- key to retrieve the password from
         key: <PRIVATE-KEY>
+    learCredentialMachineInBase64:
+      value: your-lear-credential-machine-in-base64
+      existingSecret:
+        enabled: false
+        name: desmos-lear-credential-machine-secret
+        key: lear-credential-machine
+    trustedAccessNodesList:
+      enableCustomTrustedList: false
+      customTrustedList: "https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"
+    verifier:
+      enableCustomVerifier: false
+      customVerifier: "https://verifier.dome-marketplace-<env>.org"
+
     ## configuration of the database to be used by the blockchain-connector
   db:
     # -- host of the db

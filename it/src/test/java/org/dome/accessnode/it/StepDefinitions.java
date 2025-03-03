@@ -6,27 +6,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.mockwebserver.Dispatcher;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import org.dome.accessnode.ApiException;
 import org.dome.accessnode.api.ProductOfferingApi;
 import org.dome.accessnode.api.ProductSpecificationApi;
+import org.dome.accessnode.model.ProductOfferingCreateVO;
 import org.dome.accessnode.model.ProductSpecificationCreateVO;
 import org.dome.accessnode.model.ProductSpecificationRefVO;
-import org.dome.accessnode.model.ProductOfferingCreateVO;
 import org.jetbrains.annotations.NotNull;
 
-import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.concurrent.TimeUnit;
 
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 public class StepDefinitions {
