@@ -150,7 +150,8 @@ be used as followed.
 > or
 > a dedicated secrets vault to keep it safe.
 
-1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.org/) to request a new 
+1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.org/) in the Group
+'07 - Marketplace Integration' and the Problem 'Fed Mktpl - Cannot reach the access node' to request a new 
 LEARCredentialMachine.
 
 2. Go to the [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/):
