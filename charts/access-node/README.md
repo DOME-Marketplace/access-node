@@ -27,6 +27,10 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
 | desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
 | desmos.app.internalServerPort | int | `8080` |  |
+| desmos.app.learCredentialMachineInBase64.existingSecret.enabled | bool | `false` |  |
+| desmos.app.learCredentialMachineInBase64.existingSecret.key | string | `"lear-credential-machine"` |  |
+| desmos.app.learCredentialMachineInBase64.existingSecret.name | string | `"desmos-lear-credential-machine-secret"` |  |
+| desmos.app.learCredentialMachineInBase64.value | string | `"your-lear-credential-machine-in-base64"` |  |
 | desmos.app.logLevel.app | string | `"INFO"` |  |
 | desmos.app.logLevel.root | string | `"INFO"` |  |
 | desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
@@ -43,6 +47,8 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.trustedAccessNodesList.customTrustedList | string | `"https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"` |  |
 | desmos.app.trustedAccessNodesList.enableCustomTrustedList | bool | `false` |  |
 | desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/v1/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
+| desmos.app.verifier.customVerifier | string | `"https://verifier.dome-marketplace-<env>.org"` |  |
+| desmos.app.verifier.enableCustomVerifier | bool | `false` |  |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | desmos.db.existingSecret.key | string | `"desmos-db-password"` | key to retrieve the password from |
 | desmos.db.existingSecret.name | string | `"desmos-secret"` | name of the secret |
