@@ -47,7 +47,9 @@ desmos:
       # -- local address of the blockchain-connectors notification endpoint for dlt events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
       # -- a list of external access node with which to synchronize
-    externalDomain: <YOUR-EXTERNAL-DOMAIN>
+    externalDomain:
+      protocol: "https"
+      domain: "example-external-domain.org"
     externalAccessNodesUrls:
       enableCustomUrls: false
       customUrls: "http://your-custom-url.org"
