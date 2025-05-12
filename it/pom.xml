@@ -657,7 +657,7 @@
                             <portBindings>
                                 <portBinding>8545:8545</portBinding>
                             </portBindings>
-                            <timeout>600</timeout>
+                            <timeout>1200</timeout>
                         </configuration>
                     </execution>
                     <execution>
