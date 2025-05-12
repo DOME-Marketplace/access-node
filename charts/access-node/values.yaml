@@ -1,4 +1,4 @@
-## configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
+# configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
 desmos:
   # -- should the desmos-blockchain-connector be enabled
   enabled: true
