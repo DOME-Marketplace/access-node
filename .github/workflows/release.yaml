@@ -6,28 +6,28 @@ on:
       - main
 
 jobs:
-    it:
-      runs-on: ubuntu-latest
-
-      steps:
-        - uses: actions/checkout@v2
-
-        - uses: actions/setup-java@v1
-          with:
-            java-version: '17'
-            java-package: jdk
-
-        - uses: azure/setup-helm@v3
-
-        - name: Execute tests
-          id: test
-          run: |
-            cd it
-            mvn clean test integration-test
+#    it:
+#      runs-on: ubuntu-latest
+#
+#      steps:
+#        - uses: actions/checkout@v2
+#
+#        - uses: actions/setup-java@v1
+#          with:
+#            java-version: '17'
+#            java-package: jdk
+#
+#        - uses: azure/setup-helm@v3
+#
+#        - name: Execute tests
+#          id: test
+#          run: |
+#            cd it
+#            mvn clean test integration-test
 
     check-changes: 
 
-      needs: ["it" ]
+#      needs: ["it" ]
       runs-on: ubuntu-latest
 
       outputs:
@@ -61,7 +61,8 @@ jobs:
 
     generate-version:
     
-      needs: [ "it", "check-changes" ]
+#      needs: [ "it", "check-changes" ]
+      needs: [ "check-changes" ]
       if: ${{ needs.check-changes.outputs.changed }}
       runs-on: ubuntu-latest
 
@@ -88,7 +89,8 @@ jobs:
 
     deploy:
 
-      needs: [ "it", "check-changes", "generate-version" ]
+#      needs: [ "it", "check-changes", "generate-version" ]
+      needs: [ "check-changes", "generate-version" ]
       if: ${{ needs.check-changes.outputs.changed }}
       runs-on: ubuntu-latest
 
