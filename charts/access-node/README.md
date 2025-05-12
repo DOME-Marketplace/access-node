@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 0.9.3-PRE-74](https://img.shields.io/badge/Version-0.9.3--PRE--74-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.10.0-PRE-75](https://img.shields.io/badge/Version-0.10.0--PRE--75-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -11,7 +11,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.10.8 |
-| https://in2workspace.github.io/helm-charts | desmos | 1.0.8 |
+| https://in2workspace.github.io/helm-charts | desmos | 1.1.0 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -25,7 +25,8 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.dltAdapter.provider | string | `"digitelts"` | provider of the dlt-adapter component |
 | desmos.app.externalAccessNodesUrls.customUrls | string | `"http://your-custom-url.org"` |  |
 | desmos.app.externalAccessNodesUrls.enableCustomUrls | bool | `false` |  |
-| desmos.app.externalDomain | string | `"<YOUR-EXTERNAL-DOMAIN>"` |  |
+| desmos.app.externalDomain.domain | string | `"example-external-domain.org"` |  |
+| desmos.app.externalDomain.protocol | string | `"https"` |  |
 | desmos.app.internalServerPort | int | `8080` |  |
 | desmos.app.learCredentialMachineInBase64.existingSecret.enabled | bool | `false` |  |
 | desmos.app.learCredentialMachineInBase64.existingSecret.key | string | `"lear-credential-machine"` |  |
@@ -62,7 +63,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.1.3"` |  |
+| desmos.image.tag | string | `"v1.1.4-snapshot"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
