@@ -8,7 +8,7 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.1.3
+    tag: v1.1.4-snapshot
     ## image pull policy
     pullPolicy: IfNotPresent
   ## deployment specific configuration
@@ -47,7 +47,9 @@ desmos:
       # -- local address of the blockchain-connectors notification endpoint for dlt events
       notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
       # -- a list of external access node with which to synchronize
-    externalDomain: <YOUR-EXTERNAL-DOMAIN>
+    externalDomain:
+      protocol: "https"
+      domain: "example-external-domain.org"
     externalAccessNodesUrls:
       enableCustomUrls: false
       customUrls: "http://your-custom-url.org"

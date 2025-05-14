@@ -14,7 +14,9 @@ desmos:
       externalDomain: http://desmos.consumer.svc.cluster.local:8080
     privateKey:
       value: "0x14dff9a9a0c9e7edf82359e1caabc31b708941dcdbcb6d95e3f331f6eebee03c"
-    externalDomain: "http://desmos.consumer.svc.cluster.local:8080"
+    externalDomain:
+      protocol: "http"
+      domain: "desmos.consumer.svc.cluster.local:8080"
     externalAccessNodesUrls:
       enableCustomUrls: true
       customUrls: ""
