@@ -31,8 +31,8 @@ dependencies:
     condition: scorpio.enabled
     alias: scorpio
     repository: https://fiware.github.io/helm-charts
-    version: 0.4.9
+    version: 0.4.12
   - name: tm-forum-api
     condition: tm-forum-api.enabled
     repository: https://fiware.github.io/helm-charts
-    version: 0.10.8
+    version: 0.14.1
