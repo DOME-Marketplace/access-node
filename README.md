@@ -152,23 +152,24 @@ be used as followed.
 
 1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.eu/) to the Group '11 - Integration and Replica' selecting the Problem 'Access Node deployment' to request a new 
 LEARCredentialMachine. In the ticket text, add the following data:
-   a. Environment (SBX, DEV2, PRD)
+
+   a. Environment (SBX, DEV2, PRD):
    
    b. Mandatee details:
-   -Did-key:
-   -Service name [descriptive field; by default, you can enter "access-node"]
-   -Service type [descriptive field; by default, you can enter "API"]
-   -IP address [of your service; if you have an elastic IP, enter "I have an elastic IP"]
-   -Domain [of your service; points to the provided IP address]:
-   -Email address (of the responsible of the credential):
+   - Did-key:
+   - Service name [descriptive field; by default, you can enter "access-node"]
+   - Service type [descriptive field; by default, you can enter "API"]
+   - IP address [of your service; if you have an elastic IP, enter "I have an elastic IP"]
+   - Domain [of your service; points to the provided IP address]:
+   - Email address [of the responsible of the credential]:
    
    
    c. Mandator details:
-   -Name: 
-   -Email address:
-   -Organization name:
-   -Organization id (VAT number):
-   -Country:
+   - Name: 
+   - Email address:
+   - Organization name:
+   - Organization id (VAT number):
+   - Country:
    
    d. Email address to which you wish to receive the LEARCredentialMachine:
 
