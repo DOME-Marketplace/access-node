@@ -150,7 +150,7 @@ be used as followed.
 > or
 > a dedicated secrets vault to keep it safe.
 
-1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.org/) to the Group '11 - Integration and Replica' selecting the Problem 'Access Node deployment' to request a new 
+1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.eu/) to the Group '11 - Integration and Replica' selecting the Problem 'Access Node deployment' to request a new 
 LEARCredentialMachine. In the ticket text, add the following data:
    a. Environment (SBX, DEV2, PRD)
    
