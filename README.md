@@ -150,17 +150,37 @@ be used as followed.
 > or
 > a dedicated secrets vault to keep it safe.
 
-1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.org/) in the Group
-'07 - Marketplace Integration' and the Problem 'Fed Mktpl - Cannot reach the access node' to request a new 
-LEARCredentialMachine.
+1. Open a ticket at [DOME Ticketing System](https://ticketing.dome-marketplace.eu/) to the Group '11 - Integration and Replica' selecting the Problem 'Access Node deployment' to request a new 
+LEARCredentialMachine. In the ticket text, add the following data:
 
-2. Go to the [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/):
+   a. Environment (SBX, DEV2, PRD):
+   
+   b. Mandatee details:
+   - Did-key:
+   - Service name [descriptive field; by default, you can enter "access-node"]
+   - Service type [descriptive field; by default, you can enter "API"]
+   - IP address [of your service; if you have an elastic IP, enter "I have an elastic IP"]
+   - Domain [of your service; points to the provided IP address]:
+   - Email address [of the responsible of the credential]:
+   
+   
+   c. Mandator details:
+   - Name: 
+   - Email address:
+   - Organization name:
+   - Organization id (VAT number):
+   - Country:
+   
+   d. Email address to which you wish to receive the LEARCredentialMachine:
+
+
+3. Go to the [DOME Key Generator](https://dome-marketplace.github.io/dome-crypto-generator/):
    ![dome-key-generator-home.png](doc/dome-key-generator-home.png)
 
-3. Click the button to generate the keys:
+4. Click the button to generate the keys:
    ![dome-key-generator-example.png](doc/dome-key-generator-example.png)
 
-4. Register as a valid organization in the Trusted Access Node List of the corresponding environment following the
+5. Register as a valid organization in the Trusted Access Node List of the corresponding environment following the
    instructions in the [DOME Trust Framework](https://github.com/DOME-Marketplace/trust-framework).
 
    :bulb: With the following tables you can relate the key names in the Dome Key Generator with the key names in the
@@ -170,7 +190,7 @@ LEARCredentialMachine.
    |--------------------------|---------------------------|
    | dlt_address              | DLT keys -> DLT Address   |
 
-5. Register as a valid service in the Trusted Services List of the corresponding environment following the
+6. Register as a valid service in the Trusted Services List of the corresponding environment following the
    instructions provided in the [DOME Trust Framework](https://github.com/DOME-Marketplace/trust-framework).
    Use the following YAML template as a reference:
     ```
@@ -188,10 +208,10 @@ LEARCredentialMachine.
    > [!NOTE]
    > Replace `<did:key>` with the DID key generated in the "Desmos keys" part of the DOME Key Generator.
 
-6. Copy the LEARCredentialMachine in Base64 format and paste it in the `learCredentialMachineInBase64` field in the
+7. Copy the LEARCredentialMachine in Base64 format and paste it in the `learCredentialMachineInBase64` field in the
    Access Node Helm Chart implementation.
 
-7. Copy the private keys to your Access Node Helm Chart implementation and update the specified fields
+8. Copy the private keys to your Access Node Helm Chart implementation and update the specified fields
    in [How to configure](#how-to-configure) section.
    You have a specific explanation about what you need to add in the Trusted Access Node List
    in: https://github.com/DOME-Marketplace/trust-framework#which-data-is-needed-to-set-a-new-entry-into-the-trusted-access-node-operators-list.
@@ -206,7 +226,7 @@ LEARCredentialMachine.
    | dlt-adapter.env.PRIVATE_KEY                | DLT keys -> Private Key    |
    | dlt-adapter.env.ISS                        | DLT keys -> ISS            |
 
-8. Add the DOME Helm Chart Repository to your helm installation
+9. Add the DOME Helm Chart Repository to your helm installation
 
     ```
     helm repo add dome-access-node https://dome-marketplace.github.io/access-node
@@ -219,7 +239,7 @@ LEARCredentialMachine.
    pre-repo https://dome-marketplace.github.io/access-node/pre. The pre-repo will be cleaned-up from time to time, in
    order to keep the index manageable.
 
-9. Install the DOME Access Node
+10. Install the DOME Access Node
     ```
     helm install access-node dome-access-node/access-node --namespace <NAMESPACE> -f config/accessnode.yaml
     ```
