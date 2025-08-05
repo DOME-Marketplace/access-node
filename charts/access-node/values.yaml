@@ -225,8 +225,6 @@ tm-forum-api:
     # -- host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually
     serverHost: http://localhost:8080
     # additional env vars (If you want the requests to fail in case of unresolvable relationships, you can use the defaults)
-    image:
-      tag: 1.3.6
     additionalEnvVars: 
     - name: MAPPING_STRICT_RELATIONSHIPS
       value: "false"
