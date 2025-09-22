@@ -9,6 +9,7 @@ desmos:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
+    #TODO: UPDATE TO STABLE VERSION
     tag: v1.1.7-PR-86
     ## image pull policy
     pullPolicy: IfNotPresent
