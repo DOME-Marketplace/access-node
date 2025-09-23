@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.1.3-PRE-88](https://img.shields.io/badge/Version-1.1.3--PRE--88-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.2.0-PRE-86](https://img.shields.io/badge/Version-1.2.0--PRE--86-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -8,13 +8,13 @@ Umbrella Chart for the DOME Marketplace access-node
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
-| https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
-| https://fiware.github.io/helm-charts | tm-forum-api | 0.14.12 |
+| https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0   |
+| https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9   |
+| https://fiware.github.io/helm-charts | tm-forum-api | 0.14.14 |
 | https://in2workspace.github.io/helm-charts | desmos | 1.1.3 |
-| oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
-| oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
+| oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0  |
+| oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5  |
+| oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5  |
 
 ## Values
 
