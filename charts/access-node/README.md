@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.1.1-PRE-85](https://img.shields.io/badge/Version-1.1.1--PRE--85-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.1.2-PRE-87](https://img.shields.io/badge/Version-1.1.2--PRE--87-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -11,7 +11,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.14.12 |
-| https://in2workspace.github.io/helm-charts | desmos | 1.1.1 |
+| https://in2workspace.github.io/helm-charts | desmos | 1.1.2 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -34,7 +34,6 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.learCredentialMachineInBase64.value | string | `"your-lear-credential-machine-in-base64"` |  |
 | desmos.app.logLevel.app | string | `"INFO"` |  |
 | desmos.app.logLevel.root | string | `"INFO"` |  |
-| desmos.app.ngsiSubscription.notificationEndpoint | string | `"http://desmos:8080/api/{{ .Values.desmosPathVersion }}/notifications/broker"` | local address of the blockchain-connectors notification endpoint for ngsi-ld events |
 | desmos.app.operator.externalDomain | string | `"http://scorpio:9090"` | external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities |
 | desmos.app.operator.internalDomain | string | `"http://scorpio:9090"` | internal address of the context broker to be used by the connector |
 | desmos.app.operator.organizationIdentifier | string | `"<YOUR-ORGANIZATION-ID>"` | did of the organization running the node |
@@ -47,7 +46,6 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.app.profile | string | `"dev"` |  |
 | desmos.app.trustedAccessNodesList.customTrustedList | string | `"https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"` |  |
 | desmos.app.trustedAccessNodesList.enableCustomTrustedList | bool | `false` |  |
-| desmos.app.txSubscription.notificationEndpoint | string | `"http://desmos:8080/api/{{ .Values.desmosPathVersion }}/notifications/dlt"` | local address of the blockchain-connectors notification endpoint for dlt events |
 | desmos.app.verifier.customVerifier | string | `"https://verifier.dome-marketplace-<env>.org"` |  |
 | desmos.app.verifier.enableCustomVerifier | bool | `false` |  |
 | desmos.db.existingSecret.enabled | bool | `false` | should an existing secret be used |
@@ -64,7 +62,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.1.7-PR-86"` |  |
+| desmos.image.tag | string | `"v1.1.7"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
