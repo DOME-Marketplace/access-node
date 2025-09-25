@@ -1,14 +1,10 @@
 desmos:
   app:
     profile: dev
-    txSubscription:
-      notificationEndpoint: "http://desmos.provider.svc.cluster.local:8080/api/v2/notifications/dlt"
     broker:
       provider: scorpio
       externalDomain: http://scorpio.provider.svc.cluster.local:9090
       internalDomain: http://scorpio.provider.svc.cluster.local:9090
-    ngsiSubscription:
-      notificationEndpoint: "http://desmos.provider.svc.cluster.local:8080/api/v2/notifications/broker"
     operator:
       organizationIdentifier: did:web:provider.org
       externalDomain: http://desmos.provider.svc.cluster.local:8080
