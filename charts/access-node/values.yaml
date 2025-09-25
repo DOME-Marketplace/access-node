@@ -10,7 +10,7 @@ desmos:
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
     #TODO: UPDATE TO STABLE VERSION
-    tag: v1.1.7-PR-86
+    tag: v1.1.7
     ## image pull policy
     pullPolicy: IfNotPresent
   ## deployment specific configuration
@@ -33,9 +33,6 @@ desmos:
       # -- external address of the broker. Will be included in the hashlink and used by other access-nodes to retrieve the actual entities
       externalDomain: http://scorpio:9090
     ## configuration of ngsi-ld entities to listen for
-    ngsiSubscription:
-      # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
-      notificationEndpoint: http://desmos:8080/api/{{ .Values.desmosPathVersion }}/notifications/broker
     ## configuration to connect to the dlt-adapter
     dltAdapter:
       # -- provider of the dlt-adapter component
@@ -45,9 +42,6 @@ desmos:
       # -- (external) address of the dlt-adapter
       externalDomain: http://dlt-adapter:8080
       ## configuration of subscriptions at the blockchain
-    txSubscription:
-      # -- local address of the blockchain-connectors notification endpoint for dlt events
-      notificationEndpoint: http://desmos:8080/api/{{ .Values.desmosPathVersion }}/notifications/dlt
       # -- a list of external access node with which to synchronize
     externalDomain:
       protocol: "https"
