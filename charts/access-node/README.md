@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.2.0-PRE-89](https://img.shields.io/badge/Version-1.2.0--PRE--89-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.2.1-PRE-90](https://img.shields.io/badge/Version-1.2.1--PRE--90-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -57,12 +57,12 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.password | string | `"postgres"` | default password to be used |
 | desmos.db.port | int | `5432` | port of the host of the db |
 | desmos.db.username | string | `"postgres"` | username to be used |
-| desmos.desmosPathVersion | string | `"v2"` |  |
+| desmos.desmosPathVersion | string | `"v2"` | also update the version on contextUrl of tmf |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v1.1.7"` |  |
+| desmos.image.tag | string | `"v2.0.0"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
 | dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
@@ -103,7 +103,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | tm-forum-api.defaultConfig.additionalEnvVars[0].value | string | `"false"` |  |
 | tm-forum-api.defaultConfig.additionalEnvVars[1].name | string | `"API_EXTENSION_ENABLED"` |  |
 | tm-forum-api.defaultConfig.additionalEnvVars[1].value | string | `"true"` |  |
-| tm-forum-api.defaultConfig.contextUrl | string | `"https://uri.etsi.org/ngsi-ld/{{ .Values.desmosPathVersion }}/ngsi-ld-core-context.jsonld"` | default context to be used when contacting the context broker |
+| tm-forum-api.defaultConfig.contextUrl | string | `"https://uri.etsi.org/ngsi-ld/v2/ngsi-ld-core-context.jsonld"` | default context to be used when contacting the context broker |
 | tm-forum-api.defaultConfig.ngsiLd | object | `{"url":"http://scorpio:9090"}` | ngsi-ld broker connection information |
 | tm-forum-api.defaultConfig.ngsiLd.url | string | `"http://scorpio:9090"` | address of the broker |
 | tm-forum-api.defaultConfig.serverHost | string | `"http://localhost:8080"` | host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually |
