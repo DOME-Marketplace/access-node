@@ -4,13 +4,13 @@ desmos:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
+  # -- also update the version on contextUrl of tmf
   desmosPathVersion: v2
   image:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    #TODO: UPDATE TO STABLE VERSION
-    tag: v1.1.7
+    tag: v2.0.0
     ## image pull policy
     pullPolicy: IfNotPresent
   ## deployment specific configuration
@@ -217,7 +217,7 @@ tm-forum-api:
       # -- address of the broker
       url: http://scorpio:9090
     # -- default context to be used when contacting the context broker
-    contextUrl: https://uri.etsi.org/ngsi-ld/{{ .Values.desmosPathVersion }}/ngsi-ld-core-context.jsonld
+    contextUrl: https://uri.etsi.org/ngsi-ld/v2/ngsi-ld-core-context.jsonld
     # -- host that the tm-forum api can be reached at, when the proxy is enabled it should be set to that address. If not, set the host for each api individually
     serverHost: http://localhost:8080
     # additional env vars (If you want the requests to fail in case of unresolvable relationships, you can use the defaults)
