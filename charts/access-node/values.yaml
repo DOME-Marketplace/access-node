@@ -140,6 +140,11 @@ postgresql:
         # -- create the database as expected by the blockchain-connector
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 16.0.0-debian-11-r13
+    pullPolicy: IfNotPresent
 
 ## configuration of the context-broker - see https://github.com/FIWARE/helm-charts/tree/main/charts/scorpio-broker-aaio for details
 scorpio:
@@ -205,6 +210,11 @@ postgis:
         enable.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE EXTENSION postgis;"
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE ngb;"
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 16.0.0-debian-11-r13
+    pullPolicy: IfNotPresent
 
 ## configuration of the tm-forum-api - see https://github.com/FIWARE/helm-charts/tree/main/charts/tm-forum-api for details
 tm-forum-api:
