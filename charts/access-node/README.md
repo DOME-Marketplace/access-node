@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.2.2-PRE-91](https://img.shields.io/badge/Version-1.2.2--PRE--91-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.2.3-PRE-92](https://img.shields.io/badge/Version-1.2.3--PRE--92-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -79,6 +79,10 @@ Umbrella Chart for the DOME Marketplace access-node
 | postgis.auth.username | string | `"postgres"` | username to be used |
 | postgis.enabled | bool | `true` | should postgis be enabled |
 | postgis.fullnameOverride | string | `"postgis"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
+| postgis.image.pullPolicy | string | `"IfNotPresent"` |  |
+| postgis.image.registry | string | `"docker.io"` |  |
+| postgis.image.repository | string | `"bitnamilegacy/postgresql"` |  |
+| postgis.image.tag | string | `"16.0.0-debian-11-r13"` |  |
 | postgis.nameOverride | string | `"postgis"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | postgis.primary.initdb.scripts."enable.sh" | string | `"psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c \"CREATE EXTENSION postgis;\"\npsql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c \"CREATE DATABASE ngb;\"\n"` | enable the postgis extension and create the database as expected by scorpio |
 | postgresql.auth.enablePostgresUser | bool | `true` | should the default postgres user be enabled |
@@ -86,6 +90,10 @@ Umbrella Chart for the DOME Marketplace access-node
 | postgresql.auth.username | string | `"postgres"` | username to be used |
 | postgresql.enabled | bool | `true` | should the postgresql deployment be enabled |
 | postgresql.fullnameOverride | string | `"postgresql-connector"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
+| postgresql.image.pullPolicy | string | `"IfNotPresent"` |  |
+| postgresql.image.registry | string | `"docker.io"` |  |
+| postgresql.image.repository | string | `"bitnamilegacy/postgresql"` |  |
+| postgresql.image.tag | string | `"16.0.0-debian-11-r13"` |  |
 | postgresql.nameOverride | string | `"postgresql-connector"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | postgresql.primary.initdb.scripts."create.sh" | string | `"psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c \"CREATE DATABASE mktdb;\"\n"` | create the database as expected by the blockchain-connector |
 | scorpio.db.dbhost | string | `"postgis"` | host of the db |
