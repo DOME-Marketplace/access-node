@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.2.3-PRE-92](https://img.shields.io/badge/Version-1.2.3--PRE--92-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.2.4-PRE-93](https://img.shields.io/badge/Version-1.2.4--PRE--93-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -11,7 +11,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | https://alastria.github.io/helm-charts | dlt-adapter | 8.0.0 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://fiware.github.io/helm-charts | tm-forum-api | 0.14.14 |
-| https://in2workspace.github.io/helm-charts | desmos | 1.1.3 |
+| https://in2workspace.github.io/helm-charts | desmos | 1.1.4 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
 | oci://registry-1.docker.io/bitnamicharts | postgis(postgresql) | 13.1.5 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql(postgresql) | 13.1.5 |
@@ -57,7 +57,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.password | string | `"postgres"` | default password to be used |
 | desmos.db.port | int | `5432` | port of the host of the db |
 | desmos.db.username | string | `"postgres"` | username to be used |
-| desmos.desmosPathVersion | string | `"v2"` | also update the version on contextUrl of tmf |
+| desmos.desmosPathVersion | string | `"v3"` | also update the version on contextUrl of tmf |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
