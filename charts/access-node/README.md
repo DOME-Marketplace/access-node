@@ -57,7 +57,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.password | string | `"postgres"` | default password to be used |
 | desmos.db.port | int | `5432` | port of the host of the db |
 | desmos.db.username | string | `"postgres"` | username to be used |
-| desmos.desmosPathVersion | string | `"v3"` | also update the version on contextUrl of tmf |
+| desmos.desmosPathVersion | string | `"v2"` | also update the version on contextUrl of tmf |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
