@@ -5,7 +5,7 @@ desmos:
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
   # -- also update the version on contextUrl of tmf
-  desmosPathVersion: v2
+  desmosPathVersion: v3
   image:
     ## image repository
     repository: in2workspace/in2-desmos-api
