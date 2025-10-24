@@ -4,13 +4,11 @@ desmos:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: desmos
-  # -- also update the version on contextUrl of tmf
-  desmosPathVersion: v2
   image:
     ## image repository
     repository: in2workspace/in2-desmos-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v2.0.2-snapshot
+    tag: v2.0.2
     ## image pull policy
     pullPolicy: IfNotPresent
   ## deployment specific configuration
@@ -72,6 +70,7 @@ desmos:
     verifier:
       enableCustomVerifier: false
       customVerifier: "https://verifier.dome-marketplace-<env>.org"
+    desmosPathVersion: v2
 
     ## configuration of the database to be used by the blockchain-connector
   db:
@@ -113,7 +112,7 @@ dlt-adapter:
     DEBUG: "*"
     PRIVATE_KEY: <YOUR-PRIVATE-KEY>
     RPC_ADDRESS: https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6
-    ISS: <YOUR-ORGANIZATION-ID-IN-SHA256>
+    ISS: <YOUR-ORGANIZATION-ID-IN>
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
 postgresql:
