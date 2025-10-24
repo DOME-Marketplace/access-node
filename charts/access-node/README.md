@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.2.5-PRE-94](https://img.shields.io/badge/Version-1.2.5--PRE--94-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.2.6-PRE-95](https://img.shields.io/badge/Version-1.2.6--PRE--95-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -20,6 +20,7 @@ Umbrella Chart for the DOME Marketplace access-node
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| desmos.app.desmosPathVersion | string | `"v2"` |  |
 | desmos.app.dltAdapter.externalDomain | external | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
 | desmos.app.dltAdapter.internalDomain | local | `"http://dlt-adapter:8080"` | address of the dlt-adapter |
 | desmos.app.dltAdapter.provider | string | `"digitelts"` | provider of the dlt-adapter component |
@@ -57,15 +58,14 @@ Umbrella Chart for the DOME Marketplace access-node
 | desmos.db.password | string | `"postgres"` | default password to be used |
 | desmos.db.port | int | `5432` | port of the host of the db |
 | desmos.db.username | string | `"postgres"` | username to be used |
-| desmos.desmosPathVersion | string | `"v2"` | also update the version on contextUrl of tmf |
 | desmos.enabled | bool | `true` | should the desmos-blockchain-connector be enabled |
 | desmos.fullnameOverride | string | `"desmos"` | overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace |
 | desmos.image.pullPolicy | string | `"IfNotPresent"` |  |
 | desmos.image.repository | string | `"in2workspace/in2-desmos-api"` |  |
-| desmos.image.tag | string | `"v2.0.2-snapshot"` |  |
+| desmos.image.tag | string | `"v2.0.2"` |  |
 | dlt-adapter.enabled | bool | `true` | should the dlt-adapter be enabled |
 | dlt-adapter.env.DEBUG | string | `"*"` |  |
-| dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN-SHA256>"` |  |
+| dlt-adapter.env.ISS | string | `"<YOUR-ORGANIZATION-ID-IN>"` |  |
 | dlt-adapter.env.PRIVATE_KEY | string | `"<YOUR-PRIVATE-KEY>"` |  |
 | dlt-adapter.env.RPC_ADDRESS | string | `"https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6"` |  |
 | dlt-adapter.existingSecret.enabled | bool | `false` |  |
