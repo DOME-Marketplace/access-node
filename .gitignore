@@ -3,3 +3,4 @@ it/bin/src/test/java/org/dome/accessnode/it/*.class
 it/bin/src/test/java/org/dome/accessnode/*.class
 it/bin/target/
 it/target/
+/.idea/
