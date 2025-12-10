@@ -34,5 +34,5 @@ dependencies:
     version: 0.4.9
   - name: tm-forum-api
     condition: tm-forum-api.enabled
-    repository: https://fiware.github.io/helm-charts
-    version: 0.14.14
+    repository: https://dome-marketplace.github.io/tm-forum-charts
+    version: 0.14.19
