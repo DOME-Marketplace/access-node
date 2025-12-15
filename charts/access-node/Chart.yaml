@@ -2,7 +2,7 @@ apiVersion: v2
 name: access-node
 description: Umbrella Chart for the DOME Marketplace access-node
 type: application
-version: 1.2.7-PRE-98
+version: 1.2.8-PRE-97
 appVersion: 0.0.1
 dependencies:
   - name: desmos
@@ -34,5 +34,5 @@ dependencies:
     version: 0.4.9
   - name: tm-forum-api
     condition: tm-forum-api.enabled
-    repository: https://fiware.github.io/helm-charts
-    version: 0.14.14
+    repository: https://dome-marketplace.github.io/tm-forum-charts
+    version: 0.14.19
