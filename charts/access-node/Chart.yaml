@@ -45,4 +45,4 @@ dependencies:
   - name: tm-forum-api
     condition: tm-forum-api.enabled
     repository: https://dome-marketplace.github.io/tm-forum-charts
-    version: 0.14.19
+    version: 0.14.20
