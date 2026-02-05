@@ -1,6 +1,6 @@
 # access-node
 
-![Version: 1.3.1-PRE-101](https://img.shields.io/badge/Version-1.3.1--PRE--101-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.3.2-PRE-102](https://img.shields.io/badge/Version-1.3.2--PRE--102-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Umbrella Chart for the DOME Marketplace access-node
 
@@ -11,7 +11,7 @@ Umbrella Chart for the DOME Marketplace access-node
 | https://alastria.github.io/helm-charts | dlt-adapter-alastria(dlt-adapter) | 8.0.0 |
 | https://alastria.github.io/helm-charts | dlt-adapter-hashnet(dlt-adapter) | 8.0.0 |
 | https://alastria.github.io/helm-charts | dome-ied | 1.0.0 |
-| https://dome-marketplace.github.io/tm-forum-charts | tm-forum-api | 0.14.21 |
+| https://dome-marketplace.github.io/tm-forum-charts | tm-forum-api | 0.14.22 |
 | https://fiware.github.io/helm-charts | scorpio(scorpio-broker-aaio) | 0.4.9 |
 | https://in2workspace.github.io/helm-charts | desmos | 1.1.4 |
 | oci://registry-1.docker.io/bitnamicharts | kafka | 26.0.0 |
