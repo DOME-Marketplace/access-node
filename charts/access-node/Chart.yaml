@@ -10,13 +10,13 @@ dependencies:
     repository: https://in2workspace.github.io/helm-charts
     version: 1.1.4
   - name: dlt-adapter
-    condition: dlt-adapter.enabled
     alias: dlt-adapter-alastria
+    condition: dlt-adapter-alastria.enabled
     repository: https://alastria.github.io/helm-charts
     version: 8.0.0
   - name: dlt-adapter
-    condition: dlt-adapter.enabled
     alias: dlt-adapter-hashnet
+    condition: dlt-adapter-hashnet.enabled
     repository: https://alastria.github.io/helm-charts
     version: 8.0.0
   - name: dome-ied
