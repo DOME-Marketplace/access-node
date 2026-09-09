@@ -14,8 +14,10 @@ import org.dome.accessnode.model.ProductSpecificationCreateVO;
 import org.dome.accessnode.model.ProductSpecificationRefVO;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -79,9 +81,39 @@ public class StepDefinitions {
         await().atMost(REPLICATION_TIMEOUT).until(() -> checkProductOfferingExistence(productOffering.getId()));
         await().atMost(REPLICATION_TIMEOUT).until(() -> checkProductSpecificationExistence(productSpecification.getId()));
 
-        assertEquals(productOffering, productOfferingConsumer.retrieveProductOffering(productOffering.getId(), null), "The product offering should be available at the consumers TMForum api.");
-        assertEquals(productSpecification, productSpecificationConsumer.retrieveProductSpecification(productSpecification.getId(), null), "The product specification should be available at the consumers TMForum api.");
+        assertEquals(flattenEmptyCollections(productOffering),
+                flattenEmptyCollections(productOfferingConsumer.retrieveProductOffering(productOffering.getId(), null)),
+                "The product offering should be available at the consumers TMForum api.");
+        assertEquals(flattenEmptyCollections(productSpecification),
+                flattenEmptyCollections(productSpecificationConsumer.retrieveProductSpecification(productSpecification.getId(), null)),
+                "The product specification should be available at the consumers TMForum api.");
 
+    }
+
+    /**
+     * The NGSI-LD round trip normalises an absent collection into an empty one, so the replicated
+     * copy comes back with {@code []} where the original held {@code null}. Both mean "nothing
+     * here", so flatten empty collections away on both sides and keep comparing the whole entity.
+     * <p>
+     * Only <em>empty</em> collections are flattened: if replication actually dropped the contents
+     * of a populated list, the comparison still fails.
+     */
+    private static <T> T flattenEmptyCollections(T vo) {
+        for (Field field : vo.getClass().getDeclaredFields()) {
+            if (!Collection.class.isAssignableFrom(field.getType())) {
+                continue;
+            }
+            field.setAccessible(true);
+            try {
+                Collection<?> value = (Collection<?>) field.get(vo);
+                if (value != null && value.isEmpty()) {
+                    field.set(vo, null);
+                }
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException("Could not normalise field " + field.getName(), e);
+            }
+        }
+        return vo;
     }
 
     @NotNull
