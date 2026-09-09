@@ -40,6 +40,11 @@ desmos:
   fullnameOverride: desmos
 
 dlt-adapter-alastria:
+  # El chart upstream expone el servicio en el puerto 80; desmos lo llama en 8080
+  # (app.dltAdapter.internalDomain). Sin esto el initContainer check-external-services
+  # espera para siempre a /health y el pod nunca sale de Init.
+  service:
+    port: 8080
   existingSecret:
     enabled: false
   env:
@@ -60,6 +65,12 @@ dlt-adapter-alastria:
 dlt-adapter-hashnet:
   replicaCount: 0
   fullnameOverride: dlt-adapter-hashnet
+
+# Helm habilita una dependencia cuando la ruta de su `condition` NO existe, asi que sin
+# esta clave dome-ied se despliega solo, y sin namespace propio cae en `default`, donde
+# k3s-maven-plugin lo espera y agota el timeout. El IT no lo necesita.
+dome-ied:
+  enabled: false
 
 postgresql:
   primary:
