@@ -507,44 +507,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-resources-consumer-kustomize</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/charts/consumer/access-node</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <includes>
-                                        <include>kustomize.sh</include>
-                                        <include>kustomization.yaml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-resources-provider-kustomize</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/charts/provider/access-node</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <includes>
-                                        <include>kustomize.sh</include>
-                                        <include>kustomization.yaml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-resources-namespaces</id>
                         <phase>validate</phase>
                         <goals>
@@ -579,10 +541,9 @@
                             <chartDirectory>${project.build.directory}/charts/provider/access-node</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
+                            <templateOutputDir>${project.build.directory}/k3s/provider/access-node</templateOutputDir>
                             <namespace>provider</namespace>
-                            <!-- post renderer required to account for missing env config support, that points to the tusted access nodes list -->
-                            <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider/values.yaml --post-renderer ${project.build.directory}/charts/provider/access-node/kustomize.sh --post-renderer-args ${project.build.directory}/charts/provider/access-node,${project.build.directory}/k3s/provider/access-node
-                            </additionalArguments>
+                            <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider/values.yaml</additionalArguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -597,10 +558,9 @@
                             <chartDirectory>${project.build.directory}/charts/consumer/access-node</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
-                            <!-- post renderer required to account for missing env config support, that points to the tusted access nodes list -->
+                            <templateOutputDir>${project.build.directory}/k3s/consumer/access-node</templateOutputDir>
                             <namespace>consumer</namespace>
-                            <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer/values.yaml --post-renderer ${project.build.directory}/charts/consumer/access-node/kustomize.sh --post-renderer-args ${project.build.directory}/charts/consumer/access-node,${project.build.directory}/k3s/consumer/access-node
-                            </additionalArguments>
+                            <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer/values.yaml</additionalArguments>
                         </configuration>
                     </execution>
                     <execution>

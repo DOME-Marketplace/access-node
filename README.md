@@ -415,6 +415,23 @@ The TMForum-APIs are mapped to local ports:
 * provider: localhost:8080
 * consumer: localhost:8081
 
+### The verifier stub
+
+Desmos will not replicate until it has obtained an M2M access token from a DOME
+[verifier](https://github.com/in2workspace/in2-dome-desmos-core-api), so the test deploys a stub
+one into the `infra` namespace: [it/charts/infra/verifier-stub](./it/charts/infra/verifier-stub).
+It is an `nginx` serving three constant responses -- the OIDC discovery document, a JWKS, and an
+access token that was signed offline and committed alongside them.
+
+Both nodes are pointed at it through `desmos.app.verifier.customVerifier`, and the URL has to be
+**byte-identical on both**: desmos compares it against the `iss` claim of the token it is handed.
+That is also why the URL is baked into the signature rather than templated -- to change it, edit
+`VERIFIER_URL` in [generate-fixtures.sh](./it/charts/infra/verifier-stub/generate-fixtures.sh),
+re-run the script, and update both `it/provider/values.yaml` and `it/consumer/values.yaml`.
+
+The stub authenticates nobody; it hands the same token to any caller. It is a test fixture, not a
+security boundary, and nothing it contains is a credential of any real system.
+
 ### Run the tests
 
 To execute all tests, run:

@@ -4,7 +4,7 @@ desmos:
     broker:
       provider: scorpio
       externalDomain: http://scorpio.consumer.svc.cluster.local:9090
-      internalDomain: http://scorpio.consumer.svc.cluster.local:909
+      internalDomain: http://scorpio.consumer.svc.cluster.local:9090
     operator:
       organizationIdentifier: did:web:consumer.org
       externalDomain: http://desmos.consumer.svc.cluster.local:8080
@@ -14,11 +14,32 @@ desmos:
       protocol: "http"
       domain: "desmos.consumer.svc.cluster.local:8080"
     externalAccessNodesUrls:
+      # Must stay empty. This list drives the *startup* P2P sync, and
+      # ApplicationRunner.initializeDataSync only sets isQueueAuthorizedForEmit on
+      # completion -- on error it resumes with an empty Flux and the flag stays false
+      # forever, with no retry. Naming the peer here means whichever node starts first
+      # syncs against one that does not exist yet and disables its own queues
+      # permanently. Replication under test does not need it: it flows over the DLT
+      # notification path, which is where the verifier is actually exercised.
       enableCustomUrls: true
       customUrls: ""
+    dltAdapter:
+      provider: digitelts
+      internalDomain: http://dlt-adapter.consumer.svc.cluster.local:8080
+      externalDomain: http://dlt-adapter.consumer.svc.cluster.local:8080
+    # Both nodes must resolve the verifier by the *same* string: desmos compares this
+    # against the "iss" claim of the token the stub mints.
+    verifier:
+      enableCustomVerifier: true
+      customVerifier: "http://verifier-stub.infra.svc.cluster.local:9595"
+    learCredentialMachineInBase64:
+      value: "ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnpkV0lpT2lJeE1qTTBOVFkzT0Rrd0lpd2libUZ0WlNJNklrcHZhRzRnUkc5bElpd2lhV0YwSWpveE5URTJNak01TURJeWZRLlNmbEt4d1JKU01lS0tGMlFUNGZ3cE1lSmYzNlBPazZ5SlZfYWRRc3N3NWM="
+    trustedAccessNodesList:
+      enableCustomTrustedList: true
+      customTrustedList: "http://access-node-list.infra.svc.cluster.local:8080/access-node-list/trusted_access_nodes_list.yaml"
   fullnameOverride: desmos
 
-dlt-adapter:
+dlt-adapter-alastria:
   existingSecret:
     enabled: false
     name: private-key-secret
@@ -35,6 +56,12 @@ dlt-adapter:
     root: DEBUG
     app: DEBUG
   fullnameOverride: dlt-adapter
+
+# The umbrella chart declares a second, hashnet-flavoured dlt-adapter under the same
+# condition. It is unused here; scale it to zero rather than run a pod for nothing.
+dlt-adapter-hashnet:
+  replicaCount: 0
+  fullnameOverride: dlt-adapter-hashnet
 
 postgresql:
   primary:

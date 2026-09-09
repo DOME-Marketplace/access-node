@@ -4,13 +4,22 @@ metadata:
   name: account-registration
   namespace: {{ .Release.Namespace | quote }}
 data:
-  # creates the account used for the tests and transfers enough funds from the dev-default account
+  # creates the accounts used for the tests and transfers enough funds from the dev-default account
   init.sh: |-
     #!/bin/bash
-    
+
     apt-get -y update; apt-get -y install curl; apt-get -y install jq;
 
-    account=$(curl -X POST {{ .Values.blockchain.address }} --data '{"jsonrpc":"2.0", "method":"personal_importRawKey","params":["{{ .Values.blockchain.key }}", "pwd"],"id":1}' -H 'Content-Type: application/json' | jq -r '.result')
-    source_ac=$(curl -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' -H "Content-Type: application/json" {{ .Values.blockchain.address }} | jq -r '.result' | jq -r '.[0]')
-    
-    curl -X POST {{ .Values.blockchain.address }} --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendTransaction\",\"params\":[{\"from\": \"$source_ac\", \"to\": \"$account\", \"value\":\"0xfffffffffffffff0\"}],\"id\":1}" -H "Content-Type: application/json"
+    RPC={{ .Values.blockchain.address }}
+
+    source_ac=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' -H "Content-Type: application/json" $RPC | jq -r '.result' | jq -r '.[0]')
+    echo "funding from dev account $source_ac"
+
+    {{- range .Values.blockchain.accounts }}
+
+    # {{ .name }}
+    # Import may legitimately fail on a retry ("account already exists"), so fund the known
+    # address rather than the import's return value -- that keeps the job idempotent.
+    curl -s -X POST $RPC --data '{"jsonrpc":"2.0","method":"personal_importRawKey","params":["{{ .key }}", "pwd"],"id":1}' -H 'Content-Type: application/json'
+    curl -s -X POST $RPC --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendTransaction\",\"params\":[{\"from\": \"$source_ac\", \"to\": \"{{ .address }}\", \"value\":\"0xfffffffffffffff0\"}],\"id\":1}" -H "Content-Type: application/json"
+    {{- end }}

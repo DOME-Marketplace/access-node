@@ -1,0 +1,7 @@
+apiVersion: v2
+name: verifier-stub
+description: verifier-stub Helm-Chart, mimics the DOME verifier for the integration tests
+
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
