@@ -10,7 +10,20 @@ data:
 
     RPC={{ .Values.blockchain.address }}
 
-    source_ac=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' -H "Content-Type: application/json" $RPC | jq -r '.result' | jq -r '.[0]')
+    # The dev node may still be starting when this runs. Poll until it hands out its default
+    # account instead of racing it: curl exits 0 even when the RPC answers with a JSON-RPC
+    # error, so going ahead with an empty sender would fund nobody and still report success.
+    source_ac=""
+    attempt=0
+    while [ -z "$source_ac" ] && [ "$attempt" -lt 60 ]; do
+        source_ac=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' -H "Content-Type: application/json" $RPC 2>/dev/null | jq -r '.result[0] // empty' 2>/dev/null)
+        [ -z "$source_ac" ] && sleep 2
+        attempt=$((attempt + 1))
+    done
+    if [ -z "$source_ac" ]; then
+        echo "no dev account at $RPC after two minutes"
+        exit 1
+    fi
     echo "funding from dev account $source_ac"
 
     {{- range .Values.blockchain.accounts }}
@@ -20,4 +33,12 @@ data:
     # address rather than the import's return value -- that keeps the job idempotent.
     curl -s -X POST $RPC --data '{"jsonrpc":"2.0","method":"personal_importRawKey","params":["{{ .key }}", "pwd"],"id":1}' -H 'Content-Type: application/json'
     curl -s -X POST $RPC --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendTransaction\",\"params\":[{\"from\": \"$source_ac\", \"to\": \"{{ .address }}\", \"value\":\"0xfffffffffffffff0\"}],\"id\":1}" -H "Content-Type: application/json"
+
+    # Fail loudly rather than leave the contract deployment to hit INSUFFICIENT_FUNDS: an
+    # unfunded account only surfaces there, and by then the init container no longer reruns.
+    balance=$(curl -s -X POST $RPC --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"{{ .address }}\",\"latest\"],\"id\":1}" -H "Content-Type: application/json" 2>/dev/null | jq -r '.result // "0x0"' 2>/dev/null)
+    if [ -z "$balance" ] || [ "$balance" = "0x0" ]; then
+        echo "{{ .name }} ({{ .address }}) is still broke after funding"
+        exit 1
+    fi
     {{- end }}
