@@ -6,9 +6,7 @@ metadata:
 data:
   # creates the accounts used for the tests and transfers enough funds from the dev-default account
   init.sh: |-
-    #!/bin/bash
-
-    apt-get -y update; apt-get -y install curl; apt-get -y install jq;
+    #!/bin/sh
 
     RPC={{ .Values.blockchain.address }}
 
