@@ -586,6 +586,12 @@
                 <groupId>io.kokuwa.maven</groupId>
                 <artifactId>k3s-maven-plugin</artifactId>
                 <version>${version.io.kokuwa.maven.k3s-plugin}</version>
+                <!-- the default of 300s is not enough on CI runners: the dome-contract job alone
+                     pulls an 808MB image before it can run, and the consumer/provider namespaces
+                     pull dozens more. inherited by every execution below, override with -Dk3s.timeout -->
+                <configuration>
+                    <timeout>900</timeout>
+                </configuration>
                 <executions>
                     <execution>
                         <id>create-namespaces</id>

@@ -30,3 +30,15 @@ jobs:
         run: |
           cd it
           mvn clean test integration-test verify
+
+      # the k3s plugin only reports which resource it gave up on, not why. dump the cluster
+      # so a timeout can be told apart from a pod that never came up.
+      - name: Dump cluster state
+        if: failure()
+        run: |
+          kubectl() { docker exec k3s-maven-plugin kubectl "$@" || true; }
+          kubectl get pods --all-namespaces -o wide
+          kubectl get jobs --all-namespaces
+          kubectl describe job dome-contract --namespace=infra
+          kubectl logs job/dome-contract --namespace=infra --all-containers --tail=100
+          kubectl get events --all-namespaces --sort-by=.lastTimestamp | tail -n 50
