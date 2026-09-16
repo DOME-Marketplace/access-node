@@ -6,22 +6,27 @@ metadata:
 data:
   # creates the accounts used for the tests and transfers enough funds from the dev-default account
   init.sh: |-
-    #!/bin/sh
+    #!/bin/bash
 
     RPC={{ .Values.blockchain.address }}
 
     # The dev node may still be starting when this runs. Poll until it hands out its default
     # account instead of racing it: curl exits 0 even when the RPC answers with a JSON-RPC
     # error, so going ahead with an empty sender would fund nobody and still report success.
+    # Bound each attempt and cap the retries so an unreachable node is reported here, inside
+    # the window the k3s plugin waits for this job, instead of the plugin killing us first.
     source_ac=""
     attempt=0
-    while [ -z "$source_ac" ] && [ "$attempt" -lt 60 ]; do
-        source_ac=$(curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' -H "Content-Type: application/json" $RPC 2>/dev/null | jq -r '.result[0] // empty' 2>/dev/null)
-        [ -z "$source_ac" ] && sleep 2
+    while [ -z "$source_ac" ] && [ "$attempt" -lt 30 ]; do
+        source_ac=$(curl -s --connect-timeout 2 --max-time 5 -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' -H "Content-Type: application/json" $RPC 2>/dev/null | jq -r '.result[0] // empty' 2>/dev/null)
         attempt=$((attempt + 1))
+        if [ -z "$source_ac" ]; then
+            echo "no dev account yet at $RPC, attempt $attempt"
+            sleep 2
+        fi
     done
     if [ -z "$source_ac" ]; then
-        echo "no dev account at $RPC after two minutes"
+        echo "gave up waiting for a dev account at $RPC after $attempt attempts"
         exit 1
     fi
     echo "funding from dev account $source_ac"
@@ -36,7 +41,7 @@ data:
 
     # Fail loudly rather than leave the contract deployment to hit INSUFFICIENT_FUNDS: an
     # unfunded account only surfaces there, and by then the init container no longer reruns.
-    balance=$(curl -s -X POST $RPC --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"{{ .address }}\",\"latest\"],\"id\":1}" -H "Content-Type: application/json" 2>/dev/null | jq -r '.result // "0x0"' 2>/dev/null)
+    balance=$(curl -s --connect-timeout 2 --max-time 5 -X POST $RPC --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"{{ .address }}\",\"latest\"],\"id\":1}" -H "Content-Type: application/json" 2>/dev/null | jq -r '.result // "0x0"' 2>/dev/null)
     if [ -z "$balance" ] || [ "$balance" = "0x0" ]; then
         echo "{{ .name }} ({{ .address }}) is still broke after funding"
         exit 1

@@ -40,5 +40,14 @@ jobs:
           kubectl get pods --all-namespaces -o wide
           kubectl get jobs --all-namespaces
           kubectl describe job dome-contract --namespace=infra
-          kubectl logs job/dome-contract --namespace=infra --all-containers --tail=100
+          # --all-containers skips init containers, so name it: when this job hangs it is
+          # the init container that is still going, and its log is the whole story.
+          kubectl logs job/dome-contract --namespace=infra -c init-account --tail=100
+          kubectl logs job/dome-contract --namespace=infra -c contract-create --tail=100
+          # tell a broken pod network apart from a slow one: both look like a hung job.
+          kubectl get node k3s -o jsonpath='{.spec.podCIDR}{"\n"}'
+          kubectl logs --namespace=kube-system -l k8s-app=kube-dns --tail=30
+          kubectl run netcheck --namespace=infra --rm --attach --restart=Never --quiet \
+            --image=badouralix/curl-jq:ubuntu --command -- /bin/bash -c \
+            'getent hosts blockchain-testnode.infra.svc.cluster.local; cat /etc/resolv.conf; curl -s -m 5 -X POST --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_accounts\",\"params\":[],\"id\":1}" -H "Content-Type: application/json" http://blockchain-testnode.infra.svc.cluster.local:8545/; echo " <- rpc reply"'
           kubectl get events --all-namespaces --sort-by=.lastTimestamp | tail -n 50

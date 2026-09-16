@@ -13,12 +13,13 @@ spec:
       initContainers:
         - name: init-account
           # curl and jq come preinstalled: installing them at runtime needs external DNS,
-          # which does not resolve from inside the pod on CI runners. the script only talks
-          # to an in-cluster service, so with this image the pod needs no external network
-          # at all. alpine based, hence sh rather than bash.
-          image: badouralix/curl-jq:alpine
+          # which does not resolve from inside the pod on CI runners. stay on a glibc base
+          # rather than the alpine tag of the same image -- musl resolves differently from
+          # what the rest of this harness is built around, and the pod has to reach the dev
+          # node by its in-cluster name. the tag also pins the distro, unlike plain "ubuntu".
+          image: badouralix/curl-jq:ubuntu
           command:
-            - /bin/sh
+            - /bin/bash
           args:
             - -ec
             - /bin/init.sh
