@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: verifier-stub
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "verifier-stub.labels" . | nindent 4 }}
+data:
+  # The three endpoints desmos needs from a verifier. Every response is a constant: the access
+  # token is pre-signed offline by ./generate-fixtures.sh, so the stub needs no logic at all.
+  #
+  # The bodies are emitted with `return` rather than served as static files on purpose --
+  # desmos POSTs to /token, and nginx answers POST on a static file with 405. `return` is
+  # method-agnostic, which avoids the whole error_page dance.
+  #
+  # fromJson|toJson compacts each fixture onto the single line `return` needs, while leaving
+  # the committed files in files/ pretty-printed and reviewable.
+  nginx.conf: |-
+    server {
+      listen {{ .Values.service.port }};
+      default_type application/json;
+
+      location = /.well-known/openid-configuration {
+        return 200 '{{ .Files.Get "files/openid-configuration.json" | fromJson | toJson }}';
+      }
+
+      location = /jwks {
+        return 200 '{{ .Files.Get "files/jwks.json" | fromJson | toJson }}';
+      }
+
+      location = /token {
+        return 200 '{{ .Files.Get "files/token.json" | fromJson | toJson }}';
+      }
+
+      location / {
+        return 404 '{"error":"not_found"}';
+      }
+    }
