@@ -34,8 +34,36 @@ updates:
     cooldown:
       default-days: 7
       semver-major-days: 14
+    # The generated OpenAPI client is built against whatever okhttp version
+    # openapi-generator emits, so these are not ours to pick. Proposed on their own they
+    # either fail to compile -- okhttp 5 moved okhttp3.Call -- or, worse, pass CI while
+    # leaving the two halves of the same library on different majors. They move when the
+    # generator moves.
+    ignore:
+      - dependency-name: com.squareup.okhttp3:okhttp
+      - dependency-name: com.squareup.okhttp3:logging-interceptor
     groups:
+      # These three have to move together. maven-failsafe-plugin carries its own provider,
+      # surefire-junit-platform, which pins the JUnit Platform version it needs for itself;
+      # if junit-bom does not cover that version, two Platform versions end up in the same
+      # run and test discovery fails with "Tests run: 0" and no compile error pointing at it.
+      # That is exactly what broke #120. Majors are allowed here on purpose: split apart they
+      # produce a pull request that compiles but cannot find its own tests, which is harder
+      # to spot than a build failure.
+      test-harness:
+        patterns:
+          - org.apache.maven.plugins:maven-surefire-plugin
+          - org.apache.maven.plugins:maven-failsafe-plugin
+          - org.junit:junit-bom
+        update-types:
+          - major
+          - minor
+          - patch
       maven:
+        exclude-patterns:
+          - org.apache.maven.plugins:maven-surefire-plugin
+          - org.apache.maven.plugins:maven-failsafe-plugin
+          - org.junit:junit-bom
         update-types:
           - minor
           - patch
