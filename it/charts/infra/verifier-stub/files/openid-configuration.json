@@ -1,0 +1,4 @@
+{
+  "token_endpoint": "http://verifier-stub.infra.svc.cluster.local:9595/token",
+  "jwks_uri": "http://verifier-stub.infra.svc.cluster.local:9595/jwks"
+}
