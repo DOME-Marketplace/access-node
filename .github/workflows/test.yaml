@@ -38,7 +38,7 @@ jobs:
         id: test
         run: |
           cd it
-          mvn clean test integration-test verify
+          mvn clean verify
 
       # the k3s plugin only reports which resource it gave up on, not why. dump the cluster
       # so a timeout can be told apart from a pod that never came up.

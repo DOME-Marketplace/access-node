@@ -23,7 +23,7 @@ jobs:
           id: test
           run: |
             cd it
-            mvn clean test integration-test
+            mvn clean verify
 
     check-changes: 
 
