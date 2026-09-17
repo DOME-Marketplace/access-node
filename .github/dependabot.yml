@@ -1,0 +1,44 @@
+version: 2
+
+updates:
+
+  # The workflows pin third-party actions by commit, which stops a rewritten tag reaching us
+  # but also freezes them: without something bumping the pins they rot in place. Dependabot
+  # reads the "# <tag>" beside each SHA and moves both together.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    # Wait before adopting a freshly published release, so a compromised one has time to be
+    # found first. tj-actions/changed-files had its tags rewritten to leak secrets and sat
+    # here unnoticed; pinning keeps that out, this keeps us from pinning straight to it.
+    # Only default-days applies: the github-actions ecosystem ignores the semver keys.
+    cooldown:
+      default-days: 7
+    groups:
+      # One pull request for the routine bumps. It matters more here than usual: every pull
+      # request builds a k3s cluster and runs the whole integration suite, several minutes
+      # each. Majors stay out of the group so they arrive alone and get looked at.
+      actions:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: build
+      include: scope
+
+  - package-ecosystem: maven
+    directory: /it
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+    groups:
+      maven:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: build
+      include: scope

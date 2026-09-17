@@ -1,0 +1,94 @@
+name: Integration tests
+
+# Called by the workflows that need the suite rather than triggered on its own, so a pull
+# request runs it once instead of once per workflow that wanted it.
+on:
+  workflow_call
+
+jobs:
+  it:
+    runs-on: ubuntu-latest
+
+    # Needed by the reporting step below to comment on the pull request and publish its
+    # check run; a reusable workflow does not inherit them from the caller.
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: actions/setup-java@v6.0.1
+        with:
+          java-version: '17'
+          java-package: jdk
+          # setup-java only enforces distribution from v2 on, and the maven cache saves
+          # re-downloading every dependency on each run.
+          distribution: temurin
+          cache: maven
+
+      - uses: azure/setup-helm@v5.0.1
+
+      - name: Enable bridge netfilter
+        # k3s programs the service VIPs into iptables, but without br_netfilter the pod traffic
+        # crossing the CNI bridge never traverses those rules: pod to pod works, pod to ClusterIP
+        # does not, and DNS goes with it because CoreDNS sits behind one. The runners no longer
+        # load the module, so do it here before the cluster comes up.
+        run: |
+          sudo modprobe br_netfilter
+          sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
+
+      - name: Execute tests
+        id: test
+        run: |
+          cd it
+          mvn clean verify
+
+      # Otherwise the outcome is only visible by opening the run and reading the log. Reads
+      # the reports failsafe already writes, so nothing here needs instrumenting. Never let
+      # reporting fail the build: on a pull request from a fork the token is read-only and
+      # the comment is rejected.
+      - name: Publish test results
+        if: always()
+        continue-on-error: true
+        uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3  # v2.24.0
+        with:
+          files: it/target/failsafe-reports/TEST-*.xml
+          check_name: Integration tests
+
+      # The k3s plugin only reports which resource it gave up on, never why, so without this
+      # a failure here is just a timeout with no way to tell a slow cluster from a broken one.
+      - name: Dump cluster state
+        if: failure()
+        run: |
+          kubectl() { docker exec k3s-maven-plugin kubectl "$@" || true; }
+
+          kubectl get pods --all-namespaces -o wide
+          kubectl get jobs --all-namespaces
+
+          # Whatever broke, the pods that never came up hold the story. Anything not Completed
+          # and not Running with every container ready gets described and dumped -- that covers
+          # a pod stuck initialising, one crash looping, and one whose sidecar never started.
+          docker exec k3s-maven-plugin kubectl get pods --all-namespaces --no-headers 2>/dev/null \
+            | awk '{split($3,r,"/"); if ($4 != "Completed" && (r[1] != r[2] || $4 != "Running")) print $1, $2}' \
+            | while read -r ns pod; do
+                echo "::group::$ns/$pod"
+                kubectl describe pod "$pod" --namespace="$ns"
+                # Name each container: --all-containers leaves out the init ones, and a job
+                # that hangs here is usually still sitting in one of those.
+                for c in $(docker exec k3s-maven-plugin kubectl get pod "$pod" --namespace="$ns" \
+                    -o jsonpath='{range .spec.initContainers[*]}{.name}{" "}{end}{range .spec.containers[*]}{.name}{" "}{end}' 2>/dev/null); do
+                  echo "--- logs of $c ---"
+                  kubectl logs "$pod" --namespace="$ns" --container="$c" --tail=100
+                done
+                echo "::endgroup::"
+              done
+
+          kubectl get events --all-namespaces --sort-by=.lastTimestamp | tail -n 50
+
+          # k3s runs the whole control plane in this container, so a cluster that never came
+          # up at all explains itself here and nowhere else.
+          echo "::group::k3s server log"
+          docker logs k3s-maven-plugin 2>&1 | tail -n 50 || true
+          echo "::endgroup::"

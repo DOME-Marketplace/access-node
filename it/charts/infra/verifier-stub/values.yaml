@@ -1,0 +1,10 @@
+
+service:
+  port: 9595
+  type: ClusterIP
+
+# -- Base URL the stub is reachable at. It is baked into the signature of the token in
+# files/token.json (as the "iss" claim), which desmos compares against its own VERIFIER_URL,
+# so it cannot be changed here alone -- re-run ./generate-fixtures.sh after editing it, and
+# keep it identical in it/provider/values.yaml and it/consumer/values.yaml.
+verifierUrl: http://verifier-stub.infra.svc.cluster.local:9595
