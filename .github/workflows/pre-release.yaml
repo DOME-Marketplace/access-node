@@ -111,10 +111,14 @@ jobs:
 
       steps:
 
+        # On a pull_request event checkout lands on the merge ref, not the branch tip, so
+        # pushing HEAD back would carry a merge of main onto the PR branch. Ask for the
+        # branch itself; fetch-depth 0 replaces the manual unshallow, which errors on a
+        # complete clone anyway.
         - uses: actions/checkout@v2
-
-        - name: Fetch history
-          run: git fetch --prune --unshallow
+          with:
+            ref: ${{ github.head_ref }}
+            fetch-depth: 0
 
         - name: Configure Git
           run: |
@@ -149,7 +153,10 @@ jobs:
             git config --local user.name "github-actions[bot]"
             git status
 
-            git commit -m "Update helm documentation" -a
+            # [skip ci] keeps this push from queueing another round of workflow runs.
+            # They would be attributed to github-actions[bot] and sit in action_required,
+            # leaving the PR with no checks reported.
+            git commit -m "Update helm documentation [skip ci]" -a
 
             echo status update
             git status
