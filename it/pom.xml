@@ -19,6 +19,7 @@
         <version.org.apache.maven.plugins.maven-surefire-plugin>3.0.0-M5
         </version.org.apache.maven.plugins.maven-surefire-plugin>
         <version.io.kokuwa.maven.k3s-plugin>1.2.4</version.io.kokuwa.maven.k3s-plugin>
+        <version.k3s.image>v1.32.13-k3s1</version.k3s.image>
         <version.io.kokuwa.helm-maven-plugin>6.13.0</version.io.kokuwa.helm-maven-plugin>
 
         <version.org.awaitility>4.2.0</version.org.awaitility>
@@ -507,44 +508,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-resources-consumer-kustomize</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/charts/consumer/access-node</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <includes>
-                                        <include>kustomize.sh</include>
-                                        <include>kustomization.yaml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-resources-provider-kustomize</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/charts/provider/access-node</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <includes>
-                                        <include>kustomize.sh</include>
-                                        <include>kustomization.yaml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-resources-namespaces</id>
                         <phase>validate</phase>
                         <goals>
@@ -579,10 +542,9 @@
                             <chartDirectory>${project.build.directory}/charts/provider/access-node</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
+                            <templateOutputDir>${project.build.directory}/k3s/provider/access-node</templateOutputDir>
                             <namespace>provider</namespace>
-                            <!-- post renderer required to account for missing env config support, that points to the tusted access nodes list -->
-                            <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider/values.yaml --post-renderer ${project.build.directory}/charts/provider/access-node/kustomize.sh --post-renderer-args ${project.build.directory}/charts/provider/access-node,${project.build.directory}/k3s/provider/access-node
-                            </additionalArguments>
+                            <additionalArguments>--name-template=provider --namespace=provider -f ${project.basedir}/provider/values.yaml</additionalArguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -597,10 +559,9 @@
                             <chartDirectory>${project.build.directory}/charts/consumer/access-node</chartDirectory>
                             <skipTemplate>false</skipTemplate>
                             <templateGenerateName>true</templateGenerateName>
-                            <!-- post renderer required to account for missing env config support, that points to the tusted access nodes list -->
+                            <templateOutputDir>${project.build.directory}/k3s/consumer/access-node</templateOutputDir>
                             <namespace>consumer</namespace>
-                            <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer/values.yaml --post-renderer ${project.build.directory}/charts/consumer/access-node/kustomize.sh --post-renderer-args ${project.build.directory}/charts/consumer/access-node,${project.build.directory}/k3s/consumer/access-node
-                            </additionalArguments>
+                            <additionalArguments>--name-template=consumer --namespace=consumer -f ${project.basedir}/consumer/values.yaml</additionalArguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -636,6 +597,11 @@
                             <goal>apply</goal>
                         </goals>
                         <configuration>
+                            <!-- the plugin defaults to the "latest" k3s image and warns that it is
+                                 unstable: the cluster it gives us drifts underneath the suite with
+                                 nothing in this repo changing. pin it to the line these tests were
+                                 written against. -->
+                            <imageTag>${version.k3s.image}</imageTag>
                             <failIfExists>false</failIfExists>
                             <manifests>${project.build.directory}/k3s/namespaces</manifests>
                             <portBindings>

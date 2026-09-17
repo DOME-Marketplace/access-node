@@ -12,6 +12,18 @@ service:
 
 blockchain:
   address: http://blockchain-testnode.infra.svc.cluster.local:8545/
+  # -- key used to deploy the DOME events contract
   key: 304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
+  # -- every account the test nodes transact with. Each is imported into the dev node and
+  # funded from its default account; a node whose key is missing here cannot notarize, which
+  # silently breaks replication in one direction only. Keys and addresses correspond to
+  # PRIVATE_KEY / ISS in it/{provider,consumer}/values.yaml.
+  accounts:
+    - name: provider
+      key: 304d170fb355df65cc17ef7934404fe9baee73a1244380076436dec6fafb1e1f
+      address: "0x72b440177bcDfD339eF00ffF6B78c3620c09c469"
+    - name: consumer
+      key: 14dff9a9a0c9e7edf82359e1caabc31b708941dcdbcb6d95e3f331f6eebee03c
+      address: "0xE377C763792bA6E3ec384c9572F3f03F9FEc2D70"
 
 fullnameOverride: blockchain-testnode
