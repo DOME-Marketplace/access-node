@@ -10,16 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v6.0.1
         with:
           java-version: '17'
           java-package: jdk
+          # setup-java only enforces distribution from v2 on, and the maven cache saves
+          # re-downloading every dependency on each run.
+          distribution: temurin
+          cache: maven
 
-      - uses: azure/setup-helm@v3
-
-      - uses: azure/setup-helm@v3
+      - uses: azure/setup-helm@v5.0.1
 
       - name: Enable bridge netfilter
         # k3s programs the service VIPs into iptables, but without br_netfilter the pod traffic

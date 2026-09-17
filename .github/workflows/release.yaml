@@ -19,13 +19,13 @@ jobs:
 
       steps:
 
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v7.0.1
           with:
             fetch-depth: 0
 
         - name: Get changed files
           id: changed-files
-          uses: tj-actions/changed-files@v14.6
+          uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96  # v47.0.6
 
         - name: Check changes
           id: changes
@@ -53,14 +53,14 @@ jobs:
         version: ${{ steps.out.outputs.version }}
 
       steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v7.0.1
 
         - id: pr
-          uses: actions-ecosystem/action-get-merged-pull-request@v1.0.1
+          uses: actions-ecosystem/action-get-merged-pull-request@59afe90821bb0b555082ce8ff1e36b03f91553d9  # v1.0.1
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
 
-        - uses: zwaldowski/semver-release-action@v2
+        - uses: zwaldowski/semver-release-action@239e9cd0db94c047ca49b554fd217386f0f86ad4  # v2
           with:
             dry_run: true
             bump: ${{ steps.pr.outputs.labels }}
@@ -77,7 +77,7 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v7.0.1
 
         - name: Fetch history
           run: git fetch --prune --unshallow
@@ -95,7 +95,11 @@ jobs:
             ./get_helm.sh
 
         # prepare yaml parser
-        - uses: actions/setup-go@v4
+        # setup-go dropped its implicit version default; without one it falls back to
+        # whatever the runner happens to ship.
+        - uses: actions/setup-go@v6.0.0
+          with:
+            go-version: stable
         - name: Install yq
           run: |
             go install github.com/mikefarah/yq/v4@latest
@@ -106,14 +110,14 @@ jobs:
               yq e -i '.version = "${{ needs.generate-version.outputs.version }}"' ./charts/access-node/Chart.yaml
 
         - name: Run chart-releaser
-          uses: helm/chart-releaser-action@v1.6.0
+          uses: helm/chart-releaser-action@cae68fefc6b5f367a0275617c9f83181ba54714f  # v1.7.0
           env:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
           with:
             pages_branch: gh-pages
 
-        - uses: "marvinpinto/action-automatic-releases@latest"
+        - uses: marvinpinto/action-automatic-releases@d68defdd11f9dcc7f52f35c1b7c236ee7513bcc1  # latest
           with:
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             automatic_release_tag: ${{ needs.generate-version.outputs.version }}
