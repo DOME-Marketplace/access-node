@@ -70,7 +70,7 @@ jobs:
           with:
             allowed: major,minor,patch
 
-        - uses: zwaldowski/semver-release-action@239e9cd0db94c047ca49b554fd217386f0f86ad4  # v2
+        - uses: zwaldowski/semver-release-action@a1fcf12dda3d10c122d1d9cb161dece6363c7e19  # v6
           with:
             dry_run: true
             bump: ${{ steps.bump.outputs.match }}
