@@ -1,13 +1,9 @@
-name: Test
+name: Integration tests
 
+# Called by the workflows that need the suite rather than triggered on its own, so a pull
+# request runs it once instead of once per workflow that wanted it.
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - labeled
-      - unlabeled
+  workflow_call
 
 jobs:
   it:
