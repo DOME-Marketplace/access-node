@@ -36,51 +36,38 @@ jobs:
           cd it
           mvn clean verify
 
-      # the k3s plugin only reports which resource it gave up on, not why. dump the cluster
-      # so a timeout can be told apart from a pod that never came up.
+      # The k3s plugin only reports which resource it gave up on, never why, so without this
+      # a failure here is just a timeout with no way to tell a slow cluster from a broken one.
       - name: Dump cluster state
         if: failure()
         run: |
           kubectl() { docker exec k3s-maven-plugin kubectl "$@" || true; }
+
           kubectl get pods --all-namespaces -o wide
           kubectl get jobs --all-namespaces
-          kubectl describe job dome-contract --namespace=infra
-          # --all-containers skips init containers, so name it: when this job hangs it is
-          # the init container that is still going, and its log is the whole story.
-          kubectl logs job/dome-contract --namespace=infra -c init-account --tail=100
-          kubectl logs job/dome-contract --namespace=infra -c contract-create --tail=100
-          # tell a broken pod network apart from a slow one: both look like a hung job.
-          kubectl get node k3s -o jsonpath='{.spec.podCIDR}{"\n"}'
-          kubectl logs --namespace=kube-system -l k8s-app=kube-dns --tail=30
-          kubectl get services --all-namespaces
-          # The suite dies because pods cannot reach a ClusterIP, and everything reaches
-          # everything else by service name here, so this is the thing to pin down. kube-proxy
-          # runs inside the k3s server, so its complaints land in the container log, and the
-          # nat table says whether it ever programmed the service VIPs at all.
-          docker exec k3s-maven-plugin sh -c 'iptables -t nat -L KUBE-SERVICES -n 2>&1 | head -n 25' || true
-          docker exec k3s-maven-plugin sh -c 'iptables -t nat -L -n 2>/dev/null | grep -c KUBE || echo "no KUBE chains"' || true
-          docker exec k3s-maven-plugin sh -c 'lsmod 2>/dev/null | grep -E "br_netfilter|nf_nat|nf_conntrack" || echo "no netfilter modules listed"' || true
-          docker logs k3s-maven-plugin 2>&1 | grep -iE "kube-proxy|iptables|nftables|conntrack|error|failed" | tail -n 40 || true
-          # Reaching the node by name exercises CNI, kube-proxy and CoreDNS at once, so when it
-          # fails the layer is ambiguous. Hit the pod IP, the service IP and the name in turn:
-          # whichever is the first to fail is the layer that is broken. Read the result from the
-          # pod's log rather than --attach, which connects too late and drops the first lines.
-          POD_IP=$(docker exec k3s-maven-plugin kubectl get endpoints blockchain-testnode -n infra -o jsonpath='{.subsets[0].addresses[0].ip}' 2>/dev/null || true)
-          SVC_IP=$(docker exec k3s-maven-plugin kubectl get service blockchain-testnode -n infra -o jsonpath='{.spec.clusterIP}' 2>/dev/null || true)
-          DNS_IP=$(docker exec k3s-maven-plugin kubectl get pod -n kube-system -l k8s-app=kube-dns -o jsonpath='{.items[0].status.podIP}' 2>/dev/null || true)
-          echo "probing pod=$POD_IP service=$SVC_IP coredns-pod=$DNS_IP"
-          kubectl run netcheck --namespace=infra --restart=Never --image=badouralix/curl-jq:ubuntu --command -- /bin/bash -c \
-            'rpc() { curl -s -m 5 -X POST --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_accounts\",\"params\":[],\"id\":1}" -H "Content-Type: application/json" "$1"; echo " <- $2"; };
-             cat /etc/resolv.conf;
-             rpc "http://'"$POD_IP"':8545/" "pod ip (cni)";
-             rpc "http://'"$SVC_IP"':8545/" "service ip (kube-proxy)";
-             curl -s -m 5 "http://'"$DNS_IP"':9153/metrics" >/dev/null && echo "coredns pod reachable (cni)" || echo "coredns pod unreachable (cni)";
-             getent hosts blockchain-testnode.infra.svc.cluster.local || echo "name did not resolve (coredns)"'
-          for _ in $(seq 1 30); do
-            phase=$(docker exec k3s-maven-plugin kubectl get pod netcheck -n infra -o jsonpath='{.status.phase}' 2>/dev/null || true)
-            case "$phase" in Succeeded|Failed) break;; esac
-            sleep 2
-          done
-          kubectl logs netcheck --namespace=infra
-          kubectl delete pod netcheck --namespace=infra --ignore-not-found
+
+          # Whatever broke, the pods that never came up hold the story. Anything not Completed
+          # and not Running with every container ready gets described and dumped -- that covers
+          # a pod stuck initialising, one crash looping, and one whose sidecar never started.
+          docker exec k3s-maven-plugin kubectl get pods --all-namespaces --no-headers 2>/dev/null \
+            | awk '{split($3,r,"/"); if ($4 != "Completed" && (r[1] != r[2] || $4 != "Running")) print $1, $2}' \
+            | while read -r ns pod; do
+                echo "::group::$ns/$pod"
+                kubectl describe pod "$pod" --namespace="$ns"
+                # Name each container: --all-containers leaves out the init ones, and a job
+                # that hangs here is usually still sitting in one of those.
+                for c in $(docker exec k3s-maven-plugin kubectl get pod "$pod" --namespace="$ns" \
+                    -o jsonpath='{range .spec.initContainers[*]}{.name}{" "}{end}{range .spec.containers[*]}{.name}{" "}{end}' 2>/dev/null); do
+                  echo "--- logs of $c ---"
+                  kubectl logs "$pod" --namespace="$ns" --container="$c" --tail=100
+                done
+                echo "::endgroup::"
+              done
+
           kubectl get events --all-namespaces --sort-by=.lastTimestamp | tail -n 50
+
+          # k3s runs the whole control plane in this container, so a cluster that never came
+          # up at all explains itself here and nowhere else.
+          echo "::group::k3s server log"
+          docker logs k3s-maven-plugin 2>&1 | tail -n 50 || true
+          echo "::endgroup::"
