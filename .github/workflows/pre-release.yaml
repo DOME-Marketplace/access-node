@@ -168,6 +168,7 @@ jobs:
             branch: ${{ github.head_ref }}
 
         - name: Run chart-releaser
+          id: cr
           uses: helm/chart-releaser-action@main
           env:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -176,7 +177,12 @@ jobs:
             skip_upload: true
 
 
+        # cr index builds the index from .cr-release-packages, which the step above only
+        # fills when it actually packages a chart. With nothing released there is nothing to
+        # index, and the action skips installing cr altogether, so this would fail on the
+        # missing binary and then again on an empty commit.
         - name: Create index.yaml
+          if: steps.cr.outputs.changed_charts != ''
           run: |
             owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
             repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
