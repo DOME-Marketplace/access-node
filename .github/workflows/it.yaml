@@ -9,6 +9,13 @@ jobs:
   it:
     runs-on: ubuntu-latest
 
+    # Needed by the reporting step below to comment on the pull request and publish its
+    # check run; a reusable workflow does not inherit them from the caller.
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v7.0.1
 
@@ -37,6 +44,18 @@ jobs:
         run: |
           cd it
           mvn clean verify
+
+      # Otherwise the outcome is only visible by opening the run and reading the log. Reads
+      # the reports failsafe already writes, so nothing here needs instrumenting. Never let
+      # reporting fail the build: on a pull request from a fork the token is read-only and
+      # the comment is rejected.
+      - name: Publish test results
+        if: always()
+        continue-on-error: true
+        uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3  # v2.24.0
+        with:
+          files: it/target/failsafe-reports/TEST-*.xml
+          check_name: Integration tests
 
       # The k3s plugin only reports which resource it gave up on, never why, so without this
       # a failure here is just a timeout with no way to tell a slow cluster from a broken one.

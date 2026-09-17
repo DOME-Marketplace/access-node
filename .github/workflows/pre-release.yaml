@@ -13,6 +13,12 @@ jobs:
 
     it:
       uses: ./.github/workflows/it.yaml
+      # A reusable workflow cannot grant itself more than the caller has, so the scopes its
+      # reporting step needs have to be handed down from here.
+      permissions:
+        contents: read
+        checks: write
+        pull-requests: write
 
     check-changes: 
 
