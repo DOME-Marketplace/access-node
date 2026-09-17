@@ -24,6 +24,15 @@ jobs:
 
         - uses: azure/setup-helm@v3
 
+        - name: Enable bridge netfilter
+          # k3s programs the service VIPs into iptables, but without br_netfilter the pod traffic
+          # crossing the CNI bridge never traverses those rules: pod to pod works, pod to ClusterIP
+          # does not, and DNS goes with it because CoreDNS sits behind one. The runners no longer
+          # load the module, so do it here before the cluster comes up.
+          run: |
+            sudo modprobe br_netfilter
+            sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
+
         - name: Execute tests
           id: test
           run: |
