@@ -60,7 +60,7 @@ jobs:
           distribution: temurin
 
       - id: bump
-        uses: zwaldowski/match-label-action@cc36f9c6a3f30a93c124de493e57265f37c4b24a  # v1
+        uses: zwaldowski/match-label-action@741aab5a93a215d559b62e24b860b46f049a0920  # v6
         with:
           allowed: major,minor,patch
   
