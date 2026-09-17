@@ -18,7 +18,7 @@
         <version.maven-resources-plugin>3.5.0</version.maven-resources-plugin>
         <version.org.apache.maven.plugins.maven-surefire-plugin>3.0.0-M5
         </version.org.apache.maven.plugins.maven-surefire-plugin>
-        <version.io.kokuwa.maven.k3s-plugin>1.2.4</version.io.kokuwa.maven.k3s-plugin>
+        <version.io.kokuwa.maven.k3s-plugin>2.3.1</version.io.kokuwa.maven.k3s-plugin>
         <version.k3s.image>v1.32.13-k3s1</version.k3s.image>
         <version.io.kokuwa.helm-maven-plugin>6.17.0</version.io.kokuwa.helm-maven-plugin>
 
