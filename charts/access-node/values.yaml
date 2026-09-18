@@ -1,3 +1,5 @@
+## Baseline check, not meant to be merged: touches the chart with nothing else changed,
+## to record which version the release path produces as things stand today.
 ## configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
 desmos:
   # -- should the desmos-blockchain-connector be enabled
