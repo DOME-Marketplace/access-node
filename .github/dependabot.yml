@@ -15,6 +15,18 @@ updates:
     # Only default-days applies: the github-actions ecosystem ignores the semver keys.
     cooldown:
       default-days: 7
+    # v5 replaced semver.parse with semver.coerce and v6 kept it as a fallback, which
+    # flattens the two tag namespaces this repository keeps apart: the plain ones that carry
+    # versions, and the access-node-* ones chart-releaser writes. access-node-2.0.0-PRE-82,
+    # left over from #82, coerces to 2.0.0 and becomes the base for the next version, so a
+    # patch label produced 2.0.1 instead of 1.3.19 -- on a green build, since the action does
+    # work, it just picks a different base. The prefix input cannot filter it out: an empty
+    # prefix compiles to /^/ and excludes nothing. v4 is the last release that reads our tags
+    # correctly and, since the action is archived, the last there will ever be.
+    ignore:
+      - dependency-name: zwaldowski/semver-release-action
+        versions:
+          - ">=5"
     groups:
       # One pull request for the routine bumps. It matters more here than usual: every pull
       # request builds a k3s cluster and runs the whole integration suite, several minutes
