@@ -185,15 +185,21 @@ jobs:
         # The suite proves the chart in the repository works; nothing proves that what we
         # publish can actually be installed. Pull it back the way a consumer would -- through
         # the Helm repository index, not the release URL -- so a broken or stale index is
-        # caught here rather than by whoever tries to install it. Retries because GitHub Pages
-        # takes a while to serve a fresh commit.
+        # caught here rather than by whoever tries to install it.
+        #
+        # Runs after the index has been updated, and keeps retrying because that is not the
+        # same as the index being served: pushing to gh-pages starts a Pages build, and until
+        # it finishes the old index is still what answers. Retrying through that window is
+        # what separates a genuinely broken chart from one that is merely not published yet.
+        # helm repo update goes inside the loop so each attempt refetches rather than reusing
+        # the first, stale, index.
         - name: Verify the published chart
           if: steps.cr.outputs.changed_charts != ''
           run: |
             version="${{ needs.generate-version.outputs.version }}"
             helm repo add access-node-pre https://dome-marketplace.github.io/access-node/pre/
 
-            for attempt in $(seq 1 10); do
+            for attempt in $(seq 1 15); do
               helm repo update access-node-pre > /dev/null
               if helm pull access-node-pre/access-node --version "$version"; then
                 break
