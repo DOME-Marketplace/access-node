@@ -1,0 +1,32 @@
+name: Chart changed
+
+# Called by the workflows that gate publishing on the chart having changed, rather than each
+# keeping its own copy of the check. Three copies is how release.yaml ended up without the
+# br_netfilter step that the other two had.
+on:
+  workflow_call:
+    outputs:
+      changed:
+        description: "'true' when anything under charts/access-node changed, 'false' otherwise"
+        value: ${{ jobs.check-changes.outputs.changed }}
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      changed: ${{ steps.changed.outputs.any_changed }}
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          # changed-files diffs against the base, so it needs the history to diff against.
+          fetch-depth: 0
+
+      # Replaces a hand-rolled loop that walked every changed path and split it with cut. The
+      # action does the filtering itself, and the loop it replaces compared unquoted variables,
+      # so a path containing a space would have failed the whole job.
+      - uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96  # v47.0.6
+        id: changed
+        with:
+          files: charts/access-node/**
