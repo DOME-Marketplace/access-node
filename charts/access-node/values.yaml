@@ -1,3 +1,5 @@
+## TEMPORARY, remove before merging: only here so check-changes fires and
+## generate-version actually runs, which is the only way to validate the v4 bump.
 ## configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
 desmos:
   # -- should the desmos-blockchain-connector be enabled
