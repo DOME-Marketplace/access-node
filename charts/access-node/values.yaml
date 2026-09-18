@@ -1,3 +1,5 @@
+## Positive-case check, not for merge: touching this file is what should make
+## check-changes report true and let generate-version and deploy run.
 ## configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
 desmos:
   # -- should the desmos-blockchain-connector be enabled
