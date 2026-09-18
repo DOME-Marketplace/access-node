@@ -70,7 +70,7 @@ jobs:
           with:
             allowed: major,minor,patch
 
-        - uses: zwaldowski/semver-release-action@239e9cd0db94c047ca49b554fd217386f0f86ad4  # v2
+        - uses: zwaldowski/semver-release-action@a6a8309186ccf60c52ea2463a723c78d3b924577  # v4
           with:
             dry_run: true
             bump: ${{ steps.bump.outputs.match }}
@@ -115,7 +115,7 @@ jobs:
         # prepare yaml parser
         # setup-go dropped its implicit version default; without one it falls back to
         # whatever the runner happens to ship.
-        - uses: actions/setup-go@v6.0.0
+        - uses: actions/setup-go@v7.0.0
           with:
             go-version: stable
         - name: Install yq
