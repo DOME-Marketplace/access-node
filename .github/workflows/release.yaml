@@ -116,12 +116,44 @@ jobs:
               yq e -i '.version = "${{ needs.generate-version.outputs.version }}"' ./charts/access-node/Chart.yaml
 
         - name: Run chart-releaser
+          id: cr
           uses: helm/chart-releaser-action@cae68fefc6b5f367a0275617c9f83181ba54714f  # v1.7.0
           env:
             CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             CR_SKIP_EXISTING: true
           with:
             pages_branch: gh-pages
+
+
+        # The suite proves the chart in the repository works; nothing proves that what we
+        # publish can actually be installed. Pull it back the way a consumer would -- through
+        # the Helm repository index, not the release URL -- so a broken or stale index is
+        # caught here rather than by whoever tries to install it. Retries because GitHub Pages
+        # takes a while to serve a fresh commit.
+        - name: Verify the published chart
+          if: steps.cr.outputs.changed_charts != ''
+          run: |
+            version="${{ needs.generate-version.outputs.version }}"
+            helm repo add access-node https://dome-marketplace.github.io/access-node/
+
+            for attempt in $(seq 1 10); do
+              helm repo update access-node > /dev/null
+              if helm pull access-node/access-node --version "$version"; then
+                break
+              fi
+              echo "chart $version not served yet (attempt $attempt), retrying"
+              sleep 20
+            done
+
+            if [ ! -f "access-node-$version.tgz" ]; then
+              echo "chart $version never became installable from https://dome-marketplace.github.io/access-node/"
+              exit 1
+            fi
+
+            # Renders rather than lints: the package vendors its dependencies, so this
+            # executes every template instead of only checking their shape.
+            helm template verify "access-node-$version.tgz" > /dev/null
+            echo "published chart $version installs and renders"
 
         - uses: marvinpinto/action-automatic-releases@d68defdd11f9dcc7f52f35c1b7c236ee7513bcc1  # latest
           with:
