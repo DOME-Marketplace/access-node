@@ -1,5 +1,13 @@
 name: Pre-Release
 
+# Creating a pull request with a label fires opened and labeled, and both are listened to
+# below, so two runs start on the same commit and race each other to publish. Keep the
+# newest and drop the rest: deploy tolerates being repeated -- its commit and push are
+# continue-on-error and chart-releaser skips what exists -- but not being run twice at once.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     types:
@@ -148,6 +156,14 @@ jobs:
             git switch gh-pages
             
             cr index -o "$owner" -r "$repo"
+
+            # cr writes no file when the index already covers every release, which is what a
+            # rerun over the same commit finds. Nothing to move and nothing to commit, so
+            # stop here rather than fail on the missing file.
+            if [ ! -f .cr-index/index.yaml ]; then
+              echo "index already covers every release, nothing to do"
+              exit 0
+            fi
 
             mv .cr-index/index.yaml pre/index.yaml
 
