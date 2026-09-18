@@ -66,7 +66,7 @@ jobs:
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
 
-        - uses: zwaldowski/semver-release-action@239e9cd0db94c047ca49b554fd217386f0f86ad4  # v2
+        - uses: zwaldowski/semver-release-action@a1fcf12dda3d10c122d1d9cb161dece6363c7e19  # v6
           with:
             dry_run: true
             bump: ${{ steps.pr.outputs.labels }}
@@ -103,7 +103,7 @@ jobs:
         # prepare yaml parser
         # setup-go dropped its implicit version default; without one it falls back to
         # whatever the runner happens to ship.
-        - uses: actions/setup-go@v6.0.0
+        - uses: actions/setup-go@v7.0.0
           with:
             go-version: stable
         - name: Install yq

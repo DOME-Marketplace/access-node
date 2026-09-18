@@ -1,3 +1,5 @@
+## Validation-only change, not meant to be merged: touching this file is what makes
+## check-changes fire, which is the only way to exercise generate-version and deploy.
 ## configuration for the desmos - see https://DOME-Marketplace.github.io/access-node for configuration documentation
 desmos:
   # -- should the desmos-blockchain-connector be enabled
