@@ -20,43 +20,16 @@ jobs:
         checks: write
         pull-requests: write
 
-    check-changes: 
-
+    check-changes:
+      # Gates publishing on the suite passing: deploy depends on this rather
+      # than on it directly, so dropping this would let a release go out with
+      # the tests still running.
       needs: ["it"]
-      runs-on: ubuntu-latest
-
-      outputs:
-        changed: ${{ steps.changes.outputs.changed }}
-
-      steps:
-
-        - uses: actions/checkout@v7.0.1
-          with:
-            fetch-depth: 0
-
-        - name: Get changed files
-          id: changed-files
-          uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96  # v47.0.6
-
-        - name: Check changes
-          id: changes
-          shell: bash
-          run: |
-
-            for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
-
-              echo "$file was changed"
-              baseFolder=$(cut -d'/' -f1 <<< "$file")
-              chartName=$(cut -d'/' -f2 <<< "$file")
-              if [ $baseFolder = "charts" ] && [ $chartName = "access-node" ]; then
-                echo "changed=true" >> "$GITHUB_OUTPUT"
-                break;
-              fi  
-            done    
+      uses: ./.github/workflows/chart-changed.yaml
 
     generate-version:
       needs: ["check-changes" ]
-      if: ${{ needs.check-changes.outputs.changed }}
+      if: needs.check-changes.outputs.changed == 'true'
       runs-on: ubuntu-latest
 
       outputs:
@@ -88,7 +61,7 @@ jobs:
 
       needs: ["check-changes", "generate-version" ]
       runs-on: ubuntu-latest
-      if: ${{ needs.check-changes.outputs.changed }}
+      if: needs.check-changes.outputs.changed == 'true'
 
       steps:
 
