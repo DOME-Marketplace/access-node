@@ -3,7 +3,7 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2026-09-18T07:13:59.208251199Z"
+    created: "2026-09-18T07:33:31.807172041Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -47,12 +47,12 @@ entries:
       repository: https://dome-marketplace.github.io/tm-forum-charts
       version: 0.14.23
     description: Umbrella Chart for the DOME Marketplace access-node
-    digest: 4b75800ca2f23fa16342e3081ab5de4f9d52f14da8f7e88819aca0f2bd4a66bc
+    digest: 38bcbfb9685f4c7ade8ab8368898d29b36f5b4e698cbdf72689b09e113c1807b
     name: access-node
     type: application
     urls:
-    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-1.3.19-PRE-130/access-node-1.3.19-PRE-130.tgz
-    version: 1.3.19-PRE-130
+    - https://github.com/DOME-Marketplace/access-node/releases/download/access-node-1.3.19-PRE-131/access-node-1.3.19-PRE-131.tgz
+    version: 1.3.19-PRE-131
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2026-09-17T14:28:00.558784589Z"
@@ -3054,4 +3054,4 @@ entries:
     urls:
     - https://github.com/dome-marketplace/access-node/releases/download/dlt-adapter-1.0.3/dlt-adapter-1.0.3.tgz
     version: 1.0.3
-generated: "2026-09-18T07:13:59.208445484Z"
+generated: "2026-09-18T07:33:31.807417438Z"
