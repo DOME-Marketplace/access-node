@@ -20,43 +20,16 @@ jobs:
         checks: write
         pull-requests: write
 
-    check-changes: 
-
+    check-changes:
+      # Gates publishing on the suite passing: deploy depends on this rather
+      # than on it directly, so dropping this would let a release go out with
+      # the tests still running.
       needs: ["it"]
-      runs-on: ubuntu-latest
-
-      outputs:
-        changed: ${{ steps.changes.outputs.changed }}
-
-      steps:
-
-        - uses: actions/checkout@v7.0.1
-          with:
-            fetch-depth: 0
-
-        - name: Get changed files
-          id: changed-files
-          uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96  # v47.0.6
-
-        - name: Check changes
-          id: changes
-          shell: bash
-          run: |
-
-            for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
-
-              echo "$file was changed"
-              baseFolder=$(cut -d'/' -f1 <<< "$file")
-              chartName=$(cut -d'/' -f2 <<< "$file")
-              if [ $baseFolder = "charts" ] && [ $chartName = "access-node" ]; then
-                echo "changed=true" >> "$GITHUB_OUTPUT"
-                break;
-              fi  
-            done    
+      uses: ./.github/workflows/chart-changed.yaml
 
     generate-version:
       needs: ["check-changes" ]
-      if: ${{ needs.check-changes.outputs.changed }}
+      if: needs.check-changes.outputs.changed == 'true'
       runs-on: ubuntu-latest
 
       outputs:
@@ -88,7 +61,7 @@ jobs:
 
       needs: ["check-changes", "generate-version" ]
       runs-on: ubuntu-latest
-      if: ${{ needs.check-changes.outputs.changed }}
+      if: needs.check-changes.outputs.changed == 'true'
 
       steps:
 
@@ -181,5 +154,42 @@ jobs:
             git add pre/index.yaml
             git commit -m "add pre-index"
             git push --set-upstream origin gh-pages
+
+        # The suite proves the chart in the repository works; nothing proves that what we
+        # publish can actually be installed. Pull it back the way a consumer would -- through
+        # the Helm repository index, not the release URL -- so a broken or stale index is
+        # caught here rather than by whoever tries to install it.
+        #
+        # Runs after the index has been updated, and keeps retrying because that is not the
+        # same as the index being served: pushing to gh-pages starts a Pages build, and until
+        # it finishes the old index is still what answers. Retrying through that window is
+        # what separates a genuinely broken chart from one that is merely not published yet.
+        # helm repo update goes inside the loop so each attempt refetches rather than reusing
+        # the first, stale, index.
+        - name: Verify the published chart
+          if: steps.cr.outputs.changed_charts != ''
+          run: |
+            version="${{ needs.generate-version.outputs.version }}"
+            helm repo add access-node-pre https://dome-marketplace.github.io/access-node/pre/
+
+            for attempt in $(seq 1 15); do
+              helm repo update access-node-pre > /dev/null
+              if helm pull access-node-pre/access-node --version "$version"; then
+                break
+              fi
+              echo "chart $version not served yet (attempt $attempt), retrying"
+              sleep 20
+            done
+
+            if [ ! -f "access-node-$version.tgz" ]; then
+              echo "chart $version never became installable from https://dome-marketplace.github.io/access-node/pre/"
+              exit 1
+            fi
+
+            # Renders rather than lints: the package vendors its dependencies, so this
+            # executes every template instead of only checking their shape.
+            helm template verify "access-node-$version.tgz" > /dev/null
+            echo "published chart $version installs and renders"
+
 
         
