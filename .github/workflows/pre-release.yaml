@@ -111,10 +111,11 @@ jobs:
             git config --local user.name "github-actions[bot]"
             git status
 
-            # [skip ci] keeps this push from queueing another round of workflow runs.
-            # They would be attributed to github-actions[bot] and sit in action_required,
-            # leaving the PR with no checks reported.
-            git commit -m "Update helm documentation [skip ci]" -a
+            # No [skip ci] here, however tempting. Squashing a pull request folds every
+            # commit message into one, so the marker travelled into main and GitHub skipped
+            # the whole Release run -- 1.3.19 went unpublished after #135 with no failure to
+            # notice. A marker that silences the release is worse than the runs it silenced.
+            git commit -m "Update helm documentation" -a
 
             echo status update
             git status
