@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-java@v6.0.1
+      - uses: actions/setup-java@v6.1.0
         with:
           java-version: '17'
           java-package: jdk
@@ -52,7 +52,7 @@ jobs:
       - name: Publish test results
         if: always()
         continue-on-error: true
-        uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3  # v2.24.0
+        uses: EnricoMi/publish-unit-test-result-action@7622c5bf3d112a72ab4fa3951c2aa5723d8ab92d  # v2.25.0
         with:
           files: it/target/failsafe-reports/TEST-*.xml
           check_name: Integration tests
