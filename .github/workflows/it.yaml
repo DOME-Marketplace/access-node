@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-java@v6.1.0
+      - uses: actions/setup-java@v6.2.0
         with:
           java-version: '17'
           java-package: jdk
@@ -28,7 +28,7 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - uses: azure/setup-helm@v5.0.1
+      - uses: azure/setup-helm@v5.1.0
 
       - name: Enable bridge netfilter
         # k3s programs the service VIPs into iptables, but without br_netfilter the pod traffic
@@ -52,7 +52,7 @@ jobs:
       - name: Publish test results
         if: always()
         continue-on-error: true
-        uses: EnricoMi/publish-unit-test-result-action@7622c5bf3d112a72ab4fa3951c2aa5723d8ab92d  # v2.25.0
+        uses: EnricoMi/publish-unit-test-result-action@da5b7be67623cd59bbbd1a0ce4f022050a55605f  # v2.26.0
         with:
           files: it/target/failsafe-reports/TEST-*.xml
           check_name: Integration tests
